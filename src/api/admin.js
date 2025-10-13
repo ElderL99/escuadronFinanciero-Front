@@ -9,6 +9,10 @@ export const getAdminApplicationsSubmitted = async () => {
   return api.get("/admin/applications/submitted");
 };
 
+export const getApplicationById = async (applicationId) => {
+  return api.get(`/admin/application/${applicationId}`);
+};
+
 // ✅ Aprobar solicitud
 export const approveUsersApplications = async ({ applicationId }) => {
   return api.patch(`/admin/applications/${applicationId}/approve`);
