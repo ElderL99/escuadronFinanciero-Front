@@ -5,6 +5,7 @@ import {
   approveUsersApplications,
   rejectUserApplication,
   activeUserCredit,
+  getApplicationById,
 } from "../api/admin";
 
 export default function useAdmin() {
@@ -35,6 +36,22 @@ export default function useAdmin() {
       return res.data;
     } catch (err) {
       setError(err.response?.data?.message || "Error al obtener solicitudes");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // obtener solicitudes by ID
+
+  const fetchApplicationById = useCallback(async (applicationId) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await getApplicationById(applicationId);
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || "Error al obtener la solicitud");
       return null;
     } finally {
       setLoading(false);
@@ -91,6 +108,7 @@ export default function useAdmin() {
     error,
     fetchDashboard,
     fetchSubmittedApplications,
+    fetchApplicationById,
     approveApplication,
     rejectApplication,
     activateCredit,

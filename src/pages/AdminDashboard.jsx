@@ -89,7 +89,7 @@ export default function AdminDashboard() {
   return (
     <main className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 bg-[#611232]/90 backdrop-blur-md text-white p-6 rounded-r-xl shadow-lg">
+      {/*  <aside className="hidden lg:flex flex-col w-64 bg-[#611232]/90 backdrop-blur-md text-white p-6 rounded-r-xl shadow-lg">
         <h2 className="text-2xl font-bold mb-8 tracking-wide drop-shadow-md">
           AdminPanel
         </h2>
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
             )
           )}
         </nav>
-      </aside>
+      </aside> */}
 
       {/* Contenido principal */}
       <div className="flex-1 p-6 flex flex-col gap-8">

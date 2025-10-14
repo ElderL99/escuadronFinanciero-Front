@@ -10,7 +10,7 @@ export const getAdminApplicationsSubmitted = async () => {
 };
 
 export const getApplicationById = async (applicationId) => {
-  return api.get(`/admin/application/${applicationId}`);
+  return api.get(`/admin/applications/${applicationId}`);
 };
 
 // ✅ Aprobar solicitud

@@ -1,4 +1,4 @@
-// components/DashBoard/PendientesTable.jsx
+import { useNavigate } from "react-router-dom";
 import UserPicture from "../../svg/userpicture.png";
 
 export default function PendientesTable({
@@ -7,6 +7,12 @@ export default function PendientesTable({
   onExportar,
   title = "Solicitudes Pendientes",
 }) {
+  const navigate = useNavigate();
+
+  const handleRowClick = (id) => {
+    navigate(`/admin/applications/${id}`); // Navega al detalle de la solicitud
+  };
+
   return (
     <section className="bg-white rounded-xl shadow-md p-4">
       <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
@@ -51,7 +57,11 @@ export default function PendientesTable({
           <tbody className="divide-y divide-gray-200">
             {pendientes.length > 0 ? (
               pendientes.map((solicitud) => (
-                <tr key={solicitud.id}>
+                <tr
+                  key={solicitud.id}
+                  className="cursor-pointer hover:bg-gray-100 transition-colors"
+                  onClick={() => handleRowClick(solicitud.id)}
+                >
                   <td className="px-4 py-2 text-sm text-gray-700 flex items-center gap-2">
                     <img
                       src={UserPicture}

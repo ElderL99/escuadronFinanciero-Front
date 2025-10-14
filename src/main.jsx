@@ -7,10 +7,11 @@ import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import UserPrivateRoute from "./router/UserPrivateRouter";
 import UserDashboard from "./pages/UserDashboard";
-import AdminPrivateRoutes from "./router/AdminPrivateRouter";
 import AdminDashboard from "./pages/AdminDashboard";
 import RegisterPage from "./pages/RegisterPage";
 import PasswordLostPage from "./pages/PasswordLostPage";
+import SolicitudDetail from "./components/DashBoard/SolicitudDetail";
+import AdminLayout from "./layout/AdminLayout";
 
 const router = createBrowserRouter([
   {
@@ -29,15 +30,15 @@ const router = createBrowserRouter([
           </UserPrivateRoute>
         ),
       },
-      {
-        path: "/admin/dashboard",
-        element: (
-          <AdminPrivateRoutes>
-            <AdminDashboard /> {/* Solo admin */}
-          </AdminPrivateRoutes>
-        ),
-      },
       { path: "*", element: <NotFoundPage /> }, // Ruta de error
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      { path: "dashboard", element: <AdminDashboard /> },
+      { path: "applications/:id", element: <SolicitudDetail /> },
     ],
   },
 ]);
