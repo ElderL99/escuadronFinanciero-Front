@@ -14,16 +14,22 @@ export const getApplicationById = async (applicationId) => {
 };
 
 // ✅ Aprobar solicitud
-export const approveUsersApplications = async ({ applicationId }) => {
+export const approveUsersApplicationsById = async (applicationId) => {
   return api.patch(`/admin/applications/${applicationId}/approve`);
 };
 
 // ❌ Rechazar solicitud
-export const rejectUserApplication = async ({ applicationId }) => {
+export const rejectUserApplication = async (applicationId) => {
   return api.patch(`/admin/applications/${applicationId}/reject`);
 };
 
 // 💳 Activar crédito
-export const activeUserCredit = async ({ applicationId }) => {
+export const activeUserCredit = async (applicationId) => {
   return api.patch(`/admin/applications/${applicationId}/active-credit`);
+};
+
+/* Documentos */
+
+export const getDocumentsByApplicationId = async (applicationId) => {
+  return api.get(`admin/applications/${applicationId}/documents`);
 };

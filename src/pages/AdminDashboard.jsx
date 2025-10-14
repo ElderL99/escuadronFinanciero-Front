@@ -54,12 +54,7 @@ export default function AdminDashboard() {
       Icon: FileText,
       color: "bg-[#611232]",
     },
-    {
-      label: "Aprobadas",
-      value: resumen.aprobadas,
-      Icon: CheckCircle,
-      color: "bg-green-600",
-    },
+
     {
       label: "Rechazadas",
       value: resumen.rechazadas,
@@ -89,12 +84,12 @@ export default function AdminDashboard() {
   return (
     <main className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      {/*  <aside className="hidden lg:flex flex-col w-64 bg-[#611232]/90 backdrop-blur-md text-white p-6 rounded-r-xl shadow-lg">
-        <h2 className="text-2xl font-bold mb-8 tracking-wide drop-shadow-md">
+      <aside className=" md:w-30 lg:flex flex-col lg:w-64 bg-[#611232]/90 backdrop-blur-md text-white p-6  shadow-lg">
+        <h2 className="lg:text-2xl font-bold mb-8 tracking-wide drop-shadow-md">
           AdminPanel
         </h2>
         <nav className="flex flex-col gap-3">
-          {["Dashboard", "Solicitudes", "Usuarios", "Configuración"].map(
+          {["Dashboard", "Usuarios", "Esperando Activacion", "Activas"].map(
             (item) => (
               <button
                 key={item}
@@ -105,7 +100,7 @@ export default function AdminDashboard() {
             )
           )}
         </nav>
-      </aside> */}
+      </aside>
 
       {/* Contenido principal */}
       <div className="flex-1 p-6 flex flex-col gap-8">
@@ -133,9 +128,9 @@ export default function AdminDashboard() {
         </div>
 
         {/* Placeholder para gráficas */}
-        <div className="bg-white rounded-xl shadow-md h-64 flex items-center justify-center">
+        {/*  <div className="bg-white rounded-xl shadow-md h-64 flex items-center justify-center">
           <p className="text-gray-400">Aquí irán las gráficas</p>
-        </div>
+        </div> */}
 
         {/* Solicitudes pendientes */}
         <PendientesTable

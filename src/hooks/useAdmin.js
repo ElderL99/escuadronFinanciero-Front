@@ -2,10 +2,11 @@ import { useState, useCallback } from "react";
 import {
   getAdminDashboard,
   getAdminApplicationsSubmitted,
-  approveUsersApplications,
+  approveUsersApplicationsById,
   rejectUserApplication,
   activeUserCredit,
   getApplicationById,
+  getDocumentsByApplicationId,
 } from "../api/admin";
 
 export default function useAdmin() {
@@ -58,12 +59,21 @@ export default function useAdmin() {
     }
   }, []);
 
+  // obtener los documentos by Id
+
+  const fetchApplicationDocumentsById = useCallback(async (applicationId) => {
+    setLoading(true);
+    setError(null);
+    const response = await getDocumentsByApplicationId(applicationId);
+    return response.data;
+  });
+
   // Aprobar solicitud
   const approveApplication = useCallback(async (applicationId) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await approveUsersApplications({ applicationId });
+      const res = await approveUsersApplicationsById(applicationId);
       return res.data;
     } catch (err) {
       setError(err.response?.data?.message || "Error al aprobar solicitud");
@@ -78,7 +88,7 @@ export default function useAdmin() {
     try {
       setLoading(true);
       setError(null);
-      const res = await rejectUserApplication({ applicationId });
+      const res = await rejectUserApplication(applicationId);
       return res.data;
     } catch (err) {
       setError(err.response?.data?.message || "Error al rechazar solicitud");
@@ -93,7 +103,7 @@ export default function useAdmin() {
     try {
       setLoading(true);
       setError(null);
-      const res = await activeUserCredit({ applicationId });
+      const res = await activeUserCredit(applicationId);
       return res.data;
     } catch (err) {
       setError(err.response?.data?.message || "Error al activar crédito");
@@ -112,5 +122,6 @@ export default function useAdmin() {
     approveApplication,
     rejectApplication,
     activateCredit,
+    fetchApplicationDocumentsById,
   };
 }
