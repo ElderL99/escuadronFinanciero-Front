@@ -33,3 +33,23 @@ export const activeUserCredit = async (applicationId) => {
 export const getDocumentsByApplicationId = async (applicationId) => {
   return api.get(`admin/applications/${applicationId}/documents`);
 };
+
+/* Contratos */
+
+export const getAllContractsSigned = async () => {
+  return api.get("admin/contracts/overview");
+};
+
+export const getContractById = async (contractId) => {
+  return api.get(`adin/contracts/${contractId}`);
+};
+
+/* Creditos Activos */
+
+export const getAllCreditsActive = async () => {
+  return api.get("admin/credits/overview");
+};
+
+export const activeCreditById = async (applicationId) => {
+  return api.patch(`admin/${applicationId}/active-credit`);
+};

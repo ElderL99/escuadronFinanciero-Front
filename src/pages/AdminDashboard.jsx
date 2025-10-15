@@ -84,7 +84,7 @@ export default function AdminDashboard() {
   return (
     <main className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className=" md:w-30 lg:flex flex-col lg:w-64 bg-[#611232]/90 backdrop-blur-md text-white p-6  shadow-lg">
+      <aside className=" hidden lg:flex flex-col lg:w-64 bg-[#611232]/90 backdrop-blur-md text-white p-6  shadow-lg">
         <h2 className="lg:text-2xl font-bold mb-8 tracking-wide drop-shadow-md">
           AdminPanel
         </h2>

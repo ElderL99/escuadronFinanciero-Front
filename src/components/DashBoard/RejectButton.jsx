@@ -1,14 +1,14 @@
 import { useState } from "react";
 
-export default function ApproveButton({ applicationId, onApproved, admin }) {
+export default function RejectButton({ applicationId, admin, onRejected }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleApprove = async () => {
+  const handleReject = async () => {
     setLoading(true);
     try {
-      await admin.approveApplication(applicationId);
-      onApproved();
+      await admin.rejectApplication(applicationId);
+      onRejected();
       setShowConfirm(false);
     } catch (error) {
       console.error(error);
@@ -21,19 +21,19 @@ export default function ApproveButton({ applicationId, onApproved, admin }) {
     <>
       <button
         onClick={() => setShowConfirm(true)}
-        className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-2xl font-semibold shadow-md transition-colors"
+        className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-2xl font-semibold shadow-md transition-colors"
       >
-        Aprobar
+        Rechazar
       </button>
 
       {showConfirm && (
-        <div className="fixed inset-0 bg-[#611232]/80 bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-96 shadow-lg">
             <h2 className="text-xl font-semibold mb-4 text-[#611232]">
-              Confirmar aprobación
+              Confirmar rechazo
             </h2>
             <p className="mb-6 text-gray-700">
-              ¿Estás seguro que quieres aprobar esta solicitud?
+              ¿Estás seguro que quieres rechazar esta solicitud?
             </p>
             <div className="flex justify-end gap-4">
               <button
@@ -43,11 +43,11 @@ export default function ApproveButton({ applicationId, onApproved, admin }) {
                 Cancelar
               </button>
               <button
-                onClick={handleApprove}
+                onClick={handleReject}
                 disabled={loading}
-                className="px-4 py-2 rounded-xl bg-green-600 hover:bg-green-700 text-white font-medium"
+                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium"
               >
-                {loading ? "Aprobando..." : "Aprobar"}
+                {loading ? "Rechazando..." : "Rechazar"}
               </button>
             </div>
           </div>
