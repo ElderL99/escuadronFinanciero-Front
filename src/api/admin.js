@@ -41,7 +41,7 @@ export const getAllContractsSigned = async () => {
 };
 
 export const getContractById = async (contractId) => {
-  return api.get(`adin/contracts/${contractId}`);
+  return api.get(`admin/contracts/${contractId}`);
 };
 
 /* Creditos Activos */

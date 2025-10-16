@@ -27,7 +27,7 @@ export default function RejectButton({ applicationId, admin, onRejected }) {
       </button>
 
       {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0  bg-gradient-to-br from-[#611232]/50 via-[#3e0d21] to-[#1b0510]/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-96 shadow-lg">
             <h2 className="text-xl font-semibold mb-4 text-[#611232]">
               Confirmar rechazo

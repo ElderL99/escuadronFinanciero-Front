@@ -7,11 +7,13 @@ import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import UserPrivateRoute from "./router/UserPrivateRouter";
 import UserDashboard from "./pages/UserDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 import RegisterPage from "./pages/RegisterPage";
 import PasswordLostPage from "./pages/PasswordLostPage";
 import SolicitudDetail from "./components/DashBoard/SolicitudDetail";
 import AdminLayout from "./layout/AdminLayout";
+import ContractSignedList from "./components/DashBoard/Contract/ContractsList";
+import ConctractDetail from "./pages/admin/ContractDetail";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,8 @@ const router = createBrowserRouter([
     children: [
       { path: "dashboard", element: <AdminDashboard /> },
       { path: "applications/:id", element: <SolicitudDetail /> },
+      { path: "contracts", element: <ContractSignedList /> },
+      { path: "contracts/:contractId", element: <ConctractDetail /> },
     ],
   },
 ]);
