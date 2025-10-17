@@ -24,6 +24,8 @@ export default function ContractSignedList() {
     loadContracts();
   }, []);
 
+  console.log(contracts);
+
   if (loading)
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#611232] via-[#3e0d21] to-[#1b0510]">
@@ -54,7 +56,7 @@ export default function ContractSignedList() {
           No hay contratos firmados
         </motion.h2>
         <p className="text-gray-300 text-sm max-w-sm">
-          Aún no se han registrado contratos en el sistema.
+          Aún no se han registrado contratos
         </p>
       </motion.div>
     );
@@ -64,7 +66,7 @@ export default function ContractSignedList() {
     visible: (i) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" },
+      transition: { delay: i * 0.1, duration: 0.6, ease: "easeOut" },
     }),
   };
 
@@ -115,7 +117,6 @@ export default function ContractSignedList() {
               custom={i}
               whileHover={{
                 scale: 1.02,
-                backgroundColor: "rgba(255, 255, 255, 0.05)",
               }}
               className="bg-white/5 border border-white/10 rounded-2xl p-3 transition-all duration-300 shadow-sm hover:shadow-md"
             >

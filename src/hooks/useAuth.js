@@ -97,7 +97,7 @@ export default function useAuth() {
       setError(null);
 
       const res = await recoverPasswordApi({ email });
-      return res.data; // puedes devolver mensaje del backend
+      return res.data;
     } catch (err) {
       setError(err.response?.data?.message || "Error al recuperar contraseña");
       return null;

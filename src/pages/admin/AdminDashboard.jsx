@@ -2,14 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useAdmin from "../../hooks/useAdmin";
 import DashboardCard from "../../components/DashBoard/DashBoardCard";
-import {
-  FileText,
-  CheckCircle,
-  XCircle,
-  PenTool,
-  Zap,
-  Activity,
-} from "lucide-react";
+import { FileText, XCircle, PenTool, Zap, Activity } from "lucide-react";
 import PendientesTable from "../../components/DashBoard/PendientesTable";
 
 export default function AdminDashboard() {
@@ -57,31 +50,31 @@ export default function AdminDashboard() {
       label: "Total de Solicitudes",
       value: resumen.total,
       Icon: FileText,
-      color: "bg-[#ffcedd]/10 border border-[#ffcedd]/30 text-[#ffcedd]",
+      color: "bg-[#f5e9dc] border border-[#e0d2c2] text-[#611232]",
     },
     {
       label: "Rechazadas",
       value: resumen.rechazadas,
       Icon: XCircle,
-      color: "bg-red-600/20 border border-red-500/30 text-red-400",
+      color: "bg-red-100 border border-red-300 text-red-700",
     },
     {
-      label: "Esperando Firma",
+      label: "En Proceso de Firma",
       value: resumen.esperandoFirma,
       Icon: PenTool,
-      color: "bg-yellow-500/20 border border-yellow-400/30 text-yellow-300",
+      color: "bg-yellow-100 border border-yellow-300 text-yellow-800",
     },
     {
       label: "Esperando Activación",
       value: resumen.esperandoActivacion,
       Icon: Zap,
-      color: "bg-[#611232]/30 border border-[#ffcedd]/30 text-[#ffcedd]",
+      color: "bg-[#611232]/15 border border-[#611232]/30 text-[#611232]",
     },
     {
       label: "Activas",
       value: resumen.activas,
       Icon: Activity,
-      color: "bg-emerald-600/20 border border-emerald-400/30 text-emerald-300",
+      color: "bg-green-100 border border-green-300 text-green-800",
     },
   ];
 
@@ -96,7 +89,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#611232] via-[#3e0d21] to-[#1b0510] flex flex-col p-6 text-white">
+    <main className="min-h-screen bg-[#c9b091]  bg-opacity-70 flex flex-col p-6 text-white">
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -104,10 +97,10 @@ export default function AdminDashboard() {
         transition={{ duration: 0.6 }}
         className="mb-10 text-center md:text-left"
       >
-        <h1 className="text-4xl font-bold mb-2 tracking-wide">
+        <h1 className="text-4xl font-bold mb-2 tracking-wide text-[#611232]">
           Dashboard Administrativo
         </h1>
-        <p className="text-gray-300 text-sm md:text-base">
+        <p className="text-gray-600 text-sm md:text-base font-medium">
           Resumen general del sistema
         </p>
       </motion.header>
@@ -141,9 +134,9 @@ export default function AdminDashboard() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.5 }}
-        className="bg-white/10 backdrop-blur-md border text-center p-1 border-white/10 rounded-3xl shadow-2xl sm:p-6"
+        className="bg-[#faf7f2] backdrop-blur-md border border-[#e0d2c2] text-center p-4 rounded-3xl shadow-2xl sm:p-6"
       >
-        <h2 className="text-2xl font-semibold text-[#ffcedd] mb-6">
+        <h2 className="text-2xl font-semibold text-[#611232] mb-6">
           Solicitudes Pendientes
         </h2>
         <PendientesTable

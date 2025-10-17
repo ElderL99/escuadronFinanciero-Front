@@ -1,23 +1,19 @@
-import { useState } from "react";
 import AdminPrivateRoutes from "../router/AdminPrivateRouter";
 import { Outlet, Link, useLocation } from "react-router-dom";
-import {
-  FileText,
-  CheckCircle,
-  XCircle,
-  PenTool,
-  Zap,
-  Activity,
-} from "lucide-react";
+import { FileText, CheckCircle, PenTool, Activity, Zap } from "lucide-react";
 
 export default function AdminLayout() {
   const location = useLocation();
 
   const navItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: Activity },
-    { name: "Esperando Activacion", path: "/admin/users", icon: PenTool },
-    { name: "Contratos Esp. Firma", path: "/admin/contracts", icon: FileText },
-    { name: "Activas", path: "/admin/active", icon: CheckCircle },
+    { name: "Esperando Activacion", path: "/admin/contracts", icon: Zap },
+    /* {
+      name: "Esperando Firma del Usuario",
+      path: "/admin/contracts",
+      icon: FileText,
+    }, */
+    { name: "Activas", path: "/admin/contracts/actived", icon: CheckCircle },
   ];
 
   return (

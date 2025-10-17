@@ -1,14 +1,25 @@
 import { useState } from "react";
 
-export default function ApproveButton({ applicationId, onApproved, admin }) {
+export default function ApproveButton({
+  applicationId,
+  onApproved,
+  admin,
+  onApprove,
+}) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleApprove = async () => {
     setLoading(true);
     try {
-      await admin.approveApplication(applicationId);
-      onApproved();
+      if (onApprove) {
+        // Usa la función personalizada si se pasó
+        await onApprove(applicationId);
+      } else {
+        // Caso normal (para aprobar solicitud)
+        await admin.approveApplication(applicationId);
+      }
+      onApproved?.(); // Solo si existe
       setShowConfirm(false);
     } catch (error) {
       console.error(error);
@@ -33,7 +44,7 @@ export default function ApproveButton({ applicationId, onApproved, admin }) {
               Confirmar aprobación
             </h2>
             <p className="mb-6 text-gray-700">
-              ¿Estás seguro que quieres aprobar esta solicitud?
+              ¿Estás seguro que quieres aprobar esta acción?
             </p>
             <div className="flex justify-end gap-4">
               <button

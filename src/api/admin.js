@@ -51,5 +51,5 @@ export const getAllCreditsActive = async () => {
 };
 
 export const activeCreditById = async (applicationId) => {
-  return api.patch(`admin/${applicationId}/active-credit`);
+  return api.patch(`admin/credits/${applicationId}/active-credit`);
 };

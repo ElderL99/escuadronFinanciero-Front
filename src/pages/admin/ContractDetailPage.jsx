@@ -2,12 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useAdmin from "../../hooks/useAdmin";
 import { FileText, CheckCircle2, XCircle, Clock } from "lucide-react";
+import ApproveButton from "../../components/DashBoard/ApproveButton";
 
 export default function ContractDetail() {
   const { contractId } = useParams();
   const admin = useAdmin();
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState(false); // <-- corregido el nombre
 
   useEffect(() => {
     const loadContract = async () => {
@@ -15,6 +17,11 @@ export default function ContractDetail() {
         setLoading(true);
         const response = await admin.fetchContractById(contractId);
         setContract(response?.data || null);
+
+        // Si el contrato ya está activado en el backend
+        if (response?.data?.creditActivated) {
+          setActive(true);
+        }
       } catch (err) {
         console.error("Error cargando contrato:", err);
       } finally {
@@ -105,7 +112,7 @@ export default function ContractDetail() {
         </section>
 
         {/* Acción */}
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center gap-4">
           <a
             href={url}
             target="_blank"
@@ -114,6 +121,19 @@ export default function ContractDetail() {
           >
             Ver Contrato Firmado
           </a>
+
+          {/* Mostrar solo si el contrato está firmado y no está activo */}
+          {signed && !active && (
+            <ApproveButton
+              applicationId={requestId}
+              admin={admin}
+              onApprove={admin.activateCredit}
+              onApproved={() => {
+                alert("Crédito activado correctamente");
+                setActive(true);
+              }}
+            />
+          )}
         </div>
       </div>
     </main>

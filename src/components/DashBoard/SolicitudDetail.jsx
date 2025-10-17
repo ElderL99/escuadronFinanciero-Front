@@ -33,7 +33,7 @@ export default function SolicitudDetail() {
     );
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#611232] via-[#3e0d21] to-[#1b0510] flex flex-col justify-center items-center p-6">
+    <main className="min-h-screen bg-[#212121] flex flex-col justify-center items-center p-6">
       <div className="bg-white/10 backdrop-blur-md text-white rounded-3xl shadow-2xl p-8 max-w-6xl w-full border border-white/10">
         {/* ===================== TÍTULO + BOTONES ===================== */}
         <header className="flex flex-col md:flex-row justify-between items-center mb-10 border-b border-white/10 pb-4">
