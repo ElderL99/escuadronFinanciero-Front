@@ -1,19 +1,17 @@
 import { useState } from "react";
+import useApplicationActions from "../../hooks/admin/useApplicationActions";
 
-export default function RejectButton({ applicationId, admin, onRejected }) {
+export default function RejectButton({ applicationId, onRejected }) {
+  const { rejectApplication, loading } = useApplicationActions();
   const [showConfirm, setShowConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleReject = async () => {
-    setLoading(true);
     try {
-      await admin.rejectApplication(applicationId);
-      onRejected();
+      await rejectApplication(applicationId);
+      onRejected?.();
       setShowConfirm(false);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -27,9 +25,9 @@ export default function RejectButton({ applicationId, admin, onRejected }) {
       </button>
 
       {showConfirm && (
-        <div className="fixed inset-0  bg-gradient-to-br from-[#611232]/50 via-[#3e0d21] to-[#1b0510]/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-96 shadow-lg">
-            <h2 className="text-xl font-semibold mb-4 text-[#611232]">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
               Confirmar rechazo
             </h2>
             <p className="mb-6 text-gray-700">

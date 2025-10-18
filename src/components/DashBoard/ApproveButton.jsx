@@ -1,30 +1,17 @@
 import { useState } from "react";
+import useApplicationActions from "../../hooks/admin/useApplicationActions";
 
-export default function ApproveButton({
-  applicationId,
-  onApproved,
-  admin,
-  onApprove,
-}) {
+export default function ApproveButton({ applicationId, onApproved }) {
+  const { approveApplication, loading } = useApplicationActions();
   const [showConfirm, setShowConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const handleApprove = async () => {
-    setLoading(true);
     try {
-      if (onApprove) {
-        // Usa la función personalizada si se pasó
-        await onApprove(applicationId);
-      } else {
-        // Caso normal (para aprobar solicitud)
-        await admin.approveApplication(applicationId);
-      }
-      onApproved?.(); // Solo si existe
+      await approveApplication(applicationId);
+      onApproved?.();
       setShowConfirm(false);
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -38,13 +25,13 @@ export default function ApproveButton({
       </button>
 
       {showConfirm && (
-        <div className="fixed inset-0 bg-gradient-to-br from-[#611232]/50 via-[#3e0d21] to-[#1b0510]/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-6 w-96 shadow-lg">
-            <h2 className="text-xl font-semibold mb-4 text-[#611232]">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
               Confirmar aprobación
             </h2>
             <p className="mb-6 text-gray-700">
-              ¿Estás seguro que quieres aprobar esta acción?
+              ¿Estás seguro que quieres aprobar esta solicitud?
             </p>
             <div className="flex justify-end gap-4">
               <button

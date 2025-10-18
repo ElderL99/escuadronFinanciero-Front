@@ -7,15 +7,11 @@ import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import UserPrivateRoute from "./router/UserPrivateRouter";
 import UserDashboard from "./pages/UserDashboard";
-import AdminDashboard from "./pages/admin/AdminDashboard";
 import RegisterPage from "./pages/RegisterPage";
 import PasswordLostPage from "./pages/PasswordLostPage";
-import SolicitudDetail from "./components/DashBoard/SolicitudDetail";
 import AdminLayout from "./layout/AdminLayout";
-import ContractSignedList from "./components/DashBoard/Contract/ContractsList";
-import ConctractDetailPage from "./pages/admin/ContractDetailPage";
-import ApplicationsActivePage from "./pages/admin/ApplicationsActivePage";
-import CredictActiveDetail from "./components/DashBoard/credits/CredictActiveDetails";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
+import ApplictionDetailPage from "./pages/admin/ApplicationsUser/ApplicationDetailPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -41,25 +37,12 @@ const router = createBrowserRouter([
     path: "/admin",
     element: <AdminLayout />,
     children: [
-      { path: "dashboard", element: <AdminDashboard /> },
-      { path: "applications/:id", element: <SolicitudDetail /> },
-      {
-        path: "contracts/actived",
-        element: <ApplicationsActivePage />,
-      }, // primero
-      {
-        path: "contracts/:contractId",
-        element: <ConctractDetailPage />,
-        children: [
-          { path: "credit-detail/:id", element: <CredictActiveDetail /> },
-        ],
-      }, // después
-      { path: "contracts", element: <ContractSignedList /> },
+      { path: "dashboard", element: <AdminDashboardPage /> },
+      { path: "applications/:id", element: <ApplictionDetailPage /> },
     ],
   },
 ]);
 
-// ✅ Render sin fragment innecesario
 createRoot(document.getElementById("root")).render(
   <RouterProvider
     router={router}

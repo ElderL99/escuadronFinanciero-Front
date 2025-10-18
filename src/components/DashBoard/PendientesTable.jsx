@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Download, Filter } from "lucide-react";
 import UserPicture from "../../svg/userpicture.png";
 
