@@ -46,7 +46,6 @@ export default function AdminDashboardPage() {
           Icon={Users}
           color="bg-[#611232]"
         />
-
         <DashboardCards
           label="Rechazadas"
           value={resumen?.rechazadas ?? 0}

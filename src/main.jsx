@@ -12,6 +12,8 @@ import PasswordLostPage from "./pages/PasswordLostPage";
 import AdminLayout from "./layout/AdminLayout";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
 import ApplictionDetailPage from "./pages/admin/ApplicationsUser/ApplicationDetailPage.jsx";
+import AdminSignedContractsPage from "./pages/admin/ApplicationsActivation/AdminSignedContractsPage.jsx";
+import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminContractDetailPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,8 @@ const router = createBrowserRouter([
     children: [
       { path: "dashboard", element: <AdminDashboardPage /> },
       { path: "applications/:id", element: <ApplictionDetailPage /> },
+      { path: "signed-contracts", element: <AdminSignedContractsPage /> },
+      { path: "signed-contracts/:id", element: <AdminContractDetailPage /> },
     ],
   },
 ]);

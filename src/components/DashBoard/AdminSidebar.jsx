@@ -6,7 +6,11 @@ export default function AdminSidebar() {
 
   const navItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: Activity },
-    { name: "Esperando Activación", path: "/admin/contracts", icon: Zap },
+    {
+      name: "Esperando Activación",
+      path: "/admin/signed-contracts",
+      icon: Zap,
+    },
     { name: "Activas", path: "/admin/contracts/actived", icon: CheckCircle },
   ];
 

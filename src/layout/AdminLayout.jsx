@@ -1,5 +1,5 @@
-import AdminSidebar from "../components/DashBoard/AdminSidebar";
 import AdminPrivateRoutes from "../router/AdminPrivateRouter";
+import AdminSidebar from "../components/DashBoard/AdminSidebar";
 import { Outlet } from "react-router-dom";
 
 export default function AdminLayout() {
@@ -7,11 +7,10 @@ export default function AdminLayout() {
     <AdminPrivateRoutes>
       <div className="flex min-h-screen bg-[#0f0a10] text-white">
         <AdminSidebar />
-
         <main
-          className="flex-1 relative bg-gradient-to-br 
-          from-[#1a0f16] via-[#150a12] to-[#0f0a10] 
-          overflow-y-auto"
+          className="flex-1 relative 
+  bg-gradient-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
+  overflow-y-auto"
         >
           <Outlet />
         </main>
