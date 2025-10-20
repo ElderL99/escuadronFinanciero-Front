@@ -14,6 +14,7 @@ import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
 import ApplictionDetailPage from "./pages/admin/ApplicationsUser/ApplicationDetailPage.jsx";
 import AdminSignedContractsPage from "./pages/admin/ApplicationsActivation/AdminSignedContractsPage.jsx";
 import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminContractDetailPage.jsx";
+import AdminActiveCreditsPage from "./pages/admin/ActiveCredits/ActiveCreaditsPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,7 @@ const router = createBrowserRouter([
       { path: "applications/:id", element: <ApplictionDetailPage /> },
       { path: "signed-contracts", element: <AdminSignedContractsPage /> },
       { path: "signed-contracts/:id", element: <AdminContractDetailPage /> },
+      { path: "activeCredits", element: <AdminActiveCreditsPage /> },
     ],
   },
 ]);
