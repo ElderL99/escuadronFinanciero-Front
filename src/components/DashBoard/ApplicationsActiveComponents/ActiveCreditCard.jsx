@@ -1,5 +1,5 @@
+import { Link } from "react-router-dom";
 import { PiggyBank } from "lucide-react";
-import PaymentList from "./PaymentList";
 
 export default function ActiveCreditCard({ credito }) {
   const total = Number(credito.monto) + Number(credito.interes);
@@ -7,9 +7,8 @@ export default function ActiveCreditCard({ credito }) {
   return (
     <div
       className="bg-white border border-[#e6e0da] rounded-2xl shadow-md 
-                 p-5 hover:shadow-lg transition-all duration-300 flex flex-col gap-3"
+                    p-5 hover:shadow-lg transition-all duration-300 flex flex-col gap-3"
     >
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-lg bg-[#611232]/10">
@@ -24,7 +23,6 @@ export default function ActiveCreditCard({ credito }) {
         </span>
       </div>
 
-      {/* 💰 Datos financieros */}
       <div className="text-sm text-gray-700 space-y-1">
         <p>
           <span className="font-semibold text-[#611232]">Monto: </span>
@@ -33,7 +31,6 @@ export default function ActiveCreditCard({ credito }) {
             currency: "MXN",
           })}
         </p>
-
         <p>
           <span className="font-semibold text-[#611232]">Interés: </span>
           {Number(credito.interes).toLocaleString("es-MX", {
@@ -41,7 +38,6 @@ export default function ActiveCreditCard({ credito }) {
             currency: "MXN",
           })}
         </p>
-
         <p>
           <span className="font-semibold text-[#611232]">Total a pagar: </span>
           <span className="text-[#d4af37] font-semibold">
@@ -53,8 +49,15 @@ export default function ActiveCreditCard({ credito }) {
         </p>
       </div>
 
-      {/* 📅 Plan de pagos */}
-      <PaymentList pagos={credito.pagos} />
+      {/* 🔗 Enlace a detalle */}
+      <div className="pt-3 border-t border-[#e6e0da] text-right">
+        <Link
+          to={`/admin/active-credits/${credito.creditoId}`}
+          className="text-sm font-semibold text-[#d4af37] hover:text-[#b7950b] hover:underline transition-colors"
+        >
+          Ver pagos →
+        </Link>
+      </div>
     </div>
   );
 }

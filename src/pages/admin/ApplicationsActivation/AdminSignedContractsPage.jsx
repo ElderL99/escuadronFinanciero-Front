@@ -18,7 +18,12 @@ export default function AdminSignedContractsPage() {
       </div>
     );
 
-  if (!contracts.length)
+  // 🟣 Filtrar solo contratos firmados y pendientes de activación
+  const pendingContracts = contracts.filter(
+    (contrato) => contrato.status === "signed"
+  );
+
+  if (!pendingContracts.length)
     return (
       <div className="text-[#611232]/60 text-center py-6">
         No hay contratos firmados pendientes de activación.
@@ -32,7 +37,7 @@ export default function AdminSignedContractsPage() {
       </h1>
 
       <div className="grid grid-cols-1 gap-4">
-        {contracts.map((contrato) => (
+        {pendingContracts.map((contrato) => (
           <ContractCard key={contrato.contratoId} contrato={contrato} />
         ))}
       </div>
