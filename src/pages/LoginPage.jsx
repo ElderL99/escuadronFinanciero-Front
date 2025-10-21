@@ -20,8 +20,15 @@ export default function LoginPage() {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const success = await login(data.email, data.password);
-    if (success) navigate("/user/dashboard");
+    const user = await login(data.email, data.password);
+
+    if (user) {
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
+    }
   };
 
   const validatePassword = (value) => {

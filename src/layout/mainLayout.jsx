@@ -1,13 +1,8 @@
-import { Outlet } from "react-router";
-import useAuth from "../hooks/useAuth";
+import { Outlet } from "react-router-dom";
 
 export default function MainLayout() {
-  const auth = useAuth();
-
-  if (auth.loading) return <p>Cargando...</p>;
-
   return (
-    <main>
+    <main className="min-h-screen bg-[#1a1a1a] text-white">
       <Outlet />
     </main>
   );
