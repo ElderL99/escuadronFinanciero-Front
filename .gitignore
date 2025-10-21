@@ -25,3 +25,4 @@ dist-ssr
 
 
 uploadSignedContract.js
+enviarPago.js

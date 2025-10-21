@@ -20,7 +20,12 @@ export default function AdminActiveCreditsPage() {
       </div>
     );
 
-  if (!credits.length)
+  // 🟩 Filtrar solo los créditos activos
+  const activeCredits = credits.filter(
+    (credito) => credito.status === "active"
+  );
+
+  if (!activeCredits.length)
     return (
       <div className="text-gray-500 text-center py-6">
         No hay créditos activos registrados.
@@ -34,7 +39,7 @@ export default function AdminActiveCreditsPage() {
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {credits.map((credito) => (
+        {activeCredits.map((credito) => (
           <ActiveCreditCard key={credito.creditoId} credito={credito} />
         ))}
       </div>

@@ -11,7 +11,7 @@ export default function AdminSidebar() {
       path: "/admin/signed-contracts",
       icon: Zap,
     },
-    { name: "Activas", path: "/admin/activeCredits", icon: CheckCircle },
+    { name: "Activas", path: "/admin/active-credits", icon: CheckCircle },
   ];
 
   return (

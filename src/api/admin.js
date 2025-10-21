@@ -50,6 +50,36 @@ export const getAllCreditsActive = async () => {
   return api.get("admin/credits/overview");
 };
 
+// Activar un Credito
 export const activeCreditById = async (applicationId) => {
   return api.patch(`admin/credits/${applicationId}/active-credit`);
+};
+
+// 🧾 Obtener todos los pagos de un crédito
+export const getAllPaymentsByCreditId = async (creditId) => {
+  return api.get(`/admin/creditos/${creditId}/payments`);
+};
+
+// 📄 Obtener recibo individual de un pago
+export const getPaymentReceipt = async (creditId, paymentNumber) => {
+  return api.get(
+    `/admin/creditos/${creditId}/payments/${paymentNumber}/receipt`
+  );
+};
+
+// ✅ Aprobar un pago
+export const approvePayment = async (creditId, paymentNumber) => {
+  return api.patch(
+    `/admin/creditos/${creditId}/payments/${paymentNumber}/approve`
+  );
+};
+
+// ❌ Rechazar un pago
+export const rejectPayment = async (creditId, paymentNumber, reason) => {
+  return api.patch(
+    `/admin/creditos/${creditId}/payments/${paymentNumber}/reject`,
+    {
+      reason,
+    }
+  );
 };

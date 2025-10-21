@@ -39,7 +39,7 @@ export default function AdminDashboardPage() {
       </h1>
 
       {/* === CARDS === */}
-      <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-3 md:gap-4 lg:grid-cols-6 ">
+      <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-3 md:gap-4 lg:grid-cols-5 ">
         <DashboardCards
           label="Total"
           value={resumen?.total ?? 0}
