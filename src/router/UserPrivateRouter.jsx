@@ -4,24 +4,25 @@ import useAuth from "../hooks/useAuth";
 export default function UserPrivateRoute({ children }) {
   const { user, loading, isAuthenticated } = useAuth();
 
+  // ⏳ Mostrar loader mientras se valida token
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#1a1a1a] text-[#d4af37]">
+      <div className="min-h-screen flex items-center justify-center bg-[#1a1a1a] text-[#d4af37] font-medium tracking-wide">
         Verificando acceso...
       </div>
     );
   }
 
-  // 🚫 Sin token → login
-  if (!isAuthenticated) {
+  // 🚫 Si no está autenticado → login
+  if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
   }
 
-  // 🚫 Si es admin → lo redirigimos a su panel
+  // 🚫 Si es admin → lo redirigimos a su panel principal
   if (user?.role === "admin") {
-    return <Navigate to="/admin/dashboard" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
-  // ✅ Usuario normal → acceso permitido
+  // ✅ Usuario normal → puede ver su dashboard
   return children;
 }

@@ -5,57 +5,49 @@ import {
   registerRequest,
   getProfile,
   recoverPasswordApi,
+  validateToken, // ✅ nuevo endpoint
 } from "../api/auth.js";
 
 export default function useAuth() {
-  const [user, setUser] = useState(() => {
-    // ✅ Recuperar usuario cacheado (si existe)
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // 🔐 Verificar token y obtener perfil al cargar la app
+  // ✅ Validar token y cargar perfil al montar la app
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const verifySession = async () => {
+      const token = localStorage.getItem("token");
 
-    // ⛔️ Si no hay token → redirigir al login inmediatamente
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      navigate("/login");
-      return;
-    }
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
 
-    // ⚡ Si ya hay usuario cacheado → no volver a pedir perfil
-    if (user) {
-      setLoading(false);
-      return;
-    }
-
-    // 🧩 Intentar obtener perfil
-    const fetchProfile = async () => {
       try {
+        // 1️⃣ Validar token sin traer datos pesados
+        await validateToken();
+
+        // 2️⃣ Token válido → obtener perfil completo
         const res = await getProfile();
-        const userData = res.data.data.User || res.data.data;
+        const userData = res.data?.data?.User || res.data?.data || res.data;
+
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
       } catch (err) {
-        console.error("Token inválido o expirado:", err);
+        console.warn("Token expirado o inválido:", err);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setUser(null);
-        navigate("/login"); // 🔁 redirigir si falla el perfil
+        navigate("/login");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfile();
-  }, [navigate, user]);
+    verifySession();
+  }, [navigate]);
 
   // 🔑 Login
   const login = useCallback(
@@ -64,14 +56,14 @@ export default function useAuth() {
         setLoading(true);
         setError(null);
 
-        // 1️⃣ Petición de login → obtiene token
+        // 1️⃣ Petición de login
         const res = await loginRequest({ email, password });
         const token = res.data.data.token;
         localStorage.setItem("token", token);
 
-        // 2️⃣ Obtener perfil una sola vez
+        // 2️⃣ Obtener perfil tras login
         const profileRes = await getProfile();
-        const userData = profileRes.data.data.User || profileRes.data.data;
+        const userData = profileRes.data?.data?.User || profileRes.data?.data;
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
 
@@ -84,7 +76,6 @@ export default function useAuth() {
 
         return userData;
       } catch (err) {
-        console.error("Error en login:", err);
         setError(err.response?.data?.message || "Error al iniciar sesión");
         return null;
       } finally {
@@ -100,6 +91,7 @@ export default function useAuth() {
       try {
         setLoading(true);
         setError(null);
+
         await registerRequest(userData);
         navigate("/login");
         return true;
@@ -143,7 +135,7 @@ export default function useAuth() {
     login,
     register,
     logout,
-    isAuthenticated: !!user,
     recoverPassword,
+    isAuthenticated: !!user,
   };
 }
