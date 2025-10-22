@@ -16,6 +16,9 @@ import AdminSignedContractsPage from "./pages/admin/ApplicationsActivation/Admin
 import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminContractDetailPage.jsx";
 import AdminActiveCreditsPage from "./pages/admin/ActiveCredits/ActiveCreaditsPage.jsx";
 import AdminCreditDetailPage from "./pages/admin/ActiveCredits/AdminCreditDetailPage.jsx";
+import UserLayout from "./layout/UserLayout.jsx";
+import UserProfile from "./pages/User/UserPerfil.jsx";
+import AdminPrivateRoute from "./router/AdminPrivateRouter.jsx";
 
 const router = createBrowserRouter([
   {
@@ -26,20 +29,33 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginPage /> },
       { path: "/register", element: <RegisterPage /> },
       { path: "/recover-password", element: <PasswordLostPage /> },
-      {
-        path: "/user/dashboard",
-        element: (
-          <UserPrivateRoute>
-            <UserDashboard /> {/* solo usuarios autenticados */}
-          </UserPrivateRoute>
-        ),
-      },
       { path: "*", element: <NotFoundPage /> }, // Ruta de error
     ],
   },
   {
+    path: "/user",
+    element: (
+      <UserPrivateRoute>
+        <UserLayout />
+      </UserPrivateRoute>
+    ),
+    children: [
+      { path: "dashboard", element: <h1>Aqui es el dashboard</h1> },
+      { path: "solicitudes", element: <h1>Aqui es la lista de solictudes</h1> },
+      {
+        path: "solicitud/:id",
+        element: <h1>Aqui es el detalle de la solicitud</h1>,
+      },
+      { path: "perfil", element: <UserProfile /> },
+    ],
+  },
+  {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <AdminPrivateRoute>
+        <AdminLayout />
+      </AdminPrivateRoute>
+    ),
     children: [
       { path: "dashboard", element: <AdminDashboardPage /> },
       { path: "applications/:id", element: <ApplictionDetailPage /> },
