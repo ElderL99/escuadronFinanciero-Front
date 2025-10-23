@@ -1,28 +1,46 @@
 import { Navigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { useState, useEffect } from "react";
+import { validateToken } from "../api/auth";
 
 export default function UserPrivateRoute({ children }) {
-  const { user, loading, isAuthenticated } = useAuth();
+  const [isValid, setIsValid] = useState(null);
 
-  // ⏳ Mostrar loader mientras se valida token
-  if (loading) {
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem("token");
+
+      // Si no hay token → no está autenticado
+      if (!token) {
+        setIsValid(false);
+        return;
+      }
+
+      try {
+        await validateToken();
+        setIsValid(true); // ✅ token válido
+      } catch {
+        // 🚫 Token inválido → limpiar sesión
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setIsValid(false);
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  // ⏳ Mientras se valida
+  if (isValid === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#1a1a1a] text-[#d4af37] font-medium tracking-wide">
-        Verificando acceso...
+      <div className="min-h-screen flex items-center justify-center bg-[#1a1a1a] text-[#d4af37]">
+        Verificando sesión...
       </div>
     );
   }
 
-  // 🚫 Si no está autenticado → login
-  if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
-  }
+  // 🚫 No válido → login
+  if (!isValid) return <Navigate to="/login" replace />;
 
-  // 🚫 Si es admin → lo redirigimos a su panel principal
-  if (user?.role === "admin") {
-    return <Navigate to="/admin" replace />;
-  }
-
-  // ✅ Usuario normal → puede ver su dashboard
+  // ✅ Token válido → renderizar contenido
   return children;
 }

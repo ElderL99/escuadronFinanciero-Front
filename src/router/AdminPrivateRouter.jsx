@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminPrivateRoute({ children }) {
   const { user, loading, isAuthenticated } = useAuth();
@@ -20,7 +20,7 @@ export default function AdminPrivateRoute({ children }) {
 
   // 🚫 Si está autenticado pero no es admin → dashboard normal
   if (user?.role !== "admin") {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/user/dashboard" replace />;
   }
 
   // ✅ Admin autenticado → acceso permitido

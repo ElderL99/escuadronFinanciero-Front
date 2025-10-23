@@ -1,53 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   loginRequest,
   registerRequest,
   getProfile,
   recoverPasswordApi,
-  validateToken, // ✅ nuevo endpoint
-} from "../api/auth.js";
+} from "../api/auth";
 
-export default function useAuth() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  // ✅ Validar token y cargar perfil al montar la app
-  useEffect(() => {
-    const verifySession = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        // 1️⃣ Validar token sin traer datos pesados
-        await validateToken();
-
-        // 2️⃣ Token válido → obtener perfil completo
-        const res = await getProfile();
-        const userData = res.data?.data?.User || res.data?.data || res.data;
-
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-      } catch (err) {
-        console.warn("Token expirado o inválido:", err);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        setUser(null);
-        navigate("/login");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    verifySession();
-  }, [navigate]);
 
   // 🔑 Login
   const login = useCallback(
@@ -56,23 +24,19 @@ export default function useAuth() {
         setLoading(true);
         setError(null);
 
-        // 1️⃣ Petición de login
         const res = await loginRequest({ email, password });
         const token = res.data.data.token;
         localStorage.setItem("token", token);
 
-        // 2️⃣ Obtener perfil tras login
+        // Obtener perfil inicial
         const profileRes = await getProfile();
         const userData = profileRes.data?.data?.User || profileRes.data?.data;
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
 
-        // 3️⃣ Redirigir según rol
-        if (userData.role === "admin") {
-          navigate("/admin");
-        } else {
-          navigate("/dashboard");
-        }
+        // Redirigir según rol
+        if (userData.role === "admin") navigate("/admin/dashboard");
+        else navigate("/user/dashboard");
 
         return userData;
       } catch (err) {
@@ -128,14 +92,23 @@ export default function useAuth() {
     }
   }, []);
 
-  return {
-    user,
-    loading,
-    error,
-    login,
-    register,
-    logout,
-    recoverPassword,
-    isAuthenticated: !!user,
-  };
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        error,
+        login,
+        register,
+        logout,
+        recoverPassword,
+        isAuthenticated: !!localStorage.getItem("token"),
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
+
+// Hook global
+export const useAuth = () => useContext(AuthContext);

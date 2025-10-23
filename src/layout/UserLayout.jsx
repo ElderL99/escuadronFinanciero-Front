@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { LogOut, User, FileText, Home } from "lucide-react";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 export default function UserLayout() {
   const { logout } = useAuth();

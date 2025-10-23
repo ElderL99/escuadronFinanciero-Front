@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
