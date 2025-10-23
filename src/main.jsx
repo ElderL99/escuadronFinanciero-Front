@@ -26,6 +26,7 @@ import AdminLayout from "./layout/AdminLayout.jsx";
 // 👤 Páginas de usuario
 import UserDashboard from "./pages/UserDashboard";
 import UserProfile from "./pages/User/UserPerfil.jsx";
+import UserApplicationsPage from "./pages/User/UserApplicationsPage.jsx";
 
 // 🛠️ Páginas de administrador
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
@@ -65,7 +66,7 @@ const router = createBrowserRouter(
       >
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="perfil" element={<UserProfile />} />
-        <Route path="solicitudes" element={<h1>Lista de solicitudes</h1>} />
+        <Route path="solicitudes" element={<UserApplicationsPage />} />
         <Route path="solicitud/:id" element={<h1>Detalle de solicitud</h1>} />
       </Route>
 
