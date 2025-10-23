@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import clsx from "clsx";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 import InputField from "../components/InputField";
 import { Eye, EyeOff } from "lucide-react";
 

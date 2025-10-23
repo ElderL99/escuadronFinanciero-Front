@@ -1,32 +1,26 @@
 import { LogOut } from "lucide-react";
-import useAuth from "../../hooks/useAuth";
+import { useAuth } from "../../context/AuthContext";
 
 export default function UserProfile() {
-  const { user, logout, loading } = useAuth();
+  const { user, loading } = useAuth();
 
-  if (loading) {
+  // 🌀 Estado inicial de carga
+  if (loading || !user) {
     return (
       <div className="flex items-center justify-center min-h-screen text-[#611232] font-semibold tracking-wide">
-        Cargando perfil...
+        {loading ? "Cargando perfil..." : "Verificando información..."}
       </div>
     );
   }
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-red-600 font-medium">
-        No se pudo cargar el perfil.
-      </div>
-    );
-  }
-
+  // ✅ Cuando ya hay usuario
   const profile = user.User || user;
   const initials = `${profile.name?.[0] || ""}${
     profile.lastName?.[0] || ""
   }`.toUpperCase();
 
   return (
-    <section className="min-h-screen w-full flex justify-center py-20  sm:px-6 bg-transparent">
+    <section className="min-h-screen w-full flex justify-center py-20 sm:px-6 bg-transparent">
       <div
         className="w-full max-w-2xl bg-white/70 backdrop-blur-xl 
         shadow-[0_0_30px_rgba(97,18,50,0.15)] border border-[#611232]/20 
@@ -41,7 +35,7 @@ export default function UserProfile() {
 
         {/* Avatar + Nombre */}
         <div className="flex flex-col items-center mb-8 gap-2">
-          <div className="w-20  h-20 sm:w-24 sm:h-24 rounded-full bg-[#611232]/20 flex items-center justify-center text-[#611232] text-2xl sm:text-3xl font-bold border border-[#611232]/40 shadow-inner mb-3">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#611232]/20 flex items-center justify-center text-[#611232] text-2xl sm:text-3xl font-bold border border-[#611232]/40 shadow-inner mb-3">
             {initials}
           </div>
           <h2 className="text-sm sm:text-xl font-semibold text-[#611232]">

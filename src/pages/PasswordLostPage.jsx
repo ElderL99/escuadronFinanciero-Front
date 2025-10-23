@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import InputField from "../components/InputField";
-import useAuth from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 export default function PasswordLostPage() {
   const { recoverPassword, loading, error } = useAuth();
