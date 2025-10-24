@@ -7,6 +7,11 @@ export const getUserApplications = async () => api.get("/user/solicitud");
 export const getUserApplicationById = async (id) =>
   api.get(`/user/solicitud/${id}`);
 
+// Enviar una solcitud Especifica
+
+export const sendUserApplications = async (applicationId) =>
+  api.patch(`/user/solicitud/${applicationId}/send`);
+
 // Actualizar solicitud (solo draft)
 export const updateUserApplication = async (id, data) =>
   api.patch(`/user/solicitud/${id}`, data);
@@ -18,3 +23,10 @@ export const deleteUserApplication = async (id) =>
 // Obtener documentos asociados
 export const getUserApplicationDocuments = async (id) =>
   api.get(`/user/solicitud/${id}/documentos`);
+
+// Actualizar documentos
+export const updateUserApplicationDocuments = (id, formData) => {
+  return api.patch(`user/solicitud/${id}/documentos`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};

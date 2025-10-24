@@ -43,8 +43,8 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-[#f8f4f6]">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 border border-[#611232]/20">
+    <section className="min-h-screen p-4 flex items-center justify-center bg-[#f8f4f6]">
+      <div className="w-full  max-w-md bg-white shadow-xl rounded-2xl p-8 border border-[#611232]/20">
         <h1 className="text-2xl font-semibold text-center text-[#611232] mb-6">
           Iniciar sesión
         </h1>

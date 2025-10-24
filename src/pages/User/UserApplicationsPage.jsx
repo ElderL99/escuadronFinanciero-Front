@@ -47,7 +47,7 @@ export default function UserApplicationsPage() {
             key={app._id}
             app={app}
             isDetail={!!id}
-            onClick={() => !id && navigate(`/user/solicitudes/${app._id}`)}
+            onClick={() => !id && navigate(`/user/solicitud/${app._id}`)}
           />
         ))}
       </div>
