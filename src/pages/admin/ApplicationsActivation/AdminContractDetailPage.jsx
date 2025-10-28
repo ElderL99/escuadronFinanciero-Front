@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useAdminContractById from "../../../hooks/admin/useAdminContractById";
 import useActivateCredit from "../../../hooks/admin/useActiveCredit";
 import {
@@ -7,13 +7,14 @@ import {
   ArrowLeft,
   CalendarDays,
   CheckCircle,
-  Loader2,
 } from "lucide-react";
 import { useState } from "react";
 import ActivateCreditSection from "../../../components/DashBoard/contractsComponents/ActivateCredutSection";
+import toast from "react-hot-toast";
 
 export default function AdminContractDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { contract, loading, error } = useAdminContractById(id);
   const [confirming, setConfirming] = useState(false);
   const {
@@ -24,7 +25,14 @@ export default function AdminContractDetailPage() {
   } = useActivateCredit();
 
   const handleActivate = async () => {
-    await activateCredit(contract.requestId);
+    try {
+      await activateCredit(contract.requestId);
+      toast.success("✅ Crédito activado correctamente");
+      navigate("/admin/active-credits");
+    } catch (err) {
+      console.error(err);
+      toast.error("❌ Error al activar el crédito. Intenta nuevamente.");
+    }
   };
 
   if (loading)
@@ -88,7 +96,13 @@ export default function AdminContractDetailPage() {
 
             <div className="mt-4 sm:mt-0">
               <p className="text-sm md:text-base text-gray-500">Estado</p>
-              <p className="flex items-center gap-2 text-[#d4af37] font-semibold text-sm md:text-lg">
+              <p
+                className={`flex items-center gap-2 font-semibold text-sm md:text-lg ${
+                  contract.signed
+                    ? "text-[#0c7a43]"
+                    : "text-[#d4af37]"
+                }`}
+              >
                 <CheckCircle size={18} />
                 {contract.signed ? "Firmado" : "No firmado"}
               </p>
@@ -156,13 +170,13 @@ export default function AdminContractDetailPage() {
 
           {/* 📄 Botón al documento firmado */}
           {contract.url && (
-            <div className="pt-4 border-t border-[#eae5df]">
+            <div className="pt-4 border-t border-[#eae5df] ">
               <a
                 href={contract.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-gradient-to- from-[#611232] to-[#8b204a] 
-                           text-white hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
+                className="block w-full text-center bg-gradient-to-r from-[#611232] to-[#8b204a] 
+                          text-white hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
               >
                 Ver documento firmado
               </a>
@@ -171,13 +185,15 @@ export default function AdminContractDetailPage() {
         </div>
       </section>
 
-      {/* ✅ Nueva sección: botón para activar crédito */}
-      <ActivateCreditSection
-        onActivate={handleActivate}
-        activating={activating}
-        success={success}
-        error={activateError}
-      />
+      {/* ✅ Mostrar el botón solo si el contrato NO está firmado */}
+      {!contract.signed && (
+        <ActivateCreditSection
+          onActivate={handleActivate}
+          activating={activating}
+          success={success}
+          error={activateError}
+        />
+      )}
     </>
   );
 }

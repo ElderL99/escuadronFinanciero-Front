@@ -105,9 +105,7 @@ const router = createBrowserRouter(
   )
 );
 
-// ===============================
-// 🚀 Render principal con Toaster global
-// ===============================
+
 createRoot(document.getElementById("root")).render(
   <>
     <RouterProvider
@@ -118,7 +116,7 @@ createRoot(document.getElementById("root")).render(
       }}
     />
 
-    {/* ✅ Toaster global */}
+  
     <Toaster
       position="top-right"
       toastOptions={{

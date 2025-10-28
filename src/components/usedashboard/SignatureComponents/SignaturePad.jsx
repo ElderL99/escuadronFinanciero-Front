@@ -4,6 +4,7 @@ import axios from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function SignaturePad() {
   const { id } = useParams(); // ID de la solicitud
@@ -18,7 +19,7 @@ export default function SignaturePad() {
 
   const handleSave = async () => {
     if (sigCanvas.current.isEmpty()) {
-      setError("Por favor firma antes de continuar.");
+      toast.error("✍️ Por favor firma antes de continuar.");
       return;
     }
 
@@ -30,13 +31,14 @@ export default function SignaturePad() {
 
       await axios.patch(`/user/solicitud/${id}/firma-digital`, { firmaImage });
 
-      alert(
+      toast.success(
         "✅ Firma enviada correctamente. Tu contrato se regenerará con la firma."
       );
+
       navigate("/user/dashboard");
     } catch (err) {
       console.error(err);
-      setError("Error al enviar la firma. Intenta nuevamente.");
+      toast.error("❌ Error al enviar la firma. Intenta nuevamente.");
     } finally {
       setIsSubmitting(false);
     }
