@@ -30,6 +30,7 @@ import UserProfile from "./pages/User/UserPerfil.jsx";
 import UserApplicationsPage from "./pages/User/UserApplicationsPage.jsx";
 import UserApplicationDetailPage from "./pages/User/UserApplicationsDetaliPage.jsx";
 import UpdateApplicationPage from "./pages/User/UpdateApplicationsPage.jsx";
+import SignaturePad from "./components/usedashboard/SignatureComponents/SignaturePad.jsx";
 
 // 🛠️ Páginas de administrador
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
@@ -75,6 +76,7 @@ const router = createBrowserRouter(
           path="solicitud/:id/editar"
           element={<UpdateApplicationPage />}
         />
+        <Route path="solicitud/:id/firma" element={<SignaturePad />} />
       </Route>
 
       {/* 🛠️ Admin */}

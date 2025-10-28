@@ -20,7 +20,7 @@ export default function AdminSignedContractsPage() {
 
   // 🟣 Filtrar solo contratos firmados y pendientes de activación
   const pendingContracts = contracts.filter(
-    (contrato) => contrato.status === "signed"
+    (contrato) => contrato.estadoSolicitud === "signed"
   );
 
   if (!pendingContracts.length)

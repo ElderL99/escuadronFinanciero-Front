@@ -161,7 +161,7 @@ export default function AdminContractDetailPage() {
                 href={contract.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-gradient-to-r from-[#611232] to-[#8b204a] 
+                className="block w-full text-center bg-gradient-to- from-[#611232] to-[#8b204a] 
                            text-white hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
               >
                 Ver documento firmado

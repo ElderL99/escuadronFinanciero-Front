@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Navigate } from "react-router-dom";
 
 export default function ActivateCreditSection({
   onActivate,
@@ -65,6 +66,7 @@ export default function ActivateCreditSection({
               onClick={() => {
                 setConfirming(false);
                 onActivate();
+                Navigate("/admin/signed-contracts");
               }}
               disabled={activating}
               className={`w-full sm:w-auto px-6 py-2 rounded-xl font-semibold text-white shadow-md transition-all
