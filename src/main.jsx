@@ -5,6 +5,7 @@ import {
   RouterProvider,
   Route,
 } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import "./index.css";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
@@ -26,6 +27,10 @@ import AdminLayout from "./layout/AdminLayout.jsx";
 // 👤 Páginas de usuario
 import UserDashboard from "./pages/UserDashboard";
 import UserProfile from "./pages/User/UserPerfil.jsx";
+import UserApplicationsPage from "./pages/User/UserApplicationsPage.jsx";
+import UserApplicationDetailPage from "./pages/User/UserApplicationsDetaliPage.jsx";
+import UpdateApplicationPage from "./pages/User/UpdateApplicationsPage.jsx";
+import SignaturePad from "./components/usedashboard/SignatureComponents/SignaturePad.jsx";
 
 // 🛠️ Páginas de administrador
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
@@ -65,8 +70,13 @@ const router = createBrowserRouter(
       >
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="perfil" element={<UserProfile />} />
-        <Route path="solicitudes" element={<h1>Lista de solicitudes</h1>} />
-        <Route path="solicitud/:id" element={<h1>Detalle de solicitud</h1>} />
+        <Route path="solicitudes" element={<UserApplicationsPage />} />
+        <Route path="solicitud/:id" element={<UserApplicationDetailPage />} />
+        <Route
+          path="solicitud/:id/editar"
+          element={<UpdateApplicationPage />}
+        />
+        <Route path="solicitud/:id/firma" element={<SignaturePad />} />
       </Route>
 
       {/* 🛠️ Admin */}
@@ -96,14 +106,29 @@ const router = createBrowserRouter(
 );
 
 // ===============================
-// 🚀 Render principal
+// 🚀 Render principal con Toaster global
 // ===============================
 createRoot(document.getElementById("root")).render(
-  <RouterProvider
-    router={router}
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  />
+  <>
+    <RouterProvider
+      router={router}
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    />
+
+    {/* ✅ Toaster global */}
+    <Toaster
+      position="top-right"
+      toastOptions={{
+        duration: 3500,
+        style: {
+          background: "#1a1a1a",
+          color: "#fff",
+          borderRadius: "8px",
+        },
+      }}
+    />
+  </>
 );
