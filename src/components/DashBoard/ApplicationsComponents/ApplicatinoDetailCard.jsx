@@ -21,6 +21,11 @@ export default function ApplicationDetailsCard({ data }) {
     { label: "Unidad", value: data.unidad },
     { label: "Zona", value: data.zona },
     { label: "Teléfono", value: data.telefono },
+    // 💳 Nuevo campo
+    {
+      label: "Número de cuenta bancaria",
+      value: data.clienteNumberBank || "—",
+    },
   ];
 
   const infoRight = [
@@ -44,6 +49,11 @@ export default function ApplicationDetailsCard({ data }) {
     {
       label: "Pensión Alimenticia",
       value: data.pensionAlimenticia ? "Sí" : "No",
+    },
+    // 🏛️ Nuevo campo
+    {
+      label: "Unidad Ejecutora de Pago",
+      value: data.unidadEjecutoraDePago || "—",
     },
   ];
 

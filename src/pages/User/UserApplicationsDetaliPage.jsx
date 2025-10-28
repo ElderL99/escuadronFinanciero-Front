@@ -16,7 +16,6 @@ export default function UserApplicationPage() {
   const { remove, loading: deleting, deleted } = useDeleteUserApplication(id);
   const { update, loading: updating } = useUpdateUserApplication(id, {});
 
-  // 🔹 Estados para modales
   const [showSendModal, setShowSendModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -82,7 +81,7 @@ export default function UserApplicationPage() {
       <h1 className="text-2xl font-semibold text-[#611232] mb-2">
         Solicitud #{app._id.slice(-6).toUpperCase()}
       </h1>
-      <p className="text-gray-500 text-sm mb-6  ">
+      <p className="text-gray-500 text-sm mb-6">
         Creada el{" "}
         {new Date(app.createdAt).toLocaleDateString("es-MX", {
           year: "numeric",
@@ -116,6 +115,11 @@ export default function UserApplicationPage() {
           <Field label="Matrícula" value={app.matricula} />
           <Field label="ID Personal" value={app.idPersonal} />
           <Field label="Teléfono" value={app.telefono} />
+          {/* ✅ Nuevo campo */}
+          <Field
+            label="Número de cuenta bancaria"
+            value={app.clienteNumberBank}
+          />
         </Grid>
       </Section>
 
@@ -125,6 +129,11 @@ export default function UserApplicationPage() {
           <Field label="Unidad" value={app.unidad} />
           <Field label="Zona" value={app.zona} />
           <Field label="Región" value={app.region} />
+          {/* ✅ Nuevo campo */}
+          <Field
+            label="Unidad Ejecutora de Pago"
+            value={app.unidadEjecutoraDePago}
+          />
           <Field
             label="Fecha de alta"
             value={new Date(app.fechaAlta).toLocaleDateString("es-MX")}

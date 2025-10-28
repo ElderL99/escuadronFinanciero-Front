@@ -49,7 +49,7 @@ export default function RegisterPage() {
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
+      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md text-black/70">
         <h1
           className="text-2xl font-bold text-center mb-6"
           style={{ color: "#611232" }}
