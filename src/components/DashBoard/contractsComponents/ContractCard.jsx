@@ -19,7 +19,7 @@ export default function ContractCard({ contrato }) {
       </div>
 
       {/* Divider */}
-      <div className="my-4 h-px bg-gradient-to-r from-transparent via-[#e2dcd5] to-transparent" />
+      <div className="my-4 h-px bg-gradient-to from-transparent via-[#e2dcd5] to-transparent" />
 
       {/* Body info */}
       <div className="flex flex-col items-center gap-2 text-sm text-gray-700">
@@ -47,7 +47,7 @@ export default function ContractCard({ contrato }) {
         <Link
           to={`/admin/signed-contracts/${contrato.contratoId}`}
           className="px-4 py-2 bg-[#611232] text-white rounded-lg text-sm font-medium 
-                     hover:bg-[#4c0e27] transition-colors"
+                     hover:bg-[#4c0e27] transition-colors "
         >
           Ver contrato
         </Link>
