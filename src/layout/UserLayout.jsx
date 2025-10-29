@@ -14,7 +14,7 @@ export default function UserLayout() {
 
   return (
     <div
-      className="h-screen w-full flex bg-gradient-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
+      className="h-screen w-full flex bg-linear-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
   overflow-y-auto text-white overflow-hidden"
     >
       {/* Sidebar */}
