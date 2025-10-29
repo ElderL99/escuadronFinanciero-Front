@@ -13,7 +13,7 @@ export default function UpdateForm({
 }) {
   const { register, handleSubmit, reset } = useForm();
 
-  // Prellenar formulario
+  // ✅ Prellenar formulario con formato correcto para fechas
   useEffect(() => {
     if (application) {
       const fixedData = {
@@ -39,15 +39,33 @@ export default function UpdateForm({
       className="space-y-4 bg-white/80 backdrop-blur-xl p-6 rounded-xl border border-[#611232]/10 shadow-sm"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* 💼 Datos personales */}
         <Input label="Nombre" name="nombre" register={register} />
         <Input label="Grado" name="grado" register={register} />
         <Input label="Empleo" name="empleo" register={register} />
         <Input label="Matrícula" name="matricula" register={register} />
         <Input label="ID Personal" name="idPersonal" register={register} />
         <Input label="Teléfono" name="telefono" register={register} />
+        {/* 💳 Nuevo campo */}
+        <Input
+          label="Número de cuenta bancaria"
+          name="clienteNumberBank"
+          register={register}
+        />
+
+        {/* ⚙️ Datos del servicio */}
         <Input label="Unidad" name="unidad" register={register} />
         <Input label="Zona" name="zona" register={register} />
         <Input label="Región" name="region" register={register} />
+        {/* 🏛️ Nuevo campo */}
+        <Input
+          label="Unidad Ejecutora de Pago"
+          name="unidadEjecutoraDePago"
+          type="number"
+          register={register}
+        />
+
+        {/* Fechas */}
         <Input
           label="Fecha de Alta"
           type="date"
@@ -60,6 +78,8 @@ export default function UpdateForm({
           name="ultimoAscenso"
           register={register}
         />
+
+        {/* 💰 Información del préstamo */}
         <Input
           label="Monto Solicitado"
           type="number"
@@ -74,6 +94,7 @@ export default function UpdateForm({
         />
       </div>
 
+      {/* 🔘 Botón Guardar */}
       <button
         disabled={updating}
         className="flex items-center justify-center gap-2 bg-[#611232] text-white px-6 py-2 rounded-lg hover:bg-[#4a0f27] transition disabled:opacity-60"

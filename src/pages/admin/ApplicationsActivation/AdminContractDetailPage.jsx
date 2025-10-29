@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import useAdminContractById from "../../../hooks/admin/useAdminContractById";
 import useActivateCredit from "../../../hooks/admin/useActiveCredit";
 import {
@@ -7,13 +7,13 @@ import {
   ArrowLeft,
   CalendarDays,
   CheckCircle,
-  Loader2,
 } from "lucide-react";
 import { useState } from "react";
 import ActivateCreditSection from "../../../components/DashBoard/contractsComponents/ActivateCredutSection";
 
 export default function AdminContractDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate(); 
   const { contract, loading, error } = useAdminContractById(id);
   const [confirming, setConfirming] = useState(false);
   const {
@@ -25,6 +25,7 @@ export default function AdminContractDetailPage() {
 
   const handleActivate = async () => {
     await activateCredit(contract.requestId);
+    navigate("/admin/active-credits"); 
   };
 
   if (loading)
@@ -66,10 +67,7 @@ export default function AdminContractDetailPage() {
         </div>
 
         {/* 💎 Card principal */}
-        <div
-          className="bg-white rounded-3xl border border-[#e6e0da] shadow-lg 
-                     max-w-4xl mx-auto p-8 flex flex-col gap-8"
-        >
+        <div className="bg-white rounded-3xl border border-[#e6e0da] shadow-lg max-w-4xl mx-auto p-8 flex flex-col gap-8">
           {/* ID del contrato */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#eae5df] pb-4">
             <div className="flex items-center gap-3">
@@ -161,8 +159,7 @@ export default function AdminContractDetailPage() {
                 href={contract.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-gradient-to- from-[#611232] to-[#8b204a] 
-                           text-white hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
+                className="block w-full text-center bg-gradient-to from-[#611232] to-[#8b204a] text-white hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
               >
                 Ver documento firmado
               </a>
@@ -172,12 +169,14 @@ export default function AdminContractDetailPage() {
       </section>
 
       {/* ✅ Nueva sección: botón para activar crédito */}
-      <ActivateCreditSection
-        onActivate={handleActivate}
-        activating={activating}
-        success={success}
-        error={activateError}
-      />
+      {contract.signed && (
+        <ActivateCreditSection
+          onActivate={handleActivate}
+          activating={activating}
+          success={success}
+          error={activateError}
+        />
+      )}
     </>
   );
 }

@@ -7,7 +7,7 @@ export default function AdminLayout() {
       <AdminSidebar />
       <main
         className="flex-1 relative 
-  bg-gradient-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
+  bg-linear-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
   overflow-y-auto"
       >
         <Outlet />

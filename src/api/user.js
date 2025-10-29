@@ -30,3 +30,7 @@ export const updateUserApplicationDocuments = (id, formData) => {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
+
+// Obtener contrato generado by solicitud Id
+export const getUserContractBySolicitudId = async (id) =>
+  api.get(`/user/solicitud/${id}/contrato`);

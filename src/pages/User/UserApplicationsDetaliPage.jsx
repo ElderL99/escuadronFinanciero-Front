@@ -1,10 +1,19 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, ArrowLeft, FileText, Trash2, Edit, Send } from "lucide-react";
+import {
+  Loader2,
+  ArrowLeft,
+  FileText,
+  Trash2,
+  Edit,
+  Send,
+} from "lucide-react";
+import toast from "react-hot-toast";
 import useUserApplicationById from "../../hooks/user/useUserApplicationById";
 import useSendUserApplication from "../../hooks/user/useSendApplication";
 import useDeleteUserApplication from "../../hooks/user/useDeleteApplication";
 import useUpdateUserApplication from "../../hooks/user/useUpdateApplication";
+import useUserContractBySolicitudId from "../../hooks/user/useUserContractBySolicitudId";
 import ConfirmModal from "../../components/usedashboard/ConfirmModal";
 
 export default function UserApplicationPage() {
@@ -15,8 +24,6 @@ export default function UserApplicationPage() {
   const { sendApplication, loading: sending } = useSendUserApplication();
   const { remove, loading: deleting, deleted } = useDeleteUserApplication(id);
   const { update, loading: updating } = useUpdateUserApplication(id, {});
-
-  // 🔹 Estados para modales
   const [showSendModal, setShowSendModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -82,7 +89,7 @@ export default function UserApplicationPage() {
       <h1 className="text-2xl font-semibold text-[#611232] mb-2">
         Solicitud #{app._id.slice(-6).toUpperCase()}
       </h1>
-      <p className="text-gray-500 text-sm mb-6  ">
+      <p className="text-gray-500 text-sm mb-6">
         Creada el{" "}
         {new Date(app.createdAt).toLocaleDateString("es-MX", {
           year: "numeric",
@@ -116,6 +123,10 @@ export default function UserApplicationPage() {
           <Field label="Matrícula" value={app.matricula} />
           <Field label="ID Personal" value={app.idPersonal} />
           <Field label="Teléfono" value={app.telefono} />
+          <Field
+            label="Número de cuenta bancaria"
+            value={app.clienteNumberBank}
+          />
         </Grid>
       </Section>
 
@@ -125,6 +136,10 @@ export default function UserApplicationPage() {
           <Field label="Unidad" value={app.unidad} />
           <Field label="Zona" value={app.zona} />
           <Field label="Región" value={app.region} />
+          <Field
+            label="Unidad Ejecutora de Pago"
+            value={app.unidadEjecutoraDePago}
+          />
           <Field
             label="Fecha de alta"
             value={new Date(app.fechaAlta).toLocaleDateString("es-MX")}
@@ -177,6 +192,30 @@ export default function UserApplicationPage() {
         </div>
       </Section>
 
+      {/* 📑 Contrato y firma */}
+      {app.state === "awaiting_signature" && (
+        <Section title="Contrato de préstamo">
+          <p className="text-gray-700 mb-4">
+            Tu solicitud ha sido aprobada ✅. Ahora puedes revisar el contrato
+            generado y firmarlo digitalmente para continuar el proceso.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* 🔹 Ver contrato */}
+            <ViewContractButton solicitudId={app._id} />
+
+            {/* ✍️ Firmar contrato */}
+            <button
+              onClick={() => navigate(`/user/solicitud/${app._id}/firma`)}
+              className="flex items-center justify-center gap-2 border border-[#611232] text-[#611232] hover:bg-[#611232]/10 font-medium px-4 py-2 rounded-lg transition w-full sm:w-auto"
+            >
+              <FileText size={18} />
+              Firmar contrato
+            </button>
+          </div>
+        </Section>
+      )}
+
       {/* 🧭 BOTONES DE ACCIÓN */}
       {app.state === "draft" && (
         <div className="flex flex-col sm:flex-row gap-3 mt-8">
@@ -204,7 +243,7 @@ export default function UserApplicationPage() {
         </div>
       )}
 
-      {/* 🔹 Modal Confirmación de Envío */}
+      {/* 🔹 Modales */}
       <ConfirmModal
         isOpen={showSendModal}
         onClose={() => setShowSendModal(false)}
@@ -215,7 +254,6 @@ export default function UserApplicationPage() {
         confirmColor="bg-[#611232] hover:bg-[#4a0f27]"
       />
 
-      {/* 🔹 Modal Confirmación de Eliminación */}
       <ConfirmModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
@@ -271,6 +309,45 @@ function ActionButton({ icon, text, onClick, loading, color }) {
         <>
           {icon}
           {text}
+        </>
+      )}
+    </button>
+  );
+}
+
+/* 🔹 Ver contrato */
+function ViewContractButton({ solicitudId }) {
+  const { fetchContract, loading } = useUserContractBySolicitudId();
+
+  const handleViewContract = async () => {
+    try {
+      const data = await fetchContract(solicitudId);
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      } else {
+        toast.error("No se encontró el contrato generado.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error al cargar el contrato.");
+    }
+  };
+
+  return (
+    <button
+      onClick={handleViewContract}
+      disabled={loading}
+      className="flex items-center justify-center gap-2 bg-[#611232] hover:bg-[#4a0f27] text-white font-medium px-4 py-2 rounded-lg transition w-full sm:w-auto disabled:opacity-60"
+    >
+      {loading ? (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Cargando...
+        </>
+      ) : (
+        <>
+          <FileText size={18} />
+          Ver contrato
         </>
       )}
     </button>
