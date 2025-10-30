@@ -25,12 +25,13 @@ import UserLayout from "./layout/UserLayout.jsx";
 import AdminLayout from "./layout/AdminLayout.jsx";
 
 // 👤 Páginas de usuario
-import UserDashboard from "./pages/UserDashboard";
+import UserDashboard from "./pages/User/UserDashboard";
 import UserProfile from "./pages/User/UserPerfil.jsx";
 import UserApplicationsPage from "./pages/User/UserApplicationsPage.jsx";
 import UserApplicationDetailPage from "./pages/User/UserApplicationsDetaliPage.jsx";
 import UpdateApplicationPage from "./pages/User/UpdateApplicationsPage.jsx";
 import SignaturePad from "./components/usedashboard/SignatureComponents/SignaturePad.jsx";
+import UserCreateApplicationPage from "./pages/User/UserCreateApplicationPage";
 
 // 🛠️ Páginas de administrador
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
@@ -70,6 +71,10 @@ const router = createBrowserRouter(
       >
         <Route path="dashboard" element={<UserDashboard />} />
         <Route path="perfil" element={<UserProfile />} />
+        <Route
+          path="create-solicitud"
+          element={<UserCreateApplicationPage />}
+        />
         <Route path="solicitudes" element={<UserApplicationsPage />} />
         <Route path="solicitud/:id" element={<UserApplicationDetailPage />} />
         <Route
@@ -105,7 +110,6 @@ const router = createBrowserRouter(
   )
 );
 
-
 createRoot(document.getElementById("root")).render(
   <>
     <RouterProvider
@@ -116,11 +120,10 @@ createRoot(document.getElementById("root")).render(
       }}
     />
 
-  
     <Toaster
       position="top-right"
       toastOptions={{
-        duration: 3500,
+        duration: 1500,
         style: {
           background: "#1a1a1a",
           color: "#fff",

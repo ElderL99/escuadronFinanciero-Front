@@ -114,7 +114,7 @@ export default function UserLayout() {
       </aside>
 
       {/* Contenido principal */}
-      <main className="flex-1 h-full overflow-y-auto p-4 md:p-8">
+      <main className="flex-1 h-full overflow-y-auto  md:p-8">
         <Outlet />
       </main>
     </div>
