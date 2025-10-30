@@ -8,7 +8,7 @@ export default function AdminLayout() {
       <main
         className="flex-1 relative 
   bg-linear-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
-  overflow-y-auto"
+  overflow-y-auto "
       >
         <Outlet />
       </main>
