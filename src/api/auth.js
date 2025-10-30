@@ -15,9 +15,17 @@ export const getProfile = () => {
 };
 
 // validar el token
-export const validateToken = () => {
-  return api.get("/auth/validate-token");
-};
+export async function validateToken() {
+  try {
+    const res = await api.get("/auth/validate-token");
+    return res.data;
+  } catch (err) {
+    const reason = err.response?.data?.reason;
+    if (reason === "expired") throw new Error("expired");
+    if (reason === "invalid") throw new Error("invalid");
+    throw new Error("unauthorized");
+  }
+}
 
 // recuperar  Contrasena
 export const recoverPasswordApi = ({ email }) => {
