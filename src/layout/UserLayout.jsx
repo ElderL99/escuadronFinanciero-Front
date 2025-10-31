@@ -20,17 +20,17 @@ export default function UserLayout() {
       {/* Sidebar */}
       <aside
         className="hidden md:flex flex-col w-64 
-        bg-gradient-to-b from-[#611232]/90 to-[#2e0a1c]/70 
+        bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/70 
         backdrop-blur-xl border-r border-white/10 
         shadow-[0_0_25px_rgba(97,18,50,0.5)] 
         relative overflow-hidden"
       >
         {/* Efecto de brillo */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
 
         <div className="z-10 p-6 flex flex-col h-full justify-between">
           <div>
-            <h1 className="text-2xl font-bold mb-10 tracking-wide bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent drop-shadow-sm">
+            <h1 className="text-2xl font-bold mb-10 tracking-wide bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent drop-shadow-sm">
               Escuadrón Financiero
             </h1>
 
@@ -82,7 +82,7 @@ export default function UserLayout() {
       {/* Sidebar móvil */}
       <aside
         className="flex md:hidden flex-col w-16 
-        bg-gradient-to-b from-[#611232]/90 to-[#2e0a1c]/80 
+        bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/80 
         backdrop-blur-xl border-r border-white/10 shadow-xl"
       >
         <nav className="flex flex-col items-center py-4 gap-4 flex-1">
