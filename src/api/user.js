@@ -40,3 +40,26 @@ export const createUserApplication = async (formData) =>
   api.post("/user/solicitud", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
+
+// 🔹 Obtener resumen de créditos del usuario
+export const getUserCreditsOverview = async () => {
+  return await axios.get("/user/credits/overview");
+};
+
+// 🔹 Subir comprobante de pago (ticket)
+export const uploadUserPaymentTicket = async (
+  creditId,
+  paymentNumber,
+  file
+) => {
+  const formData = new FormData();
+  formData.append("comprobantePago", file);
+
+  return await axios.post(
+    `/user/creditos/${creditId}/pagos/${paymentNumber}/upload`,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+};
