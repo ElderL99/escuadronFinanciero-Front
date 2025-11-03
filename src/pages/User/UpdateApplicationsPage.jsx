@@ -23,7 +23,6 @@ export default function UpdateApplicationPage() {
   } = useUpdateUserApplication();
   const { updateDocuments, loading: uploading } = useUpdateDocuments();
 
-  // Mostrar errores del backend
   useEffect(() => {
     if (fetchError) toast.error(fetchError);
   }, [fetchError]);

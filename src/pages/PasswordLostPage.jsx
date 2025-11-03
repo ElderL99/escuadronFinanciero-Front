@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import InputField from "../components/InputField";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
 export default function PasswordLostPage() {
   const { recoverPassword, loading, error } = useAuth();
   const navigate = useNavigate();
-  const [success, setSuccess] = useState("");
 
   const {
     register,
@@ -19,8 +19,25 @@ export default function PasswordLostPage() {
   const onSubmit = async (data) => {
     const result = await recoverPassword({ email: data.email });
     if (result) {
-      setSuccess("✅ Se envió un correo para restablecer tu contraseña.");
-      setTimeout(() => navigate("/login"), 3000); // redirige después de 3s
+      toast.success("✅ Se envió un correo para restablecer tu contraseña.", {
+        duration: 3000,
+        style: {
+          background: "#1a1a1a",
+          color: "#fff",
+          border: "1px solid #d4af37",
+        },
+      });
+
+      setTimeout(() => navigate("/login"), 2000);
+    } else {
+      toast.error("❌ No se pudo enviar el correo. Intenta de nuevo.", {
+        duration: 3000,
+        style: {
+          background: "#611232",
+          color: "#fff",
+          border: "1px solid #d4af37",
+        },
+      });
     }
   };
 
@@ -34,15 +51,10 @@ export default function PasswordLostPage() {
           Recuperar contraseña
         </h1>
 
-        {/* Mensajes */}
+        {/* Error directo (por si el backend devuelve algo genérico) */}
         {error && (
           <p className="text-red-500 text-center mb-4 bg-red-100 py-2 rounded-lg">
             {error}
-          </p>
-        )}
-        {success && (
-          <p className="text-green-600 text-center mb-4 bg-green-100 py-2 rounded-lg">
-            {success}
           </p>
         )}
 

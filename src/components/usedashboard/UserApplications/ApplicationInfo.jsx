@@ -1,4 +1,17 @@
 export default function ApplicationInfo({ app }) {
+  const estados = {
+    draft: "Borrador  (esperando envio)",
+    pending: "Pendiente",
+    approved: "Aprobada",
+    rejected: "Rechazada",
+    awaiting_signature: "En espera de firma",
+    signed: "Firmada (pendiente de activación)",
+    active: "Activa",
+    completed: "Completada",
+  };
+
+  const estadoTraducido = estados[app.state] || app.state;
+
   return (
     <div className="space-y-1 text-sm text-[#2b1b1f]">
       <p>
@@ -38,7 +51,7 @@ export default function ApplicationInfo({ app }) {
               : "text-[#611232]"
           }`}
         >
-          {app.state?.toUpperCase()}
+          {estadoTraducido}
         </span>
       </p>
 

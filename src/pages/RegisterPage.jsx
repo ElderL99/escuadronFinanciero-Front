@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import { useAuth } from "../context/AuthContext";
 import InputField from "../components/InputField";
 import { Eye, EyeOff } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
   const { register: registerUser, loading, error } = useAuth();
-  const [success, setSuccess] = useState("");
   const [password, setPassword] = useState("");
   const [validations, setValidations] = useState({
     length: false,
@@ -28,12 +28,21 @@ export default function RegisterPage() {
   const onSubmit = async (data) => {
     const ok = await registerUser(data);
     if (ok) {
-      setSuccess(
-        "Registro completado ✅. Por favor, valida tu correo para iniciar sesión."
+      toast.success(
+        "Registro completado ✅. Revisa tu correo para validar tu cuenta.",
+        {
+          duration: 3500,
+          style: {
+            background: "#1a1a1a",
+            color: "#fff",
+            border: "1px solid #d4af37",
+          },
+        }
       );
+
       setTimeout(() => {
         navigate("/login");
-      }, 3000);
+      }, 1500);
     }
   };
 
@@ -57,11 +66,9 @@ export default function RegisterPage() {
           Crear cuenta
         </h1>
 
+        {/* Error */}
         {error && (
           <p className="text-red-500 text-sm text-center mb-4">{error}</p>
-        )}
-        {success && (
-          <p className="text-green-600 text-sm text-center mb-4">{success}</p>
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -99,6 +106,7 @@ export default function RegisterPage() {
             errors={errors}
           />
 
+          {/* Contraseña con icono 👁️ */}
           <div className="relative">
             <InputField
               label="Contraseña"
@@ -127,6 +135,7 @@ export default function RegisterPage() {
             </button>
           </div>
 
+          {/* Validaciones visuales */}
           <div className="mt-2 text-sm space-y-1">
             <p
               className={clsx(
@@ -174,6 +183,7 @@ export default function RegisterPage() {
           </button>
         </form>
 
+        {/* Redirección al login */}
         <p className="text-center text-sm mt-4">
           <button
             onClick={() => !loading && navigate("/login")}
@@ -183,7 +193,7 @@ export default function RegisterPage() {
             )}
             disabled={loading}
           >
-            ¿Ya tienes una cuenta?{" "}
+            ¿Ya tienes una cuenta?
           </button>
         </p>
       </div>

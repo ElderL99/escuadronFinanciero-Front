@@ -40,6 +40,7 @@ import AdminSignedContractsPage from "./pages/admin/ApplicationsActivation/Admin
 import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminContractDetailPage.jsx";
 import AdminActiveCreditsPage from "./pages/admin/ActiveCredits/ActiveCreaditsPage.jsx";
 import AdminCreditDetailPage from "./pages/admin/ActiveCredits/AdminCreditDetailPage.jsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 // ===============================
 // 📍 Definición de rutas con contexto
@@ -58,6 +59,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/recover-password" element={<PasswordLostPage />} />
+      <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
       <Route path="*" element={<NotFoundPage />} />
 
       {/* 👤 Usuario */}

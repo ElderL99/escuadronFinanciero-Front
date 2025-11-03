@@ -1,13 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Loader2,
-  ArrowLeft,
-  FileText,
-  Trash2,
-  Edit,
-  Send,
-} from "lucide-react";
+import { Loader2, ArrowLeft, FileText, Trash2, Edit, Send } from "lucide-react";
 import toast from "react-hot-toast";
 import useUserApplicationById from "../../hooks/user/useUserApplicationById";
 import useSendUserApplication from "../../hooks/user/useSendApplication";
@@ -75,8 +68,22 @@ export default function UserApplicationPage() {
 
   const app = application;
 
+  // 🔹 Traducción de estados
+  const estados = {
+    draft: "Borrador",
+    pending: "Pendiente",
+    approved: "Aprobada",
+    rejected: "Rechazada",
+    awaiting_signature: "En espera de firma",
+    signed: "Firmada",
+    active: "Activa",
+    completed: "Completada",
+  };
+
+  const estadoTraducido = estados[app.state] || app.state;
+
   return (
-    <section className="max-w-5xl mx-auto py-10 px-4 ">
+    <section className="max-w-5xl mx-auto py-10 px-4">
       {/* 🔙 Volver */}
       <button
         onClick={() => navigate(-1)}
@@ -110,9 +117,60 @@ export default function UserApplicationPage() {
               : "text-[#611232]"
           }`}
         >
-          {app.state?.toUpperCase()}
+          {estadoTraducido}
         </span>
       </p>
+
+      {/* 🔹 Botones de acción */}
+      {app.state === "draft" && (
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
+          <ActionButton
+            icon={<Edit size={18} />}
+            text="Actualizar"
+            onClick={handleUpdate}
+            loading={updating}
+            color="bg-amber-600 hover:bg-amber-700"
+          />
+          <ActionButton
+            icon={<Trash2 size={18} />}
+            text="Eliminar"
+            onClick={() => setShowDeleteModal(true)}
+            loading={deleting}
+            color="bg-gray-400/50 hover:bg-red-700"
+          />
+          <ActionButton
+            icon={<Send size={18} />}
+            text="Enviar solicitud"
+            onClick={() => setShowSendModal(true)}
+            loading={sending}
+            color="bg-[#611232] hover:bg-[#4a0f27]"
+          />
+        </div>
+      )}
+
+      {/* 📑 Contrato y firma */}
+      {app.state === "awaiting_signature" && (
+        <div className="bg-[#fff8e6] border border-[#d4af37]/40 rounded-xl p-5 mb-8 shadow-sm">
+          <h2 className="text-lg font-semibold text-[#611232] mb-2">
+            Contrato de préstamo pendiente de firma ✍️
+          </h2>
+          <p className="text-gray-700 mb-4">
+            Tu solicitud ha sido aprobada ✅. Revisa el contrato generado y
+            fírmalo digitalmente para continuar el proceso.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <ViewContractButton solicitudId={app._id} />
+            <button
+              onClick={() => navigate(`/user/solicitud/${app._id}/firma`)}
+              className="flex items-center justify-center gap-2 border border-[#611232] text-[#611232] hover:bg-[#611232]/10 font-medium px-4 py-2 rounded-lg transition w-full sm:w-auto"
+            >
+              <FileText size={18} />
+              Firmar contrato
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 💼 Datos Personales */}
       <Section title="Datos Personales">
@@ -191,57 +249,6 @@ export default function UserApplicationPage() {
           ))}
         </div>
       </Section>
-
-      {/* 📑 Contrato y firma */}
-      {app.state === "awaiting_signature" && (
-        <Section title="Contrato de préstamo">
-          <p className="text-gray-700 mb-4">
-            Tu solicitud ha sido aprobada ✅. Ahora puedes revisar el contrato
-            generado y firmarlo digitalmente para continuar el proceso.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* 🔹 Ver contrato */}
-            <ViewContractButton solicitudId={app._id} />
-
-            {/* ✍️ Firmar contrato */}
-            <button
-              onClick={() => navigate(`/user/solicitud/${app._id}/firma`)}
-              className="flex items-center justify-center gap-2 border border-[#611232] text-[#611232] hover:bg-[#611232]/10 font-medium px-4 py-2 rounded-lg transition w-full sm:w-auto"
-            >
-              <FileText size={18} />
-              Firmar contrato
-            </button>
-          </div>
-        </Section>
-      )}
-
-      {/* 🧭 BOTONES DE ACCIÓN */}
-      {app.state === "draft" && (
-        <div className="flex flex-col sm:flex-row gap-3 mt-8">
-          <ActionButton
-            icon={<Edit size={18} />}
-            text="Actualizar"
-            onClick={handleUpdate}
-            loading={updating}
-            color="bg-amber-600 hover:bg-amber-700"
-          />
-          <ActionButton
-            icon={<Trash2 size={18} />}
-            text="Eliminar"
-            onClick={() => setShowDeleteModal(true)}
-            loading={deleting}
-            color="bg-red-600 hover:bg-red-700"
-          />
-          <ActionButton
-            icon={<Send size={18} />}
-            text="Enviar solicitud"
-            onClick={() => setShowSendModal(true)}
-            loading={sending}
-            color="bg-[#611232] hover:bg-[#4a0f27]"
-          />
-        </div>
-      )}
 
       {/* 🔹 Modales */}
       <ConfirmModal

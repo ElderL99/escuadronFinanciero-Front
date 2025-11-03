@@ -5,6 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import ConfirmModal from "../../usedashboard/ConfirmModal";
 
 export default function SignaturePad() {
   const { id } = useParams(); // ID de la solicitud
@@ -12,17 +13,22 @@ export default function SignaturePad() {
   const sigCanvas = useRef(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const clearSignature = () => {
     sigCanvas.current.clear();
   };
 
-  const handleSave = async () => {
+  const handleConfirm = () => {
     if (sigCanvas.current.isEmpty()) {
       toast.error("✍️ Por favor firma antes de continuar.");
       return;
     }
+    setShowConfirm(true); // abre el modal
+  };
 
+  const handleSend = async () => {
+    setShowConfirm(false);
     setIsSubmitting(true);
     setError(null);
 
@@ -34,11 +40,17 @@ export default function SignaturePad() {
       toast.success(
         "✅ Firma enviada correctamente. Tu contrato se regenerará con la firma."
       );
-
       navigate("/user/dashboard");
     } catch (err) {
-      console.error(err);
-      toast.error("❌ Error al enviar la firma. Intenta nuevamente.");
+      console.error("❌ Error al enviar la firma:", err);
+
+      // 🔹 Mostrar mensaje del backend si existe
+      const backendMessage =
+        err.response?.data?.message ||
+        "❌ Error al enviar la firma. Intenta nuevamente.";
+
+      setError(backendMessage);
+      toast.error(backendMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -66,7 +78,9 @@ export default function SignaturePad() {
           />
         </div>
 
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        {error && (
+          <p className="text-red-500 text-sm font-medium mb-3">{error}</p>
+        )}
 
         <div className="flex gap-3 justify-center">
           <Button
@@ -77,7 +91,7 @@ export default function SignaturePad() {
           </Button>
 
           <Button
-            onClick={handleSave}
+            onClick={handleConfirm}
             disabled={isSubmitting}
             className="bg-[#611232] hover:bg-[#4a0f27] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2"
           >
@@ -86,6 +100,17 @@ export default function SignaturePad() {
           </Button>
         </div>
       </div>
+
+      {/* 🔹 Modal de confirmación */}
+      <ConfirmModal
+        isOpen={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={handleSend}
+        title="¿Deseas enviar tu firma?"
+        message="Una vez enviada, se guardará tu firma digital en el contrato y no podrás modificarla."
+        confirmText="Enviar Firma"
+        confirmColor="bg-[#611232] hover:bg-[#4a0f27]"
+      />
     </section>
   );
 }
