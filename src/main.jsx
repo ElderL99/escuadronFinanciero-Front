@@ -41,6 +41,8 @@ import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminC
 import AdminActiveCreditsPage from "./pages/admin/ActiveCredits/ActiveCreaditsPage.jsx";
 import AdminCreditDetailPage from "./pages/admin/ActiveCredits/AdminCreditDetailPage.jsx";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import UserCreditsPage from "./pages/User/creditos/page";
+import UserCreditDetailPage from "./pages/User/creditos/[id]/page";
 
 // ===============================
 // 📍 Definición de rutas con contexto
@@ -84,6 +86,8 @@ const router = createBrowserRouter(
           element={<UpdateApplicationPage />}
         />
         <Route path="solicitud/:id/firma" element={<SignaturePad />} />
+        <Route path="creditos" element={<UserCreditsPage />} />
+        <Route path="creditos/:id" element={<UserCreditDetailPage />} />
       </Route>
 
       {/* 🛠️ Admin */}

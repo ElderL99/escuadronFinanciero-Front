@@ -41,12 +41,17 @@ export const createUserApplication = async (formData) =>
     headers: { "Content-Type": "multipart/form-data" },
   });
 
-// 🔹 Obtener resumen de créditos del usuario
+// 🔹 Obtener resumen de créditos (tarjetas del dashboard)
 export const getUserCreditsOverview = async () => {
-  return await axios.get("/user/credits/overview");
+  return await api.get("/user/credits/overview");
 };
 
-// 🔹 Subir comprobante de pago (ticket)
+// 🔹 Obtener detalle completo de un crédito por ID
+export const getUserCreditById = async (creditId) => {
+  return await api.get(`/user/credits/${creditId}`);
+};
+
+// 🔹 Subir ticket de pago (ya la tienes, pero la dejamos aquí por claridad)
 export const uploadUserPaymentTicket = async (
   creditId,
   paymentNumber,
@@ -55,7 +60,7 @@ export const uploadUserPaymentTicket = async (
   const formData = new FormData();
   formData.append("comprobantePago", file);
 
-  return await axios.post(
+  return await api.post(
     `/user/creditos/${creditId}/pagos/${paymentNumber}/upload`,
     formData,
     {

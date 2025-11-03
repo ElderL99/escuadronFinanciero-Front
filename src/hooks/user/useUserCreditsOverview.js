@@ -1,20 +1,20 @@
 import { useState, useCallback } from "react";
 import { getUserCreditsOverview } from "../../api/user";
 
-export default function useUserCredits() {
+export default function useUserCreditsOverview() {
   const [credits, setCredits] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchUserCredits = useCallback(async () => {
+  const fetchCreditsOverview = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await getUserCreditsOverview();
-      setCredits(response.data.data || []);
+      const res = await getUserCreditsOverview();
+      setCredits(res.data.data || []);
     } catch (err) {
-      console.error("❌ Error al obtener créditos:", err);
-      setError(err.response?.data?.message || "Error al obtener créditos");
+      console.error("❌ Error en useUserCreditsOverview:", err);
+      setError(err.response?.data?.message || "Error al cargar los créditos");
     } finally {
       setLoading(false);
     }
@@ -24,6 +24,6 @@ export default function useUserCredits() {
     credits,
     loading,
     error,
-    fetchUserCredits,
+    fetchCreditsOverview,
   };
 }

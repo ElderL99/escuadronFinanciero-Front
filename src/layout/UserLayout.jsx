@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
-import { LogOut, User, FileText, Home } from "lucide-react";
+import { LogOut, User, FileText, Home, CreditCard } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
 export default function UserLayout() {
@@ -10,6 +10,7 @@ export default function UserLayout() {
     { name: "Inicio", path: "dashboard", icon: Home },
     { name: "Mis solicitudes", path: "solicitudes", icon: FileText },
     { name: "Perfil", path: "perfil", icon: User },
+    { name: "credits", path: "creditos", icon: CreditCard },
   ];
 
   return (
