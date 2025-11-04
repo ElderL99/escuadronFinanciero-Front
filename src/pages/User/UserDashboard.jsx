@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FileSignature,
@@ -32,21 +32,19 @@ export default function UserDashboard() {
     fetchUserApplications();
   }, [fetchCreditsOverview, fetchUserApplications]);
 
-  // 🧠 Obtener nombre dinámico del usuario
-  const userName = useMemo(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const parsed = JSON.parse(storedUser);
-        return parsed.name
-          ? parsed.name.split(" ")[0] // solo primer nombre
-          : "Usuario";
+  // 🧠 Obtener nombre del usuario desde localStorage
+  let userName = "Usuario";
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      if (parsed.name) {
+        userName = parsed.name.split(" ")[0].toUpperCase();
       }
-    } catch {
-      return "Usuario";
     }
-    return "Usuario";
-  }, []);
+  } catch (error) {
+    console.warn("No se pudo leer el usuario:", error);
+  }
 
   if (loadingCredits || loadingApps)
     return (
@@ -60,7 +58,6 @@ export default function UserDashboard() {
   const pendientesFirma = applications.filter(
     (app) => app.state === "awaiting_signature"
   );
-
   const enProceso = applications.filter(
     (app) =>
       app.state === "submitted" ||
@@ -69,24 +66,24 @@ export default function UserDashboard() {
   );
 
   return (
-    <section className="min-h-screen py-12 px-4 text-[#1a1a1a]">
+    <section className="min-h-screen py-16 px-4 bg-[#F9FAFB] text-[#1a1a1a]">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* 👋 Hero */}
-        <div className="bg-white rounded-2xl p-8 border border-[#e8e2dc] flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 border border-[#e8e2dc]/60 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-[#611232] mb-2">
+            <h1 className="text-2xl font-bold text-[#611232] mb-2">
               Hola, {userName} 👋
             </h1>
-            <p className="text-gray-700">
+            <p className="text-gray-600 text-sm sm:text-base">
               Gestiona tus préstamos y contratos fácilmente desde tu panel.
             </p>
           </div>
           <button
             onClick={() => navigate("/user/create-solicitud")}
-            className="mt-5 sm:mt-0 flex items-center gap-2 bg-[#611232] text-white font-medium px-6 py-3 rounded-lg hover:bg-[#4a0f27] transition-all"
+            className="mt-5 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] font-semibold px-6 py-3 rounded-full hover:bg-[#d4af37] transition-all"
           >
             <PlusCircle size={20} />
-            Nueva solicitud
+            Nueva Solicitud
           </button>
         </div>
 
@@ -109,7 +106,7 @@ export default function UserDashboard() {
           />
         </div>
 
-        <div className="divide-y divide-[#e8e2dc] space-y-8">
+        <div className="divide-y divide-[#e8e2dc]/60 space-y-8">
           {/* 🔏 Contratos pendientes */}
           {pendientesFirma.length > 0 && (
             <DashboardSection title="Contratos pendientes de firma">
@@ -184,10 +181,10 @@ export default function UserDashboard() {
 /* 🔹 Subcomponentes reutilizados */
 function StatCard({ icon, title, value }) {
   return (
-    <div className="bg-white rounded-xl border border-[#e8e2dc] p-5 text-center hover:shadow-sm transition">
+    <div className="bg-white/80 backdrop-blur-md rounded-xl border border-[#e8e2dc]/60 p-5 text-center hover:shadow-md transition-all">
       <div className="mb-3 flex justify-center">{icon}</div>
       <h3 className="text-sm text-gray-600">{title}</h3>
-      <p className="text-2xl font-semibold text-[#611232]">{value}</p>
+      <p className="text-3xl font-bold text-[#611232]">{value}</p>
     </div>
   );
 }
@@ -203,9 +200,9 @@ function DashboardSection({ title, children }) {
 
 function DashboardCard({ title, subtitle, description, button, actions }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white border border-[#e8e2dc] rounded-xl p-5 hover:shadow-sm transition">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white/90 backdrop-blur-md border border-[#e8e2dc]/60 rounded-xl p-5 hover:shadow-md transition-all">
       <div>
-        <p className="font-medium text-[#1a1a1a] mb-1">{title}</p>
+        <p className="font-semibold text-[#1a1a1a] mb-1">{title}</p>
         {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
         {description && (
           <p className="text-xs text-gray-500 mt-1">{description}</p>
@@ -218,9 +215,9 @@ function DashboardCard({ title, subtitle, description, button, actions }) {
             <button
               key={i}
               onClick={a.onClick}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 a.primary
-                  ? "bg-[#611232] text-white hover:bg-[#4a0f27]"
+                  ? "bg-[#C5A572] text-[#611232] hover:bg-[#d4af37]"
                   : "border border-[#611232] text-[#611232] hover:bg-[#611232]/10"
               }`}
             >
@@ -233,7 +230,7 @@ function DashboardCard({ title, subtitle, description, button, actions }) {
         button && (
           <button
             onClick={button.onClick}
-            className="mt-4 sm:mt-0 flex items-center gap-2 bg-[#611232] text-white text-sm px-4 py-2 rounded-lg hover:bg-[#4a0f27] transition"
+            className="mt-4 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#d4af37] transition-all"
           >
             {button.icon}
             {button.label}

@@ -14,7 +14,7 @@ export default function ResetPasswordPage() {
   const [validating, setValidating] = useState(true);
   const [isValid, setIsValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false); // 👁️ para el segundo campo
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const {
     register,
@@ -91,7 +91,8 @@ export default function ResetPasswordPage() {
     }
   };
 
-  if (validating) {
+  // 🌀 Estado de validación del token
+  if (validating)
     return (
       <section className="min-h-screen flex items-center justify-center bg-[#f8f4f6]">
         <p className="text-[#611232] font-semibold animate-pulse">
@@ -99,39 +100,50 @@ export default function ResetPasswordPage() {
         </p>
       </section>
     );
-  }
 
-  if (!isValid) {
+  // 🚫 Token inválido o expirado
+  if (!isValid)
     return (
-      <section className="min-h-screen flex items-center justify-center bg-[#f8f4f6]">
-        <div className="bg-white p-8 rounded-2xl shadow-lg border border-[#611232]/20 text-center">
-          <h1 className="text-xl font-semibold text-[#611232] mb-4">
+      <section
+        className="min-h-screen flex items-center justify-center 
+        bg-linear-to-br from-[#611232] via-[#3b0d1f] to-[#0f0609] text-white px-4"
+      >
+        <div className="bg-white/10 backdrop-blur-md p-10 rounded-2xl shadow-lg text-center border border-[#d4af37]/30">
+          <h1 className="text-2xl font-semibold text-[#d4af37] mb-3">
             Enlace inválido o expirado
           </h1>
-          <p className="text-gray-600 mb-4">
+          <p className="text-white/80 mb-6">
             Solicita un nuevo correo de recuperación.
           </p>
           <button
             onClick={() => navigate("/recover-password")}
-            className="text-[#611232] font-medium hover:underline"
+            className="px-6 py-2 rounded-full bg-[#d4af37] text-[#611232] font-semibold hover:bg-[#e2c866] transition"
           >
             Volver a recuperar contraseña
           </button>
         </div>
       </section>
     );
-  }
 
+  // ✅ Formulario principal
   return (
-    <section className="min-h-screen flex items-center justify-center bg-[#f8f4f6] px-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-[#611232]/20">
-        <h1 className="text-2xl font-semibold text-center mb-6 text-[#611232]">
+    <section
+      className="min-h-screen flex items-center justify-center px-4 
+      bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] 
+      from-[#fdf8f3] via-[#f9f7f5] to-[#f4f0eb]"
+    >
+      <div
+        className="w-full max-w-md bg-white/80 backdrop-blur-md 
+        border border-[#e8e2dc]/60 rounded-2xl shadow-[0_0_25px_rgba(97,18,50,0.15)] 
+        p-8 sm:p-10 transition-all hover:shadow-lg"
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-[#611232] mb-8">
           Restablecer contraseña
         </h1>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5 text-[#1a1a1a]"
+          className="space-y-6 text-[#1a1a1a]"
         >
           {/* Nueva contraseña */}
           <div className="relative">
@@ -206,19 +218,19 @@ export default function ResetPasswordPage() {
             )}
           </div>
 
-          {/* Botón */}
+          {/* Botón principal */}
           <button
             type="submit"
-            className={clsx(
-              "w-full py-2 text-white font-semibold rounded-lg transition-colors mt-2",
-              "bg-[#611232] hover:bg-[#7b1842]"
-            )}
+            className="w-full py-3 text-white font-semibold rounded-full 
+            bg-linear-to-r from-[#611232] to-[#7a1b3a] hover:opacity-90 
+            shadow-md hover:shadow-lg transition-all"
           >
             Cambiar contraseña
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-4">
+        {/* Volver al login */}
+        <p className="text-center text-sm text-gray-600 mt-6">
           <button
             onClick={() => navigate("/login")}
             className="text-[#611232] font-medium hover:underline"

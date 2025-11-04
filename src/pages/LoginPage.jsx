@@ -51,10 +51,18 @@ export default function LoginPage() {
   };
 
   return (
-    <section className="min-h-screen p-4 flex items-center justify-center bg-[#f8f4f6]">
-      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8 border border-[#611232]/20">
-        <h1 className="text-2xl font-semibold text-center text-[#611232] mb-6">
-          Iniciar sesión
+    <section
+      className="min-h-screen flex items-center justify-center bg-[#F9FAFB] 
+      bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] 
+      from-[#fdf8f3] via-[#f9f7f5] to-[#f4f0eb] p-6"
+    >
+      <div
+        className="w-full max-w-md bg-white/80 backdrop-blur-md border border-[#e8e2dc]/60 
+        shadow-[0_0_20px_rgba(97,18,50,0.15)] rounded-2xl p-8 sm:p-10 transition-all hover:shadow-lg"
+      >
+        {/* Título */}
+        <h1 className="text-2xl font-bold text-center text-[#611232] mb-10">
+          Inicia sesión en tu cuenta
         </h1>
 
         {/* Mensaje de error */}
@@ -68,9 +76,10 @@ export default function LoginPage() {
             },
           })}
 
+        {/* Formulario */}
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-5 text-black/80"
+          className="space-y-6 text-black/80"
         >
           {/* Email */}
           <InputField
@@ -90,7 +99,7 @@ export default function LoginPage() {
             errors={errors}
           />
 
-          {/* Password con icono 👁️ */}
+          {/* Contraseña con icono 👁️ */}
           <div className="relative">
             <InputField
               label="Contraseña"
@@ -126,15 +135,15 @@ export default function LoginPage() {
             ¿Olvidaste tu contraseña?
           </p>
 
-          {/* Botón */}
+          {/* Botón Ingresar */}
           <button
             type="submit"
             disabled={loading}
             className={clsx(
-              "w-full py-2 text-white font-semibold rounded-lg transition-colors",
+              "w-full py-3 text-white font-semibold rounded-full shadow-md transition-all",
               loading
                 ? "bg-[#611232]/70 cursor-not-allowed"
-                : "bg-[#611232] hover:bg-[#7b1842]"
+                : "bg-[#611232] hover:bg-[#7a1b3a]"
             )}
           >
             {loading ? "Ingresando..." : "Ingresar"}
@@ -142,12 +151,12 @@ export default function LoginPage() {
         </form>
 
         {/* Registro */}
-        <p className="text-center text-sm text-gray-600 mt-5">
+        <p className="text-center text-sm text-gray-600 mt-8">
           ¿No tienes una cuenta?{" "}
           <button
             onClick={() => !loading && navigate("/register")}
             className={clsx(
-              "text-[#611232] font-medium hover:underline",
+              "text-[#611232] font-semibold hover:underline",
               loading && "cursor-not-allowed opacity-50"
             )}
             disabled={loading}

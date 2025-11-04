@@ -1,55 +1,53 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { LogOut, User, FileText, Home, CreditCard } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import HomeFooter from "@/components/homePage/HomeFooter";
 
 export default function UserLayout() {
   const { logout } = useAuth();
   const location = useLocation();
 
   const navItems = [
-    { name: "Inicio", path: "dashboard", icon: Home },
-    { name: "Mis solicitudes", path: "solicitudes", icon: FileText },
-    { name: "Perfil", path: "perfil", icon: User },
-    { name: "credits", path: "creditos", icon: CreditCard },
+    { name: "Inicio", path: "/user/dashboard", icon: Home },
+    { name: "Mis solicitudes", path: "/user/solicitudes", icon: FileText },
+    { name: "Mis créditos", path: "/user/creditos", icon: CreditCard },
+    { name: "Perfil", path: "/user/perfil", icon: User },
   ];
 
   return (
-    <div
-      className="h-screen w-full flex bg-linear-to-br from-[#f9f7f5] via-[#f4f0eb] to-[#ede8e3]
-  overflow-y-auto text-white overflow-hidden"
-    >
-      {/* Sidebar */}
+    <div className="h-screen w-full flex bg-[#F9FAFB] overflow-hidden text-white">
+      {/* ===== SIDEBAR DESKTOP ===== */}
       <aside
-        className="hidden md:flex flex-col w-64 
-        bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/70 
-        backdrop-blur-xl border-r border-white/10 
-        shadow-[0_0_25px_rgba(97,18,50,0.5)] 
+        className="hidden md:flex flex-col w-64 bg-linear-to-b from-[#611232]/95 to-[#2e0a1c]/80 
+        backdrop-blur-lg border-r border-white/10 shadow-[0_0_20px_rgba(97,18,50,0.3)] 
         relative overflow-hidden"
       >
-        {/* Efecto de brillo */}
+        {/* 🔹 Brillo de fondo */}
         <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
 
+        {/* Contenido Sidebar */}
         <div className="z-10 p-6 flex flex-col h-full justify-between">
+          {/* Logo y navegación */}
           <div>
-            <h1 className="text-2xl font-bold mb-10 tracking-wide bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent drop-shadow-sm">
+            <h1 className="text-lg font-bold mb-10 tracking-wide bg-linear-to-r from-white to-[#d4af37] bg-clip-text text-transparent">
               Escuadrón Financiero
             </h1>
 
-            <nav className="flex flex-col gap-3">
+            <nav className="flex flex-col gap-2">
               {navItems.map(({ name, path, icon: Icon }) => {
                 const isActive = location.pathname === path;
                 return (
                   <Link
                     key={name}
                     to={path}
-                    className={`group flex items-center gap-3 p-3 rounded-lg transition-all duration-300 ${
+                    className={`group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300 ${
                       isActive
                         ? "bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.15)]"
                         : "hover:bg-white/10"
                     }`}
                   >
                     <div
-                      className={`p-2 rounded-md transition-all duration-300 ${
+                      className={`p-2 rounded-md transition-all ${
                         isActive
                           ? "bg-[#d4af37]/20 text-[#d4af37]"
                           : "text-white/70 group-hover:text-white"
@@ -80,11 +78,10 @@ export default function UserLayout() {
         </div>
       </aside>
 
-      {/* Sidebar móvil */}
+      {/* ===== SIDEBAR MÓVIL ===== */}
       <aside
-        className="flex md:hidden flex-col w-16 
-        bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/80 
-        backdrop-blur-xl border-r border-white/10 shadow-xl"
+        className="flex md:hidden flex-col w-16 bg-linear-to-b from-[#611232]/95 to-[#2e0a1c]/90 
+        backdrop-blur-md border-r border-white/10 shadow-lg"
       >
         <nav className="flex flex-col items-center py-4 gap-4 flex-1">
           {navItems.map(({ name, path, icon: Icon }) => {
@@ -93,7 +90,7 @@ export default function UserLayout() {
               <Link
                 key={name}
                 to={path}
-                className={`p-3 rounded-xl transition-all duration-300 ${
+                className={`p-3 rounded-xl transition-all ${
                   isActive
                     ? "bg-[#d4af37]/20 text-[#d4af37] shadow-inner"
                     : "hover:bg-white/10 text-white/80"
@@ -114,8 +111,11 @@ export default function UserLayout() {
         </button>
       </aside>
 
-      {/* Contenido principal */}
-      <main className="flex-1 h-full overflow-y-auto  md:p-8">
+      {/* ===== CONTENIDO PRINCIPAL ===== */}
+      <main
+        className="flex-1 h-full overflow-y-auto px-4 md:px-8 py-10 bg-[#F9FAFB]"
+        style={{ scrollbarWidth: "thin" }}
+      >
         <Outlet />
       </main>
     </div>

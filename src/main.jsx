@@ -11,7 +11,7 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 
 // 🧩 Páginas principales
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/homePage/page.jsx";
 import MainLayout from "./layout/mainLayout";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
