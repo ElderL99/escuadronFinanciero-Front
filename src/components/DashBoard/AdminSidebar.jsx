@@ -8,26 +8,30 @@ export default function AdminSidebar() {
 
   const navItems = [
     { name: "Dashboard", path: "/admin/dashboard", icon: Activity },
-    { name: "Esperando Activación", path: "/admin/signed-contracts", icon: Zap },
+    {
+      name: "Esperando Activación",
+      path: "/admin/signed-contracts",
+      icon: Zap,
+    },
     { name: "Activas", path: "/admin/active-credits", icon: CheckCircle },
   ];
 
   return (
     <>
-      {/* Sidebar escritorio */}
+      {/* Sidebar escritorio fija */}
       <aside
-        className="hidden lg:flex flex-col w-64 
-        bg-gradient-to-b from-[#611232]/90 to-[#2e0a1c]/70 
+        className="hidden lg:flex flex-col fixed top-0 left-0 h-screen w-64 
+        bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/70 
         backdrop-blur-xl border-r border-white/10 
         shadow-[0_0_25px_rgba(97,18,50,0.5)] 
-        relative overflow-hidden"
+        z-40 overflow-y-auto"
       >
         {/* Glow decorativo */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
 
         <div className="z-10 p-6 flex flex-col justify-between h-full">
           <div>
-            <h2 className="text-2xl font-bold mb-10 tracking-wide bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent drop-shadow-sm">
+            <h2 className="text-2xl font-bold mb-10 tracking-wide bg-linear-to-r from-white to-white/50 bg-clip-text text-transparent drop-shadow-sm">
               Escuadrón Admin
             </h2>
 
@@ -77,13 +81,14 @@ export default function AdminSidebar() {
         </div>
       </aside>
 
-      {/* Sidebar móvil solo iconos */}
+      {/* Sidebar móvil (solo iconos) */}
       <aside
-        className="flex flex-col lg:hidden w-16 
-        bg-gradient-to-b from-[#611232]/90 to-[#2e0a1c]/80 
-        backdrop-blur-xl border-r border-white/10 shadow-xl"
+        className="flex flex-col lg:hidden fixed top-0 left-0 h-screen w-16 
+        bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/80 
+        backdrop-blur-xl border-r border-white/10 shadow-xl 
+        z-40"
       >
-        <nav className="flex flex-col items-center py-4 gap-4 flex-1">
+        <nav className="flex flex-col items-center py-4 gap-4 flex-1 overflow-y-auto">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;

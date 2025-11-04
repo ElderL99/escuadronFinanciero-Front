@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FileSignature,
@@ -6,25 +7,75 @@ import {
   Upload,
   Clock,
   Wallet2,
+  Loader2,
 } from "lucide-react";
+import useUserCreditsOverview from "../../hooks/user/useUserCreditsOverview";
+import useUserApplications from "../../hooks/user/useUserApplications";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
 
-  const pendientesFirma = [{ id: "002", monto: 4000 }];
-  const creditosActivos = [
-    { id: "CR123", monto: 5000, pagado: 2500, proximoPago: "05 Nov 2025" },
-  ];
-  const enProceso = [{ id: "001", estado: "En revisión", monto: 3000 }];
+  const {
+    credits,
+    loading: loadingCredits,
+    fetchCreditsOverview,
+  } = useUserCreditsOverview();
+
+  const {
+    applications,
+    loading: loadingApps,
+    fetchUserApplications,
+  } = useUserApplications();
+
+  useEffect(() => {
+    fetchCreditsOverview();
+    fetchUserApplications();
+  }, [fetchCreditsOverview, fetchUserApplications]);
+
+  // 🧠 Obtener nombre dinámico del usuario
+  const userName = useMemo(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        return parsed.name
+          ? parsed.name.split(" ")[0] // solo primer nombre
+          : "Usuario";
+      }
+    } catch {
+      return "Usuario";
+    }
+    return "Usuario";
+  }, []);
+
+  if (loadingCredits || loadingApps)
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-[#611232]">
+        <Loader2 className="animate-spin w-8 h-8 mb-2" />
+        <p>Cargando tu panel...</p>
+      </div>
+    );
+
+  // 📂 Clasificar solicitudes
+  const pendientesFirma = applications.filter(
+    (app) => app.state === "awaiting_signature"
+  );
+
+  const enProceso = applications.filter(
+    (app) =>
+      app.state === "submitted" ||
+      app.state === "reviewing" ||
+      app.state === "pending"
+  );
 
   return (
-    <section className="min-h-screen  py-12 px-4 text-[#1a1a1a]">
+    <section className="min-h-screen py-12 px-4 text-[#1a1a1a]">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* 👋 Hero */}
         <div className="bg-white rounded-2xl p-8 border border-[#e8e2dc] flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="text-3xl font-semibold text-[#611232] mb-2">
-              Hola, Adán 👋
+              Hola, {userName} 👋
             </h1>
             <p className="text-gray-700">
               Gestiona tus préstamos y contratos fácilmente desde tu panel.
@@ -44,7 +95,7 @@ export default function UserDashboard() {
           <StatCard
             icon={<CreditCard className="text-[#611232]" />}
             title="Créditos activos"
-            value={creditosActivos.length}
+            value={credits.length}
           />
           <StatCard
             icon={<FileSignature className="text-[#611232]" />}
@@ -64,12 +115,12 @@ export default function UserDashboard() {
             <DashboardSection title="Contratos pendientes de firma">
               {pendientesFirma.map((sol) => (
                 <DashboardCard
-                  key={sol.id}
-                  title={`Solicitud #${sol.id}`}
-                  subtitle={`Monto aprobado: $${sol.monto.toLocaleString()}`}
+                  key={sol._id}
+                  title={`Solicitud #${sol._id.slice(-6).toUpperCase()}`}
+                  subtitle={`Monto aprobado: $${sol.requestedAmount.toLocaleString()}`}
                   button={{
                     label: "Firmar contrato",
-                    onClick: () => navigate(`/user/contrato/${sol.id}`),
+                    onClick: () => navigate(`/user/solicitud/${sol._id}`),
                     icon: <FileSignature size={16} />,
                   }}
                 />
@@ -78,25 +129,27 @@ export default function UserDashboard() {
           )}
 
           {/* 💳 Créditos activos */}
-          {creditosActivos.length > 0 && (
+          {credits.length > 0 && (
             <DashboardSection title="Créditos activos">
-              {creditosActivos.map((credito) => (
+              {credits.map((credito) => (
                 <DashboardCard
-                  key={credito.id}
-                  title={`Crédito #${credito.id}`}
-                  subtitle={`Total: $${credito.monto.toLocaleString()} · Pagado: $${credito.pagado.toLocaleString()}`}
-                  description={`Próximo pago: ${credito.proximoPago}`}
+                  key={credito._id}
+                  title={`Crédito #${credito._id.slice(-6).toUpperCase()}`}
+                  subtitle={`Total: $${credito.monto.toLocaleString()} · Pagos: ${
+                    credito.pagosRealizados
+                  }/${credito.pagosTotales}`}
+                  description={`Pendientes: ${credito.pagosPendientes}`}
                   actions={[
                     {
                       label: "Subir ticket",
                       icon: <Upload size={16} />,
-                      onClick: () => navigate("/user/tickets"),
+                      onClick: () => navigate(`/user/creditos/${credito._id}`),
                       primary: true,
                     },
                     {
                       label: "Ver detalle",
                       icon: <Wallet2 size={16} />,
-                      onClick: () => navigate(`/user/creditos/${credito.id}`),
+                      onClick: () => navigate(`/user/creditos/${credito._id}`),
                     },
                   ]}
                 />
@@ -109,13 +162,13 @@ export default function UserDashboard() {
             <DashboardSection title="Solicitudes en proceso">
               {enProceso.map((sol) => (
                 <DashboardCard
-                  key={sol.id}
-                  title={`Solicitud #${sol.id}`}
-                  subtitle={`Estado: ${sol.estado}`}
-                  description={`Monto: $${sol.monto.toLocaleString()}`}
+                  key={sol._id}
+                  title={`Solicitud #${sol._id.slice(-6).toUpperCase()}`}
+                  subtitle={`Estado: ${sol.state}`}
+                  description={`Monto: $${sol.requestedAmount.toLocaleString()}`}
                   button={{
                     label: "Ver detalle",
-                    onClick: () => navigate(`/user/solicitud/${sol.id}`),
+                    onClick: () => navigate(`/user/solicitud/${sol._id}`),
                     icon: <Clock size={16} />,
                   }}
                 />
@@ -128,7 +181,7 @@ export default function UserDashboard() {
   );
 }
 
-/* 🔹 Subcomponentes simplificados */
+/* 🔹 Subcomponentes reutilizados */
 function StatCard({ icon, title, value }) {
   return (
     <div className="bg-white rounded-xl border border-[#e8e2dc] p-5 text-center hover:shadow-sm transition">

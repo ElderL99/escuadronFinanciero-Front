@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useUserApplications from "../../hooks/user/useUserApplications";
 import useUserApplicationById from "../../hooks/user/useUserApplicationById";
@@ -13,12 +14,24 @@ export default function UserApplicationsPage() {
     applications,
     loading: loadingAll,
     error: errorAll,
+    fetchUserApplications,
   } = useUserApplications();
+
   const {
     application,
     loading: loadingOne,
     error: errorOne,
-  } = useUserApplicationById(id);
+    fetchUserApplicationById,
+  } = useUserApplicationById();
+
+  // 🔹 Cargar solicitudes
+  useEffect(() => {
+    if (id) {
+      fetchUserApplicationById(id);
+    } else {
+      fetchUserApplications();
+    }
+  }, [id, fetchUserApplications, fetchUserApplicationById]);
 
   const loading = id ? loadingOne : loadingAll;
   const error = id ? errorOne : errorAll;
@@ -41,7 +54,7 @@ export default function UserApplicationsPage() {
         {id ? "Detalle de Solicitud" : "Mis Solicitudes"}
       </h1>
 
-      <div className={`grid grid-cols-1 gap-4`}>
+      <div className="grid grid-cols-1 gap-4">
         {apps.map((app) => (
           <ApplicationCard
             key={app._id}

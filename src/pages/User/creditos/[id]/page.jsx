@@ -70,73 +70,88 @@ export default function UserCreditDetailPage() {
         </h2>
 
         <div className="space-y-4">
-          {credit.planPagos.map((pago) => (
-            <div
-              key={pago.numero}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[#e8e2dc] pb-3"
-            >
-              <div>
-                <p className="text-sm font-medium text-[#1a1a1a]">
-                  Pago #{pago.numero} — ${pago.monto.toLocaleString()}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Fecha: {new Date(pago.fecha).toLocaleDateString("es-MX")}
-                </p>
+          {credit.planPagos.map((pago, index) => {
+            const pagoAnterior = credit.planPagos[index - 1];
+            const puedeSubir =
+              // 🔹 Si es el primer pago, permitir
+              index === 0 ||
+              // 🔹 Si el anterior está pagado o aprobado
+              pagoAnterior?.estado === "paid" ||
+              pagoAnterior?.estado === "approved";
 
-                {/* 🔹 Si fue rechazado, mostrar motivo */}
-                {pago.estado === "rejected" && pago.rechazo && (
-                  <div className="mt-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-start gap-2">
-                    <AlertTriangle className="text-red-600 w-4 h-4 mt-0.5" />
-                    <div>
-                      <p className="text-sm text-red-700 font-medium">
-                        Comprobante rechazado
-                      </p>
-                      <p className="text-xs text-red-600 italic">
-                        Motivo: {pago.rechazo}
-                      </p>
+            return (
+              <div
+                key={pago.numero}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-[#e8e2dc] pb-3"
+              >
+                <div>
+                  <p className="text-sm font-medium text-[#1a1a1a]">
+                    Pago #{pago.numero} — ${pago.monto.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Fecha: {new Date(pago.fecha).toLocaleDateString("es-MX")}
+                  </p>
+
+                  {/* 🔹 Si fue rechazado, mostrar motivo */}
+                  {pago.estado === "rejected" && pago.rechazo && (
+                    <div className="mt-2 bg-red-50 border border-red-200 rounded-lg px-3 py-2 flex items-start gap-2">
+                      <AlertTriangle className="text-red-600 w-4 h-4 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-red-700 font-medium">
+                          Comprobante rechazado
+                        </p>
+                        <p className="text-xs text-red-600 italic">
+                          Motivo: {pago.rechazo}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
 
-              {/* 🔹 Acciones según estado */}
-              <div className="flex items-center gap-3 mt-3 sm:mt-0">
-                {pago.estado === "paid" || pago.estado === "approved" ? (
-                  <span className="flex items-center gap-1 text-green-600 text-sm">
-                    <CheckCircle size={16} /> Pagado
-                  </span>
-                ) : pago.estado === "submitted" ? (
-                  <span className="flex items-center gap-1 text-amber-600 text-sm">
-                    <Clock size={16} /> En revisión
-                  </span>
-                ) : (
-                  <>
-                    <input
-                      type="file"
-                      id={`file-${pago.numero}`}
-                      className="hidden"
-                      onChange={(e) =>
-                        handleUpload(pago.numero, e.target.files[0])
-                      }
-                    />
-                    <label
-                      htmlFor={`file-${pago.numero}`}
-                      className={`flex items-center gap-2 cursor-pointer bg-[#611232] text-white text-xs px-3 py-2 rounded-lg hover:bg-[#4a0f27] transition ${
-                        uploading ? "opacity-60" : ""
-                      }`}
-                    >
-                      <Upload size={14} />
-                      {uploading
-                        ? "Subiendo..."
-                        : pago.estado === "rejected"
-                        ? "Reenviar ticket"
-                        : "Subir ticket"}
-                    </label>
-                  </>
-                )}
+                {/* 🔹 Acciones según estado */}
+                <div className="flex items-center gap-3 mt-3 sm:mt-0">
+                  {pago.estado === "paid" || pago.estado === "approved" ? (
+                    <span className="flex items-center gap-1 text-green-600 text-sm">
+                      <CheckCircle size={16} /> Pagado
+                    </span>
+                  ) : pago.estado === "submitted" ? (
+                    <span className="flex items-center gap-1 text-amber-600 text-sm">
+                      <Clock size={16} /> En revisión
+                    </span>
+                  ) : puedeSubir ? (
+                    <>
+                      <input
+                        type="file"
+                        id={`file-${pago.numero}`}
+                        className="hidden"
+                        onChange={(e) =>
+                          handleUpload(pago.numero, e.target.files[0])
+                        }
+                      />
+                      <label
+                        htmlFor={`file-${pago.numero}`}
+                        className={`flex items-center gap-2 cursor-pointer bg-[#611232] text-white text-xs px-3 py-2 rounded-lg hover:bg-[#4a0f27] transition ${
+                          uploading ? "opacity-60" : ""
+                        }`}
+                      >
+                        <Upload size={14} />
+                        {uploading
+                          ? "Subiendo..."
+                          : pago.estado === "rejected"
+                          ? "Reenviar ticket"
+                          : "Subir ticket"}
+                      </label>
+                    </>
+                  ) : (
+                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                      <XCircle size={14} />
+                      Esperando pago anterior
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

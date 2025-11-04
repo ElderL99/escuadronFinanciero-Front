@@ -21,22 +21,6 @@ export default function PendientesTable({
         <h2 className="text-2xl font-semibold text-[#611232] tracking-tight">
           {title}
         </h2>
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={onFiltrar}
-            className="flex items-center gap-2 px-4 py-2 bg-[#611232] text-white rounded-lg hover:bg-[#501025] transition-colors duration-200 shadow-sm"
-          >
-            <Filter className="w-4 h-4" />
-            <span>Filtrar</span>
-          </button>
-          <button
-            onClick={onExportar}
-            className="flex items-center gap-2 px-4 py-2 bg-[#f5e9dc] text-[#611232] border border-[#e0d2c2] rounded-lg hover:bg-[#e9dbc9] transition-colors duration-200"
-          >
-            <Download className="w-4 h-4" />
-            <span>Exportar</span>
-          </button>
-        </div>
       </div>
 
       {/* Tabla */}
