@@ -56,20 +56,18 @@ export default function UserCreateApplicationPage() {
     },
   });
 
-  /* Restaurar borrador */
+  // 🔄 Cargar / guardar borrador
   useEffect(() => {
     const saved = sessionStorage.getItem("draftSolicitud");
     if (saved) {
       try {
-        const parsed = JSON.parse(saved);
-        reset(parsed);
+        reset(JSON.parse(saved));
       } catch (err) {
         console.error("Error cargando borrador:", err);
       }
     }
   }, [reset]);
 
-  /* Guardar borrador automáticamente */
   useEffect(() => {
     const subscription = watch((value) => {
       sessionStorage.setItem("draftSolicitud", JSON.stringify(value));
@@ -77,20 +75,15 @@ export default function UserCreateApplicationPage() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  /* Maneja archivos */
   const handleFileChange = (e, name) => {
     const file = e.target.files[0];
-    setDocumentos((prev) => ({
-      ...prev,
-      [name]: file,
-    }));
+    setDocumentos((prev) => ({ ...prev, [name]: file }));
   };
 
-  // Valida espaciois vacios
   const notBlank = (value) =>
     value?.trim() !== "" || "Campo obligatorio (no puede estar vacío)";
 
-  /*  Validar antes de avanzar de paso */
+  // ✅ Validar antes de avanzar
   const handleNextStep = async () => {
     const validSteps = {
       1: Object.keys({
@@ -117,17 +110,14 @@ export default function UserCreateApplicationPage() {
     };
 
     const isValid = await trigger(validSteps[step]);
-    if (isValid) {
-      setStep((prev) => prev + 1);
-    } else {
+    if (isValid) setStep((prev) => prev + 1);
+    else
       toast.error("Completa todos los campos requeridos antes de continuar.");
-    }
   };
 
-  /* 📤 Enviar solicitud */
+  // 📤 Enviar solicitud
   const onSubmit = async (data) => {
     try {
-      // Verificar que todos los archivos requeridos existan
       const requiredFiles = [
         "clabe",
         "comprobanteDomicilio",
@@ -137,7 +127,7 @@ export default function UserCreateApplicationPage() {
         "selfieMilitarId",
       ];
 
-      const missing = requiredFiles.filter((name) => !documentos[name]);
+      const missing = requiredFiles.filter((n) => !documentos[n]);
       if (missing.length > 0) {
         toast.error("Faltan documentos por subir.");
         return;
@@ -145,21 +135,15 @@ export default function UserCreateApplicationPage() {
 
       const formData = new FormData();
 
-      // Datos personales
       Object.entries(data.datosPersonales).forEach(([k, v]) =>
         formData.append(`datosPersonales[${k}]`, v)
       );
-
-      // Datos del servicio
       Object.entries(data.datosServicio).forEach(([k, v]) =>
         formData.append(`datosServicio[${k}]`, v)
       );
-
-      // Préstamo
       formData.append("requestedAmount", data.requestedAmount);
       formData.append("paymentMode", data.paymentMode);
 
-      // Documentos (exactos a Multer)
       Object.entries(documentos || {}).forEach(([key, file]) => {
         if (file) formData.set(key, file);
       });
@@ -177,27 +161,33 @@ export default function UserCreateApplicationPage() {
   };
 
   return (
-    <section className="min-h-screen bg-[#f3efea] py-10 px-4 text-[#1a1a1a]">
+    <section
+      className="min-h-screen py-12 px-4 
+      bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] 
+      from-[#fdf8f3] via-[#f9f7f5] to-[#f4f0eb]"
+    >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-3xl mx-auto bg-white rounded-2xl shadow p-6"
+        className="max-w-3xl mx-auto bg-white/80 backdrop-blur-md 
+        border border-[#e8e2dc]/60 shadow-[0_0_30px_rgba(97,18,50,0.15)] 
+        rounded-2xl p-8 sm:p-10 transition-all hover:shadow-lg"
       >
-        {/*  Barra de progreso */}
-        <div className="relative mb-8">
-          <div className="h-2 bg-gray-200 rounded-full">
+        {/* 🟨 Progreso */}
+        <div className="relative mb-10">
+          <div className="h-2 bg-gray-200/70 rounded-full overflow-hidden">
             <motion.div
-              className="h-2 bg-[#d4af37] rounded-full"
+              className="h-2 bg-linear-to-r from-[#d4af37] to-[#611232] rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5 }}
             />
           </div>
-          <p className="text-sm text-gray-600 mt-2 text-right">
+          <p className="text-sm text-[#611232] mt-2 text-right font-medium">
             Paso {step} de {totalSteps}
           </p>
         </div>
 
-        {/* === Secciones === */}
+        {/* 🔹 Secciones dinámicas */}
         {step === 1 && (
           <StepContainer title="Datos personales">
             {Object.entries({
@@ -330,21 +320,23 @@ export default function UserCreateApplicationPage() {
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-[#611232] text-white font-medium py-3 rounded-lg hover:bg-[#4a0f27] flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-[#611232] to-[#7a1b3a] 
+              text-white font-medium py-3 rounded-full shadow-md hover:shadow-lg 
+              flex items-center justify-center gap-2 transition-all"
             >
               {loading ? <Loader2 className="animate-spin" /> : <CheckCircle />}
-              Guardar y Verificar
+              Guardar y Enviar
             </button>
           </StepContainer>
         )}
 
-        {/*Navegación */}
-        <div className="flex justify-between mt-8">
+        {/* Navegación */}
+        <div className="flex justify-between mt-10 text-[#611232] font-medium">
           <button
             disabled={step === 1}
             onClick={() => setStep(step - 1)}
             type="button"
-            className="text-[#611232] font-medium disabled:opacity-40"
+            className="disabled:opacity-40 hover:text-[#4a0f27] transition-all"
           >
             ← Atrás
           </button>
@@ -352,7 +344,7 @@ export default function UserCreateApplicationPage() {
             <button
               type="button"
               onClick={handleNextStep}
-              className="text-[#611232] font-semibold hover:text-[#4a0f27]"
+              className="hover:text-[#4a0f27] transition-all"
             >
               Siguiente →
             </button>

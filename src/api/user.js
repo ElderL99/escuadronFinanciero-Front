@@ -40,3 +40,31 @@ export const createUserApplication = async (formData) =>
   api.post("/user/solicitud", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
+
+// 🔹 Obtener resumen de créditos (tarjetas del dashboard)
+export const getUserCreditsOverview = async () => {
+  return await api.get("/user/credits/overview");
+};
+
+// 🔹 Obtener detalle completo de un crédito por ID
+export const getUserCreditById = async (creditId) => {
+  return await api.get(`/user/credits/${creditId}`);
+};
+
+// 🔹 Subir ticket de pago (ya la tienes, pero la dejamos aquí por claridad)
+export const uploadUserPaymentTicket = async (
+  creditId,
+  paymentNumber,
+  file
+) => {
+  const formData = new FormData();
+  formData.append("comprobantePago", file);
+
+  return await api.post(
+    `/user/creditos/${creditId}/pagos/${paymentNumber}/upload`,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
+  );
+};

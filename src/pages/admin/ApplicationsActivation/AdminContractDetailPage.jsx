@@ -13,7 +13,7 @@ import ActivateCreditSection from "../../../components/DashBoard/contractsCompon
 
 export default function AdminContractDetailPage() {
   const { id } = useParams();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { contract, loading, error } = useAdminContractById(id);
   const [confirming, setConfirming] = useState(false);
   const {
@@ -25,7 +25,7 @@ export default function AdminContractDetailPage() {
 
   const handleActivate = async () => {
     await activateCredit(contract.requestId);
-    navigate("/admin/active-credits"); 
+    navigate("/admin/active-credits");
   };
 
   if (loading)
@@ -159,7 +159,7 @@ export default function AdminContractDetailPage() {
                 href={contract.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block w-full text-center bg-gradient-to from-[#611232] to-[#8b204a] text-white hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
+                className="block w-full text-center bg-gradient-to from-[#611232] to-[#8b204a] text-black/70 hover:opacity-90 transition-all rounded-xl py-3 font-semibold text-sm md:text-lg tracking-wide shadow-md"
               >
                 Ver documento firmado
               </a>

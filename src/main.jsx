@@ -11,7 +11,7 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext.jsx";
 
 // 🧩 Páginas principales
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/homePage/page.jsx";
 import MainLayout from "./layout/mainLayout";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
@@ -40,6 +40,9 @@ import AdminSignedContractsPage from "./pages/admin/ApplicationsActivation/Admin
 import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminContractDetailPage.jsx";
 import AdminActiveCreditsPage from "./pages/admin/ActiveCredits/ActiveCreaditsPage.jsx";
 import AdminCreditDetailPage from "./pages/admin/ActiveCredits/AdminCreditDetailPage.jsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
+import UserCreditsPage from "./pages/User/creditos/page";
+import UserCreditDetailPage from "./pages/User/creditos/[id]/page";
 
 // ===============================
 // 📍 Definición de rutas con contexto
@@ -58,6 +61,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/recover-password" element={<PasswordLostPage />} />
+      <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
       <Route path="*" element={<NotFoundPage />} />
 
       {/* 👤 Usuario */}
@@ -82,6 +86,8 @@ const router = createBrowserRouter(
           element={<UpdateApplicationPage />}
         />
         <Route path="solicitud/:id/firma" element={<SignaturePad />} />
+        <Route path="creditos" element={<UserCreditsPage />} />
+        <Route path="creditos/:id" element={<UserCreditDetailPage />} />
       </Route>
 
       {/* 🛠️ Admin */}

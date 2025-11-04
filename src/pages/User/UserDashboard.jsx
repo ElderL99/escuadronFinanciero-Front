@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FileSignature,
@@ -6,36 +7,83 @@ import {
   Upload,
   Clock,
   Wallet2,
+  Loader2,
 } from "lucide-react";
+import useUserCreditsOverview from "../../hooks/user/useUserCreditsOverview";
+import useUserApplications from "../../hooks/user/useUserApplications";
 
 export default function UserDashboard() {
   const navigate = useNavigate();
 
-  const pendientesFirma = [{ id: "002", monto: 4000 }];
-  const creditosActivos = [
-    { id: "CR123", monto: 5000, pagado: 2500, proximoPago: "05 Nov 2025" },
-  ];
-  const enProceso = [{ id: "001", estado: "En revisión", monto: 3000 }];
+  const {
+    credits,
+    loading: loadingCredits,
+    fetchCreditsOverview,
+  } = useUserCreditsOverview();
+
+  const {
+    applications,
+    loading: loadingApps,
+    fetchUserApplications,
+  } = useUserApplications();
+
+  useEffect(() => {
+    fetchCreditsOverview();
+    fetchUserApplications();
+  }, [fetchCreditsOverview, fetchUserApplications]);
+
+  // 🧠 Obtener nombre del usuario desde localStorage
+  let userName = "Usuario";
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      if (parsed.name) {
+        userName = parsed.name.split(" ")[0].toUpperCase();
+      }
+    }
+  } catch (error) {
+    console.warn("No se pudo leer el usuario:", error);
+  }
+
+  if (loadingCredits || loadingApps)
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-[#611232]">
+        <Loader2 className="animate-spin w-8 h-8 mb-2" />
+        <p>Cargando tu panel...</p>
+      </div>
+    );
+
+  // 📂 Clasificar solicitudes
+  const pendientesFirma = applications.filter(
+    (app) => app.state === "awaiting_signature"
+  );
+  const enProceso = applications.filter(
+    (app) =>
+      app.state === "submitted" ||
+      app.state === "reviewing" ||
+      app.state === "pending"
+  );
 
   return (
-    <section className="min-h-screen  py-12 px-4 text-[#1a1a1a]">
+    <section className="min-h-screen py-16 px-4 bg-[#F9FAFB] text-[#1a1a1a]">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* 👋 Hero */}
-        <div className="bg-white rounded-2xl p-8 border border-[#e8e2dc] flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 border border-[#e8e2dc]/60 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold text-[#611232] mb-2">
-              Hola, Adán 👋
+            <h1 className="text-2xl font-bold text-[#611232] mb-2">
+              Hola, {userName} 👋
             </h1>
-            <p className="text-gray-700">
+            <p className="text-gray-600 text-sm sm:text-base">
               Gestiona tus préstamos y contratos fácilmente desde tu panel.
             </p>
           </div>
           <button
             onClick={() => navigate("/user/create-solicitud")}
-            className="mt-5 sm:mt-0 flex items-center gap-2 bg-[#611232] text-white font-medium px-6 py-3 rounded-lg hover:bg-[#4a0f27] transition-all"
+            className="mt-5 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] font-semibold px-6 py-3 rounded-full hover:bg-[#d4af37] transition-all"
           >
             <PlusCircle size={20} />
-            Nueva solicitud
+            Nueva Solicitud
           </button>
         </div>
 
@@ -44,7 +92,7 @@ export default function UserDashboard() {
           <StatCard
             icon={<CreditCard className="text-[#611232]" />}
             title="Créditos activos"
-            value={creditosActivos.length}
+            value={credits.length}
           />
           <StatCard
             icon={<FileSignature className="text-[#611232]" />}
@@ -58,18 +106,18 @@ export default function UserDashboard() {
           />
         </div>
 
-        <div className="divide-y divide-[#e8e2dc] space-y-8">
+        <div className="divide-y divide-[#e8e2dc]/60 space-y-8">
           {/* 🔏 Contratos pendientes */}
           {pendientesFirma.length > 0 && (
             <DashboardSection title="Contratos pendientes de firma">
               {pendientesFirma.map((sol) => (
                 <DashboardCard
-                  key={sol.id}
-                  title={`Solicitud #${sol.id}`}
-                  subtitle={`Monto aprobado: $${sol.monto.toLocaleString()}`}
+                  key={sol._id}
+                  title={`Solicitud #${sol._id.slice(-6).toUpperCase()}`}
+                  subtitle={`Monto aprobado: $${sol.requestedAmount.toLocaleString()}`}
                   button={{
                     label: "Firmar contrato",
-                    onClick: () => navigate(`/user/contrato/${sol.id}`),
+                    onClick: () => navigate(`/user/solicitud/${sol._id}`),
                     icon: <FileSignature size={16} />,
                   }}
                 />
@@ -78,25 +126,27 @@ export default function UserDashboard() {
           )}
 
           {/* 💳 Créditos activos */}
-          {creditosActivos.length > 0 && (
+          {credits.length > 0 && (
             <DashboardSection title="Créditos activos">
-              {creditosActivos.map((credito) => (
+              {credits.map((credito) => (
                 <DashboardCard
-                  key={credito.id}
-                  title={`Crédito #${credito.id}`}
-                  subtitle={`Total: $${credito.monto.toLocaleString()} · Pagado: $${credito.pagado.toLocaleString()}`}
-                  description={`Próximo pago: ${credito.proximoPago}`}
+                  key={credito._id}
+                  title={`Crédito #${credito._id.slice(-6).toUpperCase()}`}
+                  subtitle={`Total: $${credito.monto.toLocaleString()} · Pagos: ${
+                    credito.pagosRealizados
+                  }/${credito.pagosTotales}`}
+                  description={`Pendientes: ${credito.pagosPendientes}`}
                   actions={[
                     {
                       label: "Subir ticket",
                       icon: <Upload size={16} />,
-                      onClick: () => navigate("/user/tickets"),
+                      onClick: () => navigate(`/user/creditos/${credito._id}`),
                       primary: true,
                     },
                     {
                       label: "Ver detalle",
                       icon: <Wallet2 size={16} />,
-                      onClick: () => navigate(`/user/creditos/${credito.id}`),
+                      onClick: () => navigate(`/user/creditos/${credito._id}`),
                     },
                   ]}
                 />
@@ -109,13 +159,13 @@ export default function UserDashboard() {
             <DashboardSection title="Solicitudes en proceso">
               {enProceso.map((sol) => (
                 <DashboardCard
-                  key={sol.id}
-                  title={`Solicitud #${sol.id}`}
-                  subtitle={`Estado: ${sol.estado}`}
-                  description={`Monto: $${sol.monto.toLocaleString()}`}
+                  key={sol._id}
+                  title={`Solicitud #${sol._id.slice(-6).toUpperCase()}`}
+                  subtitle={`Estado: ${sol.state}`}
+                  description={`Monto: $${sol.requestedAmount.toLocaleString()}`}
                   button={{
                     label: "Ver detalle",
-                    onClick: () => navigate(`/user/solicitud/${sol.id}`),
+                    onClick: () => navigate(`/user/solicitud/${sol._id}`),
                     icon: <Clock size={16} />,
                   }}
                 />
@@ -128,13 +178,13 @@ export default function UserDashboard() {
   );
 }
 
-/* 🔹 Subcomponentes simplificados */
+/* 🔹 Subcomponentes reutilizados */
 function StatCard({ icon, title, value }) {
   return (
-    <div className="bg-white rounded-xl border border-[#e8e2dc] p-5 text-center hover:shadow-sm transition">
+    <div className="bg-white/80 backdrop-blur-md rounded-xl border border-[#e8e2dc]/60 p-5 text-center hover:shadow-md transition-all">
       <div className="mb-3 flex justify-center">{icon}</div>
       <h3 className="text-sm text-gray-600">{title}</h3>
-      <p className="text-2xl font-semibold text-[#611232]">{value}</p>
+      <p className="text-3xl font-bold text-[#611232]">{value}</p>
     </div>
   );
 }
@@ -150,9 +200,9 @@ function DashboardSection({ title, children }) {
 
 function DashboardCard({ title, subtitle, description, button, actions }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white border border-[#e8e2dc] rounded-xl p-5 hover:shadow-sm transition">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white/90 backdrop-blur-md border border-[#e8e2dc]/60 rounded-xl p-5 hover:shadow-md transition-all">
       <div>
-        <p className="font-medium text-[#1a1a1a] mb-1">{title}</p>
+        <p className="font-semibold text-[#1a1a1a] mb-1">{title}</p>
         {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
         {description && (
           <p className="text-xs text-gray-500 mt-1">{description}</p>
@@ -165,9 +215,9 @@ function DashboardCard({ title, subtitle, description, button, actions }) {
             <button
               key={i}
               onClick={a.onClick}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 a.primary
-                  ? "bg-[#611232] text-white hover:bg-[#4a0f27]"
+                  ? "bg-[#C5A572] text-[#611232] hover:bg-[#d4af37]"
                   : "border border-[#611232] text-[#611232] hover:bg-[#611232]/10"
               }`}
             >
@@ -180,7 +230,7 @@ function DashboardCard({ title, subtitle, description, button, actions }) {
         button && (
           <button
             onClick={button.onClick}
-            className="mt-4 sm:mt-0 flex items-center gap-2 bg-[#611232] text-white text-sm px-4 py-2 rounded-lg hover:bg-[#4a0f27] transition"
+            className="mt-4 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#d4af37] transition-all"
           >
             {button.icon}
             {button.label}
