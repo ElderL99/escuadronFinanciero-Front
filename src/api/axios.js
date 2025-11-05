@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 // Crear instancia base
 const api = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: "https://escuadron-financiero-back-end.onrender.com",
   withCredentials: false,
 });
 
