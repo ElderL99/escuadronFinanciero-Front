@@ -8,7 +8,7 @@ import {
 import { Toaster } from "react-hot-toast";
 import "./index.css";
 
-import { AuthProvider } from "./context/AuthContext.jsx";
+import AuthProvider from "./context/AuthContext.jsx";
 
 // 🧩 Páginas principales
 import HomePage from "./pages/homePage/page.jsx";

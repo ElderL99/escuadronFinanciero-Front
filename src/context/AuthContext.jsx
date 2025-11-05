@@ -9,7 +9,7 @@ import {
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export default function AuthProvider({ children }) {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("user")) || null
   );

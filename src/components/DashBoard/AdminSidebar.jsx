@@ -18,7 +18,7 @@ export default function AdminSidebar() {
 
   return (
     <>
-      {/* Sidebar escritorio fija */}
+      {/* ===== SIDEBAR ESCRITORIO ===== */}
       <aside
         className="hidden lg:flex flex-col fixed top-0 left-0 h-screen w-64 
         bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/70 
@@ -26,7 +26,6 @@ export default function AdminSidebar() {
         shadow-[0_0_25px_rgba(97,18,50,0.5)] 
         z-40 overflow-y-auto"
       >
-        {/* Glow decorativo */}
         <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
 
         <div className="z-10 p-6 flex flex-col justify-between h-full">
@@ -43,14 +42,14 @@ export default function AdminSidebar() {
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`group flex items-center gap-3 p-3 rounded-lg relative overflow-hidden transition-all duration-300 ${
+                    className={`group flex items-center gap-3 p-3 rounded-lg transition-all duration-300 ${
                       isActive
                         ? "bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.15)]"
                         : "hover:bg-white/10"
                     }`}
                   >
                     <div
-                      className={`p-2 rounded-md flex items-center justify-center transition-all duration-300 ${
+                      className={`p-2 rounded-md flex items-center justify-center ${
                         isActive
                           ? "bg-[#d4af37]/20 text-[#d4af37]"
                           : "text-white/70 group-hover:text-white"
@@ -59,7 +58,7 @@ export default function AdminSidebar() {
                       <Icon size={20} />
                     </div>
                     <span
-                      className={`text-sm font-medium transition-colors duration-300 ${
+                      className={`text-sm font-medium ${
                         isActive ? "text-white" : "text-white/80"
                       }`}
                     >
@@ -71,7 +70,6 @@ export default function AdminSidebar() {
             </nav>
           </div>
 
-          {/* 🔴 Botón Cerrar sesión */}
           <button
             onClick={logout}
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors mt-8"
@@ -81,12 +79,12 @@ export default function AdminSidebar() {
         </div>
       </aside>
 
-      {/* Sidebar móvil (solo iconos) */}
+      {/* ===== SIDEBAR MÓVIL ===== */}
       <aside
-        className="flex flex-col lg:hidden fixed top-0 left-0 h-screen w-16 
+        className="lg:hidden fixed top-0 left-0 h-full w-16 
         bg-linear-to-b from-[#611232]/90 to-[#2e0a1c]/80 
         backdrop-blur-xl border-r border-white/10 shadow-xl 
-        z-40"
+        flex flex-col justify-between z-50"
       >
         <nav className="flex flex-col items-center py-4 gap-4 flex-1 overflow-y-auto">
           {navItems.map((item) => {
@@ -108,7 +106,6 @@ export default function AdminSidebar() {
           })}
         </nav>
 
-        {/* 🔴 Logout en móvil */}
         <button
           onClick={logout}
           className="p-3 mb-4 text-gray-400 hover:text-red-400 transition-colors flex justify-center"

@@ -187,7 +187,7 @@ export default function AdminCreditDetailPage() {
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#611232]/50"
+                  className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#611232]/50"
                   placeholder="Escribe el motivo aquí..."
                 />
               </div>

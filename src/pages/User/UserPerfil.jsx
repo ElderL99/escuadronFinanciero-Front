@@ -20,7 +20,7 @@ export default function UserProfile() {
   }`.toUpperCase();
 
   return (
-    <section className="min-h-screen bg-[#F9FAFB] py-16 px-4 flex justify-center items-start">
+    <section className="min-h-screen bg-[#F9FAFB]   flex justify-center items-start">
       <div
         className="w-full max-w-2xl bg-white/80 backdrop-blur-md border border-[#e8e2dc]/60 
         rounded-2xl shadow-sm p-8 transition-all hover:shadow-md"
