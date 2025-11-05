@@ -1,14 +1,15 @@
+import { memo } from "react";
 import ApplicationHeader from "./ApplicationHeader";
 import ApplicationInfo from "./ApplicationInfo";
 import ApplicationDetails from "./ApplicationDetails";
 
-export default function ApplicationCard({ app, onClick, isDetail }) {
+function ApplicationCard({ app, onClick, isDetail }) {
   return (
     <article
       onClick={onClick}
-      className={`bg-white/80 backdrop-blur-xl rounded-xl p-5 border border-[#611232]/10 shadow-sm hover:shadow-md transition-all duration-200 ${
-        !isDetail ? "cursor-pointer hover:scale-[1.02]" : ""
-      }`}
+      className={`bg-white/90 rounded-xl p-5 border border-[#611232]/10 shadow-sm 
+      hover:shadow-md transition-transform transition-shadow duration-200 will-change-transform
+      ${!isDetail ? "cursor-pointer hover:scale-[1.01]" : ""}`}
     >
       <ApplicationHeader app={app} />
       <ApplicationInfo app={app} />
@@ -16,3 +17,6 @@ export default function ApplicationCard({ app, onClick, isDetail }) {
     </article>
   );
 }
+
+// 🧠 Memoizar para evitar re-render innecesario
+export default memo(ApplicationCard);

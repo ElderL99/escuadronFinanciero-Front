@@ -1,14 +1,14 @@
 export default function DashboardCards({ label, value, Icon, color }) {
   return (
     <div
-      className="relative w-full min-h-[4.5rem] rounded-xl 
-      bg-gradient-to-br from-[#611232]/80 to-[#611232]/40 
+      className="relative w-full min-h-18 rounded-xl 
+      bg-linear-to-br from-[#611232]/80 to-[#611232]/60 
       backdrop-blur-lg border border-white/10 shadow-lg 
       flex items-center gap-3 px-3 
       transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl"
     >
       {/* Glow decorativo */}
-      <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/10 to-transparent opacity-30 blur-xl pointer-events-none" />
+      <div className="absolute inset-0 rounded-xl bg-linear-to-br from-white/10 to-transparent opacity-30 blur-xl pointer-events-none" />
 
       {/* Icono */}
       {Icon && (

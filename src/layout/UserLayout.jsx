@@ -1,7 +1,6 @@
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { LogOut, User, FileText, Home, CreditCard } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import HomeFooter from "@/components/homePage/HomeFooter";
 
 export default function UserLayout() {
   const { logout } = useAuth();
@@ -15,21 +14,20 @@ export default function UserLayout() {
   ];
 
   return (
-    <div className="h-screen w-full flex bg-[#F9FAFB] overflow-hidden text-white">
+    <div className="h-screen w-full flex bg-[#F9FAFB] text-white overflow-hidden">
       {/* ===== SIDEBAR DESKTOP ===== */}
       <aside
-        className="hidden md:flex flex-col w-64 bg-linear-to-b from-[#611232]/95 to-[#2e0a1c]/80 
-        backdrop-blur-lg border-r border-white/10 shadow-[0_0_20px_rgba(97,18,50,0.3)] 
+        className="hidden md:flex flex-col w-64 
+        bg-gradient-to-b from-[#611232]/95 to-[#2e0a1c]/85 
+        backdrop-blur-sm border-r border-white/10 shadow-md
         relative overflow-hidden"
       >
-        {/* 🔹 Brillo de fondo */}
-        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-20 blur-2xl pointer-events-none" />
+        {/* 🔹 Brillo decorativo */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-20 blur-md pointer-events-none" />
 
-        {/* Contenido Sidebar */}
         <div className="z-10 p-6 flex flex-col h-full justify-between">
-          {/* Logo y navegación */}
           <div>
-            <h1 className="text-lg font-bold mb-10 tracking-wide bg-linear-to-r from-white to-[#d4af37] bg-clip-text text-transparent">
+            <h1 className="text-lg font-bold mb-10 tracking-wide bg-gradient-to-r from-white to-[#d4af37] bg-clip-text text-transparent">
               Escuadrón Financiero
             </h1>
 
@@ -40,14 +38,14 @@ export default function UserLayout() {
                   <Link
                     key={name}
                     to={path}
-                    className={`group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300 ${
+                    className={`group flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-300 ${
                       isActive
-                        ? "bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.15)]"
+                        ? "bg-white/15 shadow-inner"
                         : "hover:bg-white/10"
                     }`}
                   >
                     <div
-                      className={`p-2 rounded-md transition-all ${
+                      className={`p-2 rounded-md transition-colors ${
                         isActive
                           ? "bg-[#d4af37]/20 text-[#d4af37]"
                           : "text-white/70 group-hover:text-white"
@@ -68,7 +66,7 @@ export default function UserLayout() {
             </nav>
           </div>
 
-          {/* Botón Salir */}
+          {/* Botón salir */}
           <button
             onClick={logout}
             className="flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors mt-8"
@@ -79,12 +77,11 @@ export default function UserLayout() {
       </aside>
 
       {/* ===== SIDEBAR MÓVIL ===== */}
-      {/* ===== SIDEBAR MÓVIL ===== */}
       <aside
         className="fixed md:hidden top-0 left-0 h-full w-16 
-  bg-linear-to-b from-[#611232]/95 to-[#2e0a1c]/90 
-  backdrop-blur-md border-r border-white/10 shadow-lg 
-  flex flex-col justify-between z-50"
+        bg-gradient-to-b from-[#611232]/95 to-[#2e0a1c]/90 
+        backdrop-blur-sm border-r border-white/10 shadow-md 
+        flex flex-col justify-between z-50"
       >
         <nav className="flex flex-col items-center py-4 gap-4 flex-1 overflow-y-auto">
           {navItems.map(({ name, path, icon: Icon }) => {
@@ -93,7 +90,7 @@ export default function UserLayout() {
               <Link
                 key={name}
                 to={path}
-                className={`p-3 rounded-xl transition-all ${
+                className={`p-3 rounded-xl transition-colors duration-300 ${
                   isActive
                     ? "bg-[#d4af37]/20 text-[#d4af37] shadow-inner"
                     : "hover:bg-white/10 text-white/80"
@@ -115,8 +112,8 @@ export default function UserLayout() {
 
       {/* ===== CONTENIDO PRINCIPAL ===== */}
       <main
-        className="flex-1 h-full overflow-y-auto px-2   md:px-8  bg-[#F9FAFB] md:ml-0 ml-15"
-        style={{ scrollbarWidth: "thin" }}
+        className="flex-1 h-full overflow-y-auto px-3 md:px-8 bg-[#F9FAFB] md:ml-0 ml-16"
+        style={{ scrollbarWidth: "thin", willChange: "transform" }}
       >
         <Outlet />
       </main>

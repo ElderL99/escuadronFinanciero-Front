@@ -21,7 +21,6 @@ export default function UserCreateApplicationPage() {
   const totalSteps = 5;
   const progress = (step / totalSteps) * 100;
 
-  // 📋 useForm
   const {
     register,
     handleSubmit,
@@ -56,23 +55,24 @@ export default function UserCreateApplicationPage() {
     },
   });
 
-  // 🔄 Cargar / guardar borrador
+  // 🔄 Cargar / guardar borrador con debounce
   useEffect(() => {
     const saved = sessionStorage.getItem("draftSolicitud");
     if (saved) {
       try {
         reset(JSON.parse(saved));
-      } catch (err) {
-        console.error("Error cargando borrador:", err);
+      } catch {
+        console.warn("Error cargando borrador");
       }
     }
   }, [reset]);
 
   useEffect(() => {
-    const subscription = watch((value) => {
+    const handler = setInterval(() => {
+      const value = watch();
       sessionStorage.setItem("draftSolicitud", JSON.stringify(value));
-    });
-    return () => subscription.unsubscribe();
+    }, 1000); // guarda cada 1s
+    return () => clearInterval(handler);
   }, [watch]);
 
   const handleFileChange = (e, name) => {
@@ -83,22 +83,21 @@ export default function UserCreateApplicationPage() {
   const notBlank = (value) =>
     value?.trim() !== "" || "Campo obligatorio (no puede estar vacío)";
 
-  // ✅ Validar antes de avanzar
   const handleNextStep = async () => {
     const validSteps = {
-      1: Object.keys({
-        nombre: "",
-        idPersonal: "",
-        folioINE: "",
-        grado: "",
-        empleo: "",
-        matricula: "",
-        telefono: "",
-        clienteNumberBank: "",
-        unidad: "",
-        zona: "",
-        region: "",
-      }).map((key) => `datosPersonales.${key}`),
+      1: [
+        "datosPersonales.nombre",
+        "datosPersonales.idPersonal",
+        "datosPersonales.folioINE",
+        "datosPersonales.grado",
+        "datosPersonales.empleo",
+        "datosPersonales.matricula",
+        "datosPersonales.telefono",
+        "datosPersonales.clienteNumberBank",
+        "datosPersonales.unidad",
+        "datosPersonales.zona",
+        "datosPersonales.region",
+      ],
       2: [
         "datosServicio.fechaAlta",
         "datosServicio.ultimoAscenso",
@@ -108,14 +107,12 @@ export default function UserCreateApplicationPage() {
       ],
       3: ["requestedAmount", "paymentMode"],
     };
-
     const isValid = await trigger(validSteps[step]);
     if (isValid) setStep((prev) => prev + 1);
     else
       toast.error("Completa todos los campos requeridos antes de continuar.");
   };
 
-  // 📤 Enviar solicitud
   const onSubmit = async (data) => {
     try {
       const requiredFiles = [
@@ -126,7 +123,6 @@ export default function UserCreateApplicationPage() {
         "selfieIne",
         "selfieMilitarId",
       ];
-
       const missing = requiredFiles.filter((n) => !documentos[n]);
       if (missing.length > 0) {
         toast.error("Faltan documentos por subir.");
@@ -134,7 +130,6 @@ export default function UserCreateApplicationPage() {
       }
 
       const formData = new FormData();
-
       Object.entries(data.datosPersonales).forEach(([k, v]) =>
         formData.append(`datosPersonales[${k}]`, v)
       );
@@ -143,7 +138,6 @@ export default function UserCreateApplicationPage() {
       );
       formData.append("requestedAmount", data.requestedAmount);
       formData.append("paymentMode", data.paymentMode);
-
       Object.entries(documentos || {}).forEach(([key, file]) => {
         if (file) formData.set(key, file);
       });
@@ -161,22 +155,17 @@ export default function UserCreateApplicationPage() {
   };
 
   return (
-    <section
-      className="min-h-screen py-12 px-4 
-      bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] 
-      from-[#fdf8f3] via-[#f9f7f5] to-[#f4f0eb]"
-    >
+    <section className="min-h-screen py-12 px-4 bg-gradient-to-b from-[#f9f7f5] to-[#f4f0eb]">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-3xl mx-auto bg-white/80 backdrop-blur-md 
-        border border-[#e8e2dc]/60 shadow-[0_0_30px_rgba(97,18,50,0.15)] 
-        rounded-2xl p-8 sm:p-10 transition-all hover:shadow-lg"
+        className="max-w-3xl mx-auto bg-white/95 border border-[#e8e2dc]/60 shadow-[0_0_10px_rgba(97,18,50,0.15)] 
+        rounded-2xl p-8 sm:p-10 transition-shadow hover:shadow-md will-change-transform"
       >
         {/* 🟨 Progreso */}
         <div className="relative mb-10">
           <div className="h-2 bg-gray-200/70 rounded-full overflow-hidden">
             <motion.div
-              className="h-2 bg-linear-to-r from-[#d4af37] to-[#611232] rounded-full"
+              className="h-2 bg-gradient-to-r from-[#d4af37] to-[#611232] rounded-full will-change-[width]"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5 }}
@@ -187,7 +176,7 @@ export default function UserCreateApplicationPage() {
           </p>
         </div>
 
-        {/* 🔹 Secciones dinámicas */}
+        {/* 🔹 Contenido dinámico */}
         {step === 1 && (
           <StepContainer title="Datos personales">
             {Object.entries({
@@ -198,7 +187,7 @@ export default function UserCreateApplicationPage() {
               empleo: "Empleo",
               matricula: "Matrícula",
               telefono: "Teléfono",
-              clienteNumberBank: "Número de cuenta bancaria",
+              clienteNumberBank: "Cuenta bancaria",
               unidad: "Unidad",
               zona: "Zona",
               region: "Región",
@@ -320,12 +309,12 @@ export default function UserCreateApplicationPage() {
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-linear-to-r from-[#611232] to-[#7a1b3a] 
+              className="w-full bg-gradient-to-r from-[#611232] to-[#7a1b3a] 
               text-white font-medium py-3 rounded-full shadow-md hover:shadow-lg 
-              flex items-center justify-center gap-2 transition-all"
+              flex items-center justify-center gap-2 transition-shadow will-change-transform"
             >
               {loading ? <Loader2 className="animate-spin" /> : <CheckCircle />}
-              Guardar y Enviar
+              Guardar
             </button>
           </StepContainer>
         )}
@@ -336,7 +325,7 @@ export default function UserCreateApplicationPage() {
             disabled={step === 1}
             onClick={() => setStep(step - 1)}
             type="button"
-            className="disabled:opacity-40 hover:text-[#4a0f27] transition-all"
+            className="disabled:opacity-40 hover:text-[#4a0f27] transition-colors"
           >
             ← Atrás
           </button>
@@ -344,7 +333,7 @@ export default function UserCreateApplicationPage() {
             <button
               type="button"
               onClick={handleNextStep}
-              className="hover:text-[#4a0f27] transition-all"
+              className="hover:text-[#4a0f27] transition-colors"
             >
               Siguiente →
             </button>

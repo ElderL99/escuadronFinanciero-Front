@@ -7,7 +7,7 @@ export default function AdminActiveCreditsPage() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center min-h-screen text-[#611232]/70">
+      <div className="flex items-center justify-center min-h-[70vh] text-[#611232]/70">
         <Loader2 className="animate-spin mr-2" size={20} />
         Cargando créditos activos...
       </div>
@@ -20,10 +20,7 @@ export default function AdminActiveCreditsPage() {
       </div>
     );
 
-  // 🟩 Filtrar solo los créditos activos
-  const activeCredits = credits.filter(
-    (credito) => credito.status === "active"
-  );
+  const activeCredits = credits.filter((c) => c.status === "active");
 
   if (!activeCredits.length)
     return (
@@ -33,12 +30,17 @@ export default function AdminActiveCreditsPage() {
     );
 
   return (
-    <section className="p-6 space-y-6">
-      <h1 className="text-2xl md:text-3xl font-bold text-[#611232] mb-6">
-        Créditos activos
-      </h1>
+    <section className="p-6">
+      <header className="mb-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#611232] tracking-tight">
+          Créditos activos
+        </h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Gestiona y revisa los créditos actualmente en curso.
+        </p>
+      </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 will-change-transform">
         {activeCredits.map((credito) => (
           <ActiveCreditCard key={credito.creditoId} credito={credito} />
         ))}
