@@ -79,11 +79,14 @@ export default function UserLayout() {
       </aside>
 
       {/* ===== SIDEBAR MÓVIL ===== */}
+      {/* ===== SIDEBAR MÓVIL ===== */}
       <aside
-        className="flex md:hidden flex-col w-16 bg-linear-to-b from-[#611232]/95 to-[#2e0a1c]/90 
-        backdrop-blur-md border-r border-white/10 shadow-lg"
+        className="fixed md:hidden top-0 left-0 h-full w-16 
+  bg-linear-to-b from-[#611232]/95 to-[#2e0a1c]/90 
+  backdrop-blur-md border-r border-white/10 shadow-lg 
+  flex flex-col justify-between z-50"
       >
-        <nav className="flex flex-col items-center py-4 gap-4 flex-1">
+        <nav className="flex flex-col items-center py-4 gap-4 flex-1 overflow-y-auto">
           {navItems.map(({ name, path, icon: Icon }) => {
             const isActive = location.pathname === path;
             return (
@@ -102,7 +105,6 @@ export default function UserLayout() {
           })}
         </nav>
 
-        {/* Salir en móvil */}
         <button
           onClick={logout}
           className="p-3 mb-4 text-gray-400 hover:text-red-400 transition-colors"
@@ -113,7 +115,7 @@ export default function UserLayout() {
 
       {/* ===== CONTENIDO PRINCIPAL ===== */}
       <main
-        className="flex-1 h-full overflow-y-auto px-4 md:px-8 py-10 bg-[#F9FAFB]"
+        className="flex-1 h-full overflow-y-auto px-2   md:px-8  bg-[#F9FAFB] md:ml-0 ml-15"
         style={{ scrollbarWidth: "thin" }}
       >
         <Outlet />
