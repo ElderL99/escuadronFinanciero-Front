@@ -11,7 +11,7 @@ export function Input({ label, name, register, type = "text" }) {
   );
 }
 
-export function Select({ label, name, register, options }) {
+export function Select({ label, name, register, options = [] }) {
   return (
     <div className="flex flex-col">
       <label className="text-xs text-gray-600 mb-1">{label}</label>
@@ -19,11 +19,26 @@ export function Select({ label, name, register, options }) {
         {...register(name)}
         className="border border-[#611232]/20 rounded-lg px-3 py-2 text-sm text-[#1a1a1a] bg-white focus:outline-none focus:ring-2 focus:ring-[#611232]/40"
       >
-        {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt.toUpperCase()}
-          </option>
-        ))}
+        {/* opción por defecto */}
+        <option value="">Selecciona una opción</option>
+
+        {options.map((opt) => {
+          // si es un objeto { value, label }
+          if (typeof opt === "object" && opt !== null) {
+            return (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            );
+          }
+
+          // si es un string o número
+          return (
+            <option key={opt} value={opt}>
+              {opt}
+            </option>
+          );
+        })}
       </select>
     </div>
   );

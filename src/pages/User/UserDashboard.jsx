@@ -83,7 +83,7 @@ export default function UserDashboard() {
         </div>
 
         {/* 📊 Resumen */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="hidden  sm:grid sm:grid-cols-3 gap-6">
           <StatCard
             icon={<CreditCard className="text-[#611232]" />}
             title="Créditos activos"

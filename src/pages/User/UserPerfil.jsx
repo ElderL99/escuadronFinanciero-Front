@@ -2,7 +2,7 @@ import { LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 export default function UserProfile() {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
 
   // 🌀 Estado inicial de carga
   if (loading || !user) {
@@ -74,7 +74,7 @@ export default function UserProfile() {
         {/* Botón Salir */}
         <div className="flex justify-center mt-10">
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => logout()}
             className="flex items-center gap-2 bg-[#C5A572] text-[#611232] px-6 py-3 rounded-full font-semibold hover:bg-[#d4af37] transition-colors"
           >
             <LogOut size={18} />

@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import toast from "react-hot-toast";
 import { sendUserApplications } from "../../api/user";
 
 export default function useSendUserApplication() {
@@ -13,10 +14,16 @@ export default function useSendUserApplication() {
       setSuccess(false);
 
       const res = await sendUserApplications(applicationId);
+
+      toast.success(res.data?.message || "✅ Solicitud enviada correctamente");
+
       setSuccess(true);
       return res.data;
     } catch (err) {
-      setError(err.response?.data?.message || "Error al enviar la solicitud");
+      const msg =
+        err.response?.data?.message || "❌ Error al enviar la solicitud";
+      setError(msg);
+      toast.error(msg);
       return null;
     } finally {
       setLoading(false);

@@ -90,6 +90,37 @@ export default function AdminCreditDetailPage() {
               })}
             </p>
 
+            {/* 🗓️ Fecha de pago */}
+            {pago.date && (
+              <p
+                className={`text-sm font-medium ${
+                  pago.status === "paid"
+                    ? "text-green-600"
+                    : new Date(pago.date) >= new Date()
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                Fecha de pago:{" "}
+                {new Date(pago.date).toLocaleDateString("es-MX", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}{" "}
+                {pago.status !== "paid" && (
+                  <span
+                    className={`ml-2 text-xs font-semibold ${
+                      new Date(pago.date) < new Date()
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {new Date(pago.date) < new Date() ? "Vencido" : "En tiempo"}
+                  </span>
+                )}
+              </p>
+            )}
+
             {/* Estado con color */}
             <p className="flex items-center gap-1 text-sm mt-1">
               {pago.status === "paid" && (

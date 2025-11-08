@@ -221,8 +221,8 @@ export default function UserApplicationPage() {
             value={`$${app.requestedAmount?.toLocaleString("es-MX")}`}
           />
           <Field
-            label="Modalidad de pago"
-            value={app.paymentMode?.toUpperCase()}
+            label="Modalidad de pago (Quincenal)"
+            value={`${Number(app.paymentMode)} quincenas`}
           />
           <Field
             label="Última actualización"
@@ -270,7 +270,7 @@ export default function UserApplicationPage() {
   );
 }
 
-/* 🔹 Subcomponentes optimizados */
+/* 🔹 Subcomponentes */
 const Section = memo(({ title, children }) => (
   <div className="bg-white/95 rounded-xl p-6 border border-[#611232]/10 shadow-xs mb-8 will-change-transform">
     <h2 className="text-lg font-semibold text-[#611232] mb-4">{title}</h2>
