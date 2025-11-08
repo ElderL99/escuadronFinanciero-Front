@@ -315,7 +315,7 @@ export default function UserCreateApplicationPage() {
 
     // ✅ Archivos (el backend los recibe como campos directos)
     Object.entries(documentos).forEach(([key, file]) => {
-      formData.append(key, file); // sin "documentos[...]", directo
+      formData.append(key, file);
     });
 
     try {
