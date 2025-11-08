@@ -19,27 +19,16 @@ export default function HomePage() {
     {
       title: "Préstamos Personales",
       description:
-        "Desde $10,000 hasta $500,000 pesos con tasas preferenciales para personal militar activo y retirado.",
+        "Desde $1,000 hasta $20,000 pesos con tasas preferenciales para personal militar activo y retirado.",
       Icon: BadgeDollarSign,
       bgColor: "#611232",
       textColor: "white",
       items: [
-        "Tasa fija desde 12% anual",
-        "Plazos hasta 60 meses",
+        "Tasa fija desde 5% por credito",
+        "Plazos cortos y flexibles",
+        "Plazos quincenales",
         "Sin comisiones ocultas",
-      ],
-    },
-    {
-      title: "Créditos Hipotecarios",
-      description:
-        "Financiamiento para la compra de vivienda con condiciones especiales para militares.",
-      Icon: Home,
-      bgColor: "#C5A572",
-      textColor: "#611232",
-      items: [
-        "Hasta 95% de financiamiento",
-        "Plazos hasta 25 años",
-        "Tasas competitivas",
+        "sin verificación de buró",
       ],
     },
   ];
@@ -75,7 +64,7 @@ export default function HomePage() {
               Crear cuenta
             </button>
             <button
-              onClick={() => navigate("/user/create-solicitud")}
+              onClick={() => navigate("/user/dashboard")}
               className="bg-[#C5A572] text-[#611232] px-4 py-2 rounded-lg font-semibold hover:bg-[#d4af37] transition-colors"
             >
               Solicita tu Crédito
@@ -123,7 +112,7 @@ export default function HomePage() {
           </button>
           <button
             onClick={() => {
-              navigate("/user/create-solicitud");
+              navigate("/user/dashboard");
               setMenuOpen(false);
             }}
             className="bg-[#C5A572] text-[#611232] px-5 py-2 rounded-lg font-semibold hover:bg-[#d4af37] transition-colors"
@@ -141,7 +130,7 @@ export default function HomePage() {
           className="absolute inset-0 w-full h-full object-cover object-center opacity-90"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#611232]/95 via-[#611232]/70 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-[#611232]/95 via-[#611232]/70 to-transparent"></div>
 
         <div className="relative z-10 px-6">
           <h2 className="text-3xl sm:text-4xl font-bold leading-tight drop-shadow-lg">
@@ -152,12 +141,22 @@ export default function HomePage() {
             Soluciones financieras diseñadas con honor, respeto y compromiso
             para quienes sirven a la patria.
           </p>
-          <button
-            onClick={() => navigate("/user/create-solicitud")}
-            className="mt-8 bg-[#C5A572] px-6 py-3 rounded-full font-semibold text-[#611232] hover:bg-[#d4af37] transition-colors"
-          >
-            Solicitar Crédito
-          </button>
+
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mt-8">
+            <button
+              onClick={() => navigate("/user/dashboard")}
+              className="bg-[#C5A572] px-6 py-3 rounded-full font-semibold text-[#611232] hover:bg-[#d4af37] transition-colors"
+            >
+              Solicitar Crédito
+            </button>
+
+            <button
+              onClick={() => navigate("/contacto")}
+              className="border-2 border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-[#611232] transition-colors"
+            >
+              Contáctanos
+            </button>
+          </div>
         </div>
       </header>
 
@@ -195,7 +194,7 @@ export default function HomePage() {
         <p className="text-[#4B5563] mb-10">
           Soluciones financieras adaptadas a cada rango y necesidad
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1  gap-6 max-w-6xl mx-auto">
           {services.map((service, i) => (
             <HomeOurProduct key={i} {...service} />
           ))}
