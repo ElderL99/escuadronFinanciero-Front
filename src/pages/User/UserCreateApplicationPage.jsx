@@ -330,7 +330,7 @@ export default function UserCreateApplicationPage() {
   };
 
   return (
-    <section className="min-h-screen py-12 px-4 bg-gradient-to-b from-[#f9f7f5] to-[#f4f0eb]">
+    <section className="min-h-screen py-12 px-4 bg-linear-to-b from-[#f9f7f5] to-[#f4f0eb]">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-3xl mx-auto bg-white/95 border border-[#e8e2dc]/60 shadow-[0_0_10px_rgba(97,18,50,0.15)] 
@@ -340,7 +340,7 @@ export default function UserCreateApplicationPage() {
         <div className="relative mb-10">
           <div className="h-2 bg-gray-200/70 rounded-full overflow-hidden">
             <motion.div
-              className="h-2 bg-gradient-to-r from-[#d4af37] to-[#611232] rounded-full will-change-[width]"
+              className="h-2 bg-linear-to-r from-[#d4af37] to-[#611232] rounded-full will-change-[width]"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.5 }}
