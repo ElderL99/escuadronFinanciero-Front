@@ -44,6 +44,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import UserCreditsPage from "./pages/User/creditos/page";
 import UserCreditDetailPage from "./pages/User/creditos/[id]/page";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
+import ContactPage from "./pages/contact/page";
 
 // ===============================
 // 📍 Definición de rutas con contexto
@@ -64,6 +65,7 @@ const router = createBrowserRouter(
       <Route path="/recover-password" element={<PasswordLostPage />} />
       <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
       <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/contacto" element={<ContactPage />} />
       <Route path="*" element={<NotFoundPage />} />
 
       {/* 👤 Usuario */}
