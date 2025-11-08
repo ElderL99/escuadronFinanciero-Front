@@ -1,20 +1,18 @@
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import Logo from "../../public/logo.jpeg";
 import { useState } from "react";
+import useSendContact from "@/hooks/useSendContact";
 
 export default function ContactPage() {
+  const { sendContact, loading, success } = useSendContact();
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí ira la logica para enviar el fomulario al correo del equipo de soporte
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
+    await sendContact(form);
     setForm({ name: "", email: "", message: "" });
   };
 
@@ -110,12 +108,18 @@ export default function ContactPage() {
 
           <button
             type="submit"
-            className="mt-4 flex items-center justify-center gap-2 bg-[#C5A572] text-[#611232] font-semibold py-2 rounded-lg hover:bg-[#d4af37] transition-all"
+            disabled={loading}
+            className={`mt-4 flex items-center justify-center gap-2 font-semibold py-2 rounded-lg transition-all ${
+              loading
+                ? "bg-[#C5A572]/60 cursor-not-allowed"
+                : "bg-[#C5A572] hover:bg-[#d4af37] text-[#611232]"
+            }`}
           >
-            <Send size={18} /> Enviar mensaje
+            <Send size={18} />
+            {loading ? "Enviando..." : "Enviar mensaje"}
           </button>
 
-          {sent && (
+          {success && (
             <p className="text-green-400 text-sm mt-2 text-center animate-fade-in">
               ✅ Tu mensaje ha sido enviado correctamente.
             </p>
