@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Loader2, ArrowLeft, FileText, Trash2, Edit, Send } from "lucide-react";
 import toast from "react-hot-toast";
@@ -58,7 +58,7 @@ export default function UserApplicationPage() {
         <p>{error || "No se encontró la solicitud."}</p>
         <button
           onClick={() => navigate(-1)}
-          className="mt-4 text-sm px-4 py-2 rounded-lg bg-[#611232] text-white hover:bg-[#4a0f27] transition"
+          className="mt-4 text-sm px-4 py-2 rounded-lg bg-[#611232] text-white hover:bg-[#4a0f27] transition-colors will-change-transform"
         >
           Volver
         </button>
@@ -68,7 +68,6 @@ export default function UserApplicationPage() {
 
   const app = application;
 
-  // 🔹 Traducción de estados
   const estados = {
     draft: "Borrador",
     pending: "Pendiente",
@@ -83,11 +82,11 @@ export default function UserApplicationPage() {
   const estadoTraducido = estados[app.state] || app.state;
 
   return (
-    <section className="max-w-5xl mx-auto py-10 px-4">
+    <section className="max-w-5xl mx-auto py-10 px-4 text-[#1a1a1a]">
       {/* 🔙 Volver */}
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-[#611232] mb-6 hover:text-[#4a0f27] transition"
+        className="flex items-center gap-2 text-[#611232] mb-6 hover:text-[#4a0f27] transition-colors will-change-transform"
       >
         <ArrowLeft size={18} /> Volver a mis solicitudes
       </button>
@@ -150,7 +149,7 @@ export default function UserApplicationPage() {
 
       {/* 📑 Contrato y firma */}
       {app.state === "awaiting_signature" && (
-        <div className="bg-[#fff8e6] border border-[#d4af37]/40 rounded-xl p-5 mb-8 shadow-sm">
+        <div className="bg-[#fff8e6] border border-[#d4af37]/40 rounded-xl p-5 mb-8 shadow-xs">
           <h2 className="text-lg font-semibold text-[#611232] mb-2">
             Contrato de préstamo pendiente de firma ✍️
           </h2>
@@ -163,7 +162,7 @@ export default function UserApplicationPage() {
             <ViewContractButton solicitudId={app._id} />
             <button
               onClick={() => navigate(`/user/solicitud/${app._id}/firma`)}
-              className="flex items-center justify-center gap-2 border border-[#611232] text-[#611232] hover:bg-[#611232]/10 font-medium px-4 py-2 rounded-lg transition w-full sm:w-auto"
+              className="flex items-center justify-center gap-2 border border-[#611232] text-[#611232] hover:bg-[#611232]/10 font-medium px-4 py-2 rounded-lg transition-colors w-full sm:w-auto will-change-transform"
             >
               <FileText size={18} />
               Firmar contrato
@@ -181,10 +180,7 @@ export default function UserApplicationPage() {
           <Field label="Matrícula" value={app.matricula} />
           <Field label="ID Personal" value={app.idPersonal} />
           <Field label="Teléfono" value={app.telefono} />
-          <Field
-            label="Número de cuenta bancaria"
-            value={app.clienteNumberBank}
-          />
+          <Field label="Cuenta bancaria" value={app.clienteNumberBank} />
         </Grid>
       </Section>
 
@@ -225,8 +221,8 @@ export default function UserApplicationPage() {
             value={`$${app.requestedAmount?.toLocaleString("es-MX")}`}
           />
           <Field
-            label="Modalidad de pago"
-            value={app.paymentMode?.toUpperCase()}
+            label="Modalidad de pago (Quincenal)"
+            value={`${Number(app.paymentMode)} quincenas`}
           />
           <Field
             label="Última actualización"
@@ -241,7 +237,7 @@ export default function UserApplicationPage() {
           {Object.keys(app.documentos || {}).map((key) => (
             <button
               key={key}
-              className="flex items-center gap-2 px-4 py-3 bg-[#611232]/10 text-[#611232] border border-[#611232]/20 rounded-lg hover:bg-[#611232]/15 transition"
+              className="flex items-center gap-2 px-4 py-3 bg-[#611232]/10 text-[#611232] border border-[#611232]/20 rounded-lg hover:bg-[#611232]/15 transition-colors will-change-transform"
             >
               <FileText size={18} />
               <span className="capitalize">{key}</span>
@@ -275,52 +271,44 @@ export default function UserApplicationPage() {
 }
 
 /* 🔹 Subcomponentes */
-function Section({ title, children }) {
-  return (
-    <div className="bg-white/80 backdrop-blur-xl rounded-xl p-6 border border-[#611232]/10 shadow-sm mb-8">
-      <h2 className="text-lg font-semibold text-[#611232] mb-4">{title}</h2>
-      {children}
-    </div>
-  );
-}
+const Section = memo(({ title, children }) => (
+  <div className="bg-white/95 rounded-xl p-6 border border-[#611232]/10 shadow-xs mb-8 will-change-transform">
+    <h2 className="text-lg font-semibold text-[#611232] mb-4">{title}</h2>
+    {children}
+  </div>
+));
 
-function Grid({ children }) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div>
-  );
-}
+const Grid = memo(({ children }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div>
+));
 
-function Field({ label, value }) {
-  return (
-    <div className="flex flex-col">
-      <span className="text-xs text-gray-500">{label}</span>
-      <span className="font-medium text-[#611232]/90 break-all">
-        {value || "—"}
-      </span>
-    </div>
-  );
-}
+const Field = memo(({ label, value }) => (
+  <div className="flex flex-col">
+    <span className="text-xs text-gray-500">{label}</span>
+    <span className="font-medium text-[#611232]/90 break-all">
+      {value || "—"}
+    </span>
+  </div>
+));
 
-function ActionButton({ icon, text, onClick, loading, color }) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={loading}
-      className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition w-full sm:w-auto ${color} disabled:opacity-60`}
-    >
-      {loading ? (
-        <>
-          <Loader2 className="animate-spin w-4 h-4" /> Procesando...
-        </>
-      ) : (
-        <>
-          {icon}
-          {text}
-        </>
-      )}
-    </button>
-  );
-}
+const ActionButton = memo(({ icon, text, onClick, loading, color }) => (
+  <button
+    onClick={onClick}
+    disabled={loading}
+    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-white font-medium transition-colors w-full sm:w-auto will-change-transform ${color} disabled:opacity-60`}
+  >
+    {loading ? (
+      <>
+        <Loader2 className="animate-spin w-4 h-4" /> Procesando...
+      </>
+    ) : (
+      <>
+        {icon}
+        {text}
+      </>
+    )}
+  </button>
+));
 
 /* 🔹 Ver contrato */
 function ViewContractButton({ solicitudId }) {
@@ -344,7 +332,7 @@ function ViewContractButton({ solicitudId }) {
     <button
       onClick={handleViewContract}
       disabled={loading}
-      className="flex items-center justify-center gap-2 bg-[#611232] hover:bg-[#4a0f27] text-white font-medium px-4 py-2 rounded-lg transition w-full sm:w-auto disabled:opacity-60"
+      className="flex items-center justify-center gap-2 bg-[#611232] hover:bg-[#4a0f27] text-white font-medium px-4 py-2 rounded-lg transition-colors w-full sm:w-auto will-change-transform disabled:opacity-60"
     >
       {loading ? (
         <>

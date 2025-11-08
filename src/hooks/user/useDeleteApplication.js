@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { deleteUserApplication } from "../../api/user";
 
 export default function useDeleteUserApplication(id) {
@@ -15,10 +16,20 @@ export default function useDeleteUserApplication(id) {
     const deleteData = async () => {
       try {
         setLoading(true);
-        await deleteUserApplication(id);
+        setError(null);
+        setDeleted(false);
+
+        const res = await deleteUserApplication(id);
+
+        toast.success(
+          res.data?.message || "🗑️ Solicitud eliminada correctamente"
+        );
         setDeleted(true);
       } catch (err) {
-        setError(err.response?.data?.message || "Error al eliminar solicitud");
+        const msg =
+          err.response?.data?.message || "❌ Error al eliminar la solicitud";
+        setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
         setTrigger(false);

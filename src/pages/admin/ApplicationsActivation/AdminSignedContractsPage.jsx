@@ -6,7 +6,7 @@ export default function AdminSignedContractsPage() {
 
   if (loading)
     return (
-      <div className="flex items-center justify-center min-h-screen text-[#611232]/70">
+      <div className="flex items-center justify-center min-h-[70vh] text-[#611232]/70">
         Cargando contratos firmados...
       </div>
     );
@@ -18,7 +18,7 @@ export default function AdminSignedContractsPage() {
       </div>
     );
 
-  // 🟣 Filtrar solo contratos firmados y pendientes de activación
+  // 🟣 Filtrar contratos firmados pendientes de activación
   const pendingContracts = contracts.filter(
     (contrato) => contrato.estadoSolicitud === "signed"
   );
@@ -31,12 +31,21 @@ export default function AdminSignedContractsPage() {
     );
 
   return (
-    <section className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-[#611232] mb-2">
-        Contratos firmados (pendientes de activación)
-      </h1>
+    <section className="p-6">
+      <header className="mb-6">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#611232] tracking-tight">
+          Contratos firmados (pendientes de activación)
+        </h1>
+        <p className="text-sm text-gray-500">
+          Administra los contratos listos para activar el crédito
+          correspondiente.
+        </p>
+      </header>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 
+        opacity-0 animate-[fadeIn_0.4s_ease-out_forwards] will-change-transform"
+      >
         {pendingContracts.map((contrato) => (
           <ContractCard key={contrato.contratoId} contrato={contrato} />
         ))}

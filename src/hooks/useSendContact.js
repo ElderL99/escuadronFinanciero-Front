@@ -1,27 +1,30 @@
 import { useState, useCallback } from "react";
+import { sendContactForm } from "../api/contact";
 import toast from "react-hot-toast";
-import { sendUserApplications } from "../../api/user";
 
-export default function useSendUserApplication() {
+export default function useSendContact() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const sendApplication = useCallback(async (applicationId) => {
+  const sendContact = useCallback(async (formData) => {
     try {
       setLoading(true);
       setError(null);
       setSuccess(false);
 
-      const res = await sendUserApplications(applicationId);
+      const res = await sendContactForm(formData);
 
-      toast.success(res.data?.message || "✅ Solicitud enviada correctamente");
-
+      toast.success(
+        res.data?.message || "✅ Tu mensaje ha sido enviado correctamente."
+      );
       setSuccess(true);
       return res.data;
     } catch (err) {
+      console.error("Error al enviar contacto:", err);
       const msg =
-        err.response?.data?.message || "❌ Error al enviar la solicitud";
+        err.response?.data?.message ||
+        "❌ No se pudo enviar el mensaje. Inténtalo más tarde.";
       setError(msg);
       toast.error(msg);
       return null;
@@ -30,5 +33,5 @@ export default function useSendUserApplication() {
     }
   }, []);
 
-  return { sendApplication, loading, error, success };
+  return { sendContact, loading, error, success };
 }

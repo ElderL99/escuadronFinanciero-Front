@@ -1,5 +1,12 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import {
   loginRequest,
   registerRequest,
@@ -10,12 +17,47 @@ import {
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // 🧠 Leer nivel y expiración del token
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const decoded = jwtDecode(token);
+      const now = Date.now() / 1000;
+
+      if (decoded.exp && decoded.exp < now) {
+        // Expiró → cerrar sesión
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+        navigate("/login");
+        return;
+      }
+
+      // Si no expiró, inyectar nivel en user (si no lo tiene)
+      if (decoded.level && user && user.level !== decoded.level) {
+        const updated = { ...user, level: decoded.level };
+        setUser(updated);
+        localStorage.setItem("user", JSON.stringify(updated));
+      }
+    } catch {
+      console.warn("Error al decodificar token");
+    }
+  }, [navigate, user]);
 
   // 🔑 Login
   const login = useCallback(
@@ -25,21 +67,36 @@ export default function AuthProvider({ children }) {
         setError(null);
 
         const res = await loginRequest({ email, password });
-        const token = res.data.data.token;
+        const token = res.data?.data?.token;
+        if (!token) throw new Error("No se recibió token del servidor");
+
+        // Guardar token
         localStorage.setItem("token", token);
 
-        // Obtener perfil inicial
+        // Decodificar nivel real del usuario
+        let level = 1;
+        try {
+          const decoded = jwtDecode(token);
+          level = decoded.level || 1;
+        } catch {
+          level = 1;
+        }
+
+        // Obtener perfil real
         const profileRes = await getProfile();
         const userData = profileRes.data?.data?.User || profileRes.data?.data;
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
+
+        const fullUser = { ...userData, level };
+        setUser(fullUser);
+        localStorage.setItem("user", JSON.stringify(fullUser));
 
         // Redirigir según rol
-        if (userData.role === "admin") navigate("/admin/dashboard");
+        if (fullUser.role === "admin") navigate("/admin/dashboard");
         else navigate("/user/dashboard");
 
-        return userData;
+        return fullUser;
       } catch (err) {
+        console.error(err);
         setError(err.response?.data?.message || "Error al iniciar sesión");
         return null;
       } finally {
@@ -55,7 +112,6 @@ export default function AuthProvider({ children }) {
       try {
         setLoading(true);
         setError(null);
-
         await registerRequest(userData);
         navigate("/login");
         return true;

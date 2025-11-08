@@ -32,15 +32,13 @@ export default function UserDashboard() {
     fetchUserApplications();
   }, [fetchCreditsOverview, fetchUserApplications]);
 
-  // 🧠 Obtener nombre del usuario desde localStorage
+  // 🧠 Obtener nombre del usuario
   let userName = "Usuario";
   try {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsed = JSON.parse(storedUser);
-      if (parsed.name) {
-        userName = parsed.name.split(" ")[0].toUpperCase();
-      }
+      if (parsed.name) userName = parsed.name.split(" ")[0].toUpperCase();
     }
   } catch (error) {
     console.warn("No se pudo leer el usuario:", error);
@@ -58,18 +56,15 @@ export default function UserDashboard() {
   const pendientesFirma = applications.filter(
     (app) => app.state === "awaiting_signature"
   );
-  const enProceso = applications.filter(
-    (app) =>
-      app.state === "submitted" ||
-      app.state === "reviewing" ||
-      app.state === "pending"
+  const enProceso = applications.filter((app) =>
+    ["submitted", "reviewing", "pending"].includes(app.state)
   );
 
   return (
-    <section className="min-h-screen py-16 px-4 bg-[#F9FAFB] text-[#1a1a1a]">
+    <section className="py-16 px-4 bg-[#F9FAFB] text-[#1a1a1a]">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* 👋 Hero */}
-        <div className="bg-white/80 backdrop-blur-md rounded-2xl p-8 border border-[#e8e2dc]/60 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div className="bg-white/95 rounded-2xl p-8 border border-[#e8e2dc]/60 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between will-change-transform transition-shadow">
           <div>
             <h1 className="text-2xl font-bold text-[#611232] mb-2">
               Hola, {userName} 👋
@@ -80,7 +75,7 @@ export default function UserDashboard() {
           </div>
           <button
             onClick={() => navigate("/user/create-solicitud")}
-            className="mt-5 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] font-semibold px-6 py-3 rounded-full hover:bg-[#d4af37] transition-all"
+            className="mt-5 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] font-semibold px-6 py-3 rounded-full hover:bg-[#d4af37] transition-colors will-change-transform"
           >
             <PlusCircle size={20} />
             Nueva Solicitud
@@ -88,7 +83,7 @@ export default function UserDashboard() {
         </div>
 
         {/* 📊 Resumen */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="hidden  sm:grid sm:grid-cols-3 gap-6">
           <StatCard
             icon={<CreditCard className="text-[#611232]" />}
             title="Créditos activos"
@@ -178,10 +173,10 @@ export default function UserDashboard() {
   );
 }
 
-/* 🔹 Subcomponentes reutilizados */
+/* 🔹 Subcomponentes optimizados */
 function StatCard({ icon, title, value }) {
   return (
-    <div className="bg-white/80 backdrop-blur-md rounded-xl border border-[#e8e2dc]/60 p-5 text-center hover:shadow-md transition-all">
+    <div className="bg-white/95 rounded-xl border border-[#e8e2dc]/60 p-5 text-center hover:shadow-md transition-shadow will-change-transform">
       <div className="mb-3 flex justify-center">{icon}</div>
       <h3 className="text-sm text-gray-600">{title}</h3>
       <p className="text-3xl font-bold text-[#611232]">{value}</p>
@@ -200,7 +195,7 @@ function DashboardSection({ title, children }) {
 
 function DashboardCard({ title, subtitle, description, button, actions }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white/90 backdrop-blur-md border border-[#e8e2dc]/60 rounded-xl p-5 hover:shadow-md transition-all">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white/95 border border-[#e8e2dc]/60 rounded-xl p-5 hover:shadow-md transition-shadow will-change-transform">
       <div>
         <p className="font-semibold text-[#1a1a1a] mb-1">{title}</p>
         {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
@@ -215,7 +210,7 @@ function DashboardCard({ title, subtitle, description, button, actions }) {
             <button
               key={i}
               onClick={a.onClick}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 a.primary
                   ? "bg-[#C5A572] text-[#611232] hover:bg-[#d4af37]"
                   : "border border-[#611232] text-[#611232] hover:bg-[#611232]/10"
@@ -230,7 +225,7 @@ function DashboardCard({ title, subtitle, description, button, actions }) {
         button && (
           <button
             onClick={button.onClick}
-            className="mt-4 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#d4af37] transition-all"
+            className="mt-4 sm:mt-0 flex items-center gap-2 bg-[#C5A572] text-[#611232] text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#d4af37] transition-colors"
           >
             {button.icon}
             {button.label}

@@ -32,14 +32,16 @@ export default function AdminDashboardPage() {
   const { resumen, pendientes } = data;
 
   return (
-    <main className="p-4 md:p-6 lg:p-8 bg-[#f8f5f0] min-h-screen">
-      {/* Header */}
-      <h1 className="text-3xl font-bold text-[#611232] mb-8">
-        Panel de Administración
-      </h1>
+    <main className="p-4 md:p-6 lg:p-8 bg-linear-to-b from-[#f9f8f6] to-[#f4f1ec] min-h-[90vh] text-[#1a1a1a]">
+      {/* === HEADER === */}
+      <header className="mb-8">
+        <h1 className="text-2xl font-bold text-[#611232] tracking-tight">
+          Panel de Administración
+        </h1>
+      </header>
 
       {/* === CARDS === */}
-      <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-3 md:gap-4 lg:grid-cols-5 ">
+      <section className="grid grid-cols-2  gap-2 sm:grid-cols-3 md:grid-cols-3 md:gap-4 lg:grid-cols-5 will-change-transform ">
         <DashboardCards
           label="Total"
           value={resumen?.total ?? 0}
@@ -71,11 +73,12 @@ export default function AdminDashboardPage() {
           color="bg-emerald-600"
         />
       </section>
-      {/* Botón para recargar datos */}
+
+      {/* === BOTÓN REFRESH === */}
       <div className="flex justify-end mt-6 mb-4">
         <button
           onClick={refetch}
-          className="px-5 py-2 bg-[#611232] text-white rounded-lg hover:bg-[#4d0e28] transition-all shadow-md"
+          className="px-5 py-2 bg-[#611232] text-white rounded-lg hover:bg-[#4d0e28] transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.15)] active:scale-[0.98] will-change-transform"
         >
           Recargar datos
         </button>

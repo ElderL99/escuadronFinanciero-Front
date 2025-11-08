@@ -1,8 +1,14 @@
-import { motion } from "framer-motion";
+import { memo, useMemo } from "react";
 import { FileImage } from "lucide-react";
 
-export default function ReviewDocuments({ documentos = {} }) {
-  if (!documentos || Object.keys(documentos).length === 0) {
+function ReviewDocuments({ documentos = {} }) {
+  // 🧠 Evita recalcular si no cambian los documentos
+  const documentosArray = useMemo(
+    () => Object.entries(documentos || {}),
+    [documentos]
+  );
+
+  if (!documentosArray.length) {
     return (
       <div className="bg-white/60 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 shadow-sm text-center">
         <p className="text-gray-400 text-sm">No hay documentos disponibles</p>
@@ -10,15 +16,8 @@ export default function ReviewDocuments({ documentos = {} }) {
     );
   }
 
-  const documentosArray = Object.entries(documentos);
-
   return (
-    <motion.section
-      initial={{ opacity: 0, x: 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl shadow-lg p-4 mt-4"
-    >
+    <section className="bg-white/80 backdrop-blur-sm border border-gray-100 rounded-2xl shadow-md p-5 mt-4 transition-all duration-300">
       <header className="mb-6">
         <h3 className="text-2xl font-bold text-[#611232] border-b border-gray-200 pb-2">
           Documentos
@@ -28,14 +27,15 @@ export default function ReviewDocuments({ documentos = {} }) {
         </p>
       </header>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {documentosArray.map(([nombre, url]) => (
-          <motion.button
+          <button
             key={nombre}
             onClick={() => window.open(url, "_blank")}
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center justify-between w-full px-5 py-3 rounded-xl font-medium shadow-sm border border-[#611232] bg-gradient-to-r from-[#611232]/90 to-[#831d47] hover:from-[#831d47] hover:to-[#611232] text-white transition-all"
+            className="flex items-center justify-between w-full px-5 py-3 rounded-xl font-medium 
+                       border border-[#611232] bg-linear-to-r from-[#611232]/90 to-[#831d47] 
+                       hover:scale-[1.02] hover:shadow-md active:scale-[0.99]
+                       text-white transition-all duration-200 ease-out"
           >
             <span className="truncate text-left">
               {nombre
@@ -43,9 +43,11 @@ export default function ReviewDocuments({ documentos = {} }) {
                 .replace(/^./, (str) => str.toUpperCase())}
             </span>
             <FileImage size={22} className="text-white opacity-90" />
-          </motion.button>
+          </button>
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }
+
+export default memo(ReviewDocuments);
