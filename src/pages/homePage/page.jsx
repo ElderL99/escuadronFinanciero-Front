@@ -43,10 +43,15 @@ export default function HomePage() {
             className="flex items-center gap-2 cursor-pointer select-none"
             onClick={() => navigate("/")}
           >
-            <img src={Logo} className="w-10 h-10 rounded-md" alt="logo" />
-            <h1 className="text-lg text-[#611232] font-bold tracking-tight">
-              Escuadrón Financiero
-            </h1>
+            <a href="/">
+              {" "}
+              <img src={Logo} className="w-10 h-10 rounded-md" alt="logo" />
+            </a>
+            <a href="/">
+              <h1 className="text-lg text-[#611232] font-bold tracking-tight">
+                Escuadrón Financiero
+              </h1>
+            </a>
           </section>
 
           {/* Botones Desktop */}
@@ -202,7 +207,7 @@ export default function HomePage() {
       </section>
 
       <HomeLoanCalculator />
-      <HomeTestimonials />
+
       <HomeCTA />
       <HomeFooter />
     </div>

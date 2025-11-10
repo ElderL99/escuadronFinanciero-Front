@@ -20,11 +20,13 @@ export default function ContactPage() {
     <section className="min-h-screen bg-[#1a1a1a] text-white flex flex-col items-center justify-center py-16 px-6">
       {/* === Header === */}
       <div className="max-w-3xl w-full text-center mb-10">
-        <img
-          src={Logo}
-          alt="Escuadrón Financiero"
-          className="mx-auto w-20 h-20 mb-4 drop-shadow-lg"
-        />
+        <a href="/">
+          <img
+            src={Logo}
+            alt="Escuadrón Financiero"
+            className="mx-auto w-20 h-20 mb-4 drop-shadow-lg"
+          />
+        </a>
         <h1 className="text-3xl sm:text-4xl font-bold text-[#C5A572] tracking-tight">
           Contáctanos
         </h1>
