@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
-import InputField from "../components/InputField";
-import { useAuth } from "../context/AuthContext";
+import InputField from "../../components/InputField";
+import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
 
 export default function PasswordLostPage() {

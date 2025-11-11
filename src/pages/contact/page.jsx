@@ -43,15 +43,11 @@ export default function ContactPage() {
         <div className="flex flex-col justify-center space-y-6">
           <div className="flex items-center gap-3">
             <Mail className="text-[#C5A572]" size={22} />
-            <p className="text-white/80">contacto@escuadronfinanciero.mx</p>
+            <p className="text-white/80">contacto@escuadronfinanciero.com</p>
           </div>
           <div className="flex items-center gap-3">
             <Phone className="text-[#C5A572]" size={22} />
-            <p className="text-white/80">+52 55 1234 5678</p>
-          </div>
-          <div className="flex items-center gap-3">
-            <MapPin className="text-[#C5A572]" size={22} />
-            <p className="text-white/80">Ciudad de México, MX</p>
+            <p className="text-white/80">+52 33 51 91 32 47</p>
           </div>
 
           <div className="border-t border-white/10 pt-6">

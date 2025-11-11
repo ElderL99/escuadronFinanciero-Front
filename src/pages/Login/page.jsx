@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import InputField from "../components/InputField";
+import InputField from "../../components/InputField";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 
