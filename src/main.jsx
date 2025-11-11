@@ -13,10 +13,10 @@ import AuthProvider from "./context/AuthContext.jsx";
 // 🧩 Páginas principales
 import HomePage from "./pages/homePage/page.jsx";
 import MainLayout from "./layout/mainLayout";
-import NotFoundPage from "./pages/NotFoundPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import PasswordLostPage from "./pages/PasswordLostPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import LoginPage from "./pages/Login/page";
+import RegisterPage from "./pages/RegisterPage/page.jsx";
+import PasswordLostPage from "./pages/PasswordLostPage/page.jsx";
 
 // 🧭 Layouts y rutas protegidas
 import UserPrivateRoute from "./router/UserPrivateRouter";
@@ -40,11 +40,13 @@ import AdminSignedContractsPage from "./pages/admin/ApplicationsActivation/Admin
 import AdminContractDetailPage from "./pages/admin/ApplicationsActivation/AdminContractDetailPage.jsx";
 import AdminActiveCreditsPage from "./pages/admin/ActiveCredits/ActiveCreaditsPage.jsx";
 import AdminCreditDetailPage from "./pages/admin/ActiveCredits/AdminCreditDetailPage.jsx";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/page.jsx";
 import UserCreditsPage from "./pages/User/creditos/page";
 import UserCreditDetailPage from "./pages/User/creditos/[id]/page";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
+import VerifyEmailPage from "./pages/verifyEmailPage/page.jsx";
 import ContactPage from "./pages/contact/page";
+import PrivacyPolicy from "./pages/PrivacyPolicy/page";
+import TermsConditions from "./pages/TermsConditions/page";
 
 // ===============================
 // 📍 Definición de rutas con contexto
@@ -66,6 +68,8 @@ const router = createBrowserRouter(
       <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
       <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
       <Route path="/contacto" element={<ContactPage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/terms-conditions" element={<TermsConditions />} />
       <Route path="*" element={<NotFoundPage />} />
 
       {/* 👤 Usuario */}

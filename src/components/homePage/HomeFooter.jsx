@@ -28,20 +28,23 @@ export default function HomeFooter() {
           <h4 className="text-white font-semibold mb-4">Servicios</h4>
           <ul className="space-y-2 text-sm text-gray-400">
             <li>Préstamos Personales</li>
-            <li>Créditos Hipotecarios</li>
-            <li>Refinanciamiento</li>
-            <li>Seguros</li>
+            <li>Prestamos para Emergencias</li>
           </ul>
         </div>
 
         {/* Soporte */}
         <div>
           <h4 className="text-white font-semibold mb-4">Soporte</h4>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li>Centro de Ayuda</li>
-            <li>Preguntas Frecuentes</li>
-            <li>Términos y Condiciones</li>
-            <li>Privacidad</li>
+          <ul className="space-y-2 flex flex-col text-sm text-gray-400 ">
+            <a href="/contacto">
+              <li>Centro de Ayuda</li>
+            </a>
+            <a href="/terms-conditions">
+              <li>Términos y Condiciones</li>
+            </a>
+            <a href="/privacy-policy">
+              <li>Privacidad</li>
+            </a>
           </ul>
         </div>
 
@@ -50,13 +53,11 @@ export default function HomeFooter() {
           <h4 className="text-white font-semibold mb-4">Contacto</h4>
           <ul className="space-y-3 text-sm text-gray-400">
             <li className="flex items-center gap-2">
-              <Phone size={16} color="#C5A572" /> 55 1234 5678
+              <Phone size={16} color="#C5A572" /> +52 3351913247
             </li>
             <li className="flex items-center gap-2">
-              <Mail size={16} color="#C5A572" /> info@escuadronfinanciero.mx
-            </li>
-            <li className="flex items-center gap-2">
-              <MapPin size={16} color="#C5A572" /> Ciudad de México
+              <Mail size={16} color="#C5A572" />{" "}
+              contacto@escuadronfinanciero.com
             </li>
           </ul>
         </div>

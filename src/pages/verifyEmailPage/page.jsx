@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
-import api from "../api/axios"; // ✅ Usamos tu instancia configurada
+import api from "../../api/axios";
 
 export default function VerifyEmailPage() {
   const [status, setStatus] = useState("loading");

@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import clsx from "clsx";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
-import api from "../api/axios";
+import api from "../../api/axios";
 
 export default function ResetPasswordPage() {
   const [params] = useSearchParams();
