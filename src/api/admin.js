@@ -31,28 +31,28 @@ export const activeUserCredit = async (applicationId) => {
 /* Documentos */
 
 export const getDocumentsByApplicationId = async (applicationId) => {
-  return api.get(`admin/applications/${applicationId}/documents`);
+  return api.get(`/admin/applications/${applicationId}/documents`);
 };
 
 /* Contratos */
 
 export const getAllContractsSigned = async () => {
-  return api.get("admin/contracts/overview");
+  return api.get("/admin/contracts/overview");
 };
 
 export const getContractById = async (contractId) => {
-  return api.get(`admin/contracts/${contractId}`);
+  return api.get(`/admin/contracts/${contractId}`);
 };
 
 /* Creditos Activos */
 
 export const getAllCreditsActive = async () => {
-  return api.get("admin/credits/overview");
+  return api.get("/admin/credits/overview");
 };
 
 // Activar un Credito
 export const activeCreditById = async (applicationId) => {
-  return api.patch(`admin/credits/${applicationId}/active-credit`);
+  return api.patch(`/admin/credits/${applicationId}/active-credit`);
 };
 
 // 🧾 Obtener todos los pagos de un crédito
