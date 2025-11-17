@@ -40,7 +40,7 @@ api.interceptors.response.use(
       // ⚡ Redirigir (sin necesidad de recargar)
       setTimeout(() => {
         window.location.href = "/login";
-      }, 1000);
+      }, 10000);
     }
 
     return Promise.reject(error);
