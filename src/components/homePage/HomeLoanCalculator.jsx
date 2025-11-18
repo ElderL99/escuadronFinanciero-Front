@@ -133,10 +133,6 @@ export default function HomeLoanCalculator() {
             </p>
           </div>
         </div>
-
-        <button className="w-full bg-[#611232] text-white py-3 rounded-md font-semibold hover:bg-[#4b0f28] transition-colors">
-          Solicitar este préstamo
-        </button>
       </div>
     </section>
   );
