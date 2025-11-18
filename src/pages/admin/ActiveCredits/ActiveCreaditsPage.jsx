@@ -4,6 +4,7 @@ import ActiveCreditCard from "../../../components/DashBoard/ApplicationsActiveCo
 
 export default function AdminActiveCreditsPage() {
   const { credits, loading, error } = useAdminActiveCredits();
+  console.log(credits);
 
   if (loading)
     return (
