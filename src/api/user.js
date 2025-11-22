@@ -68,3 +68,10 @@ export const uploadUserPaymentTicket = async (
     }
   );
 };
+
+// 🔹 Crear sesión de pago con Stripe
+export const createPaymentSession = async (creditId, paymentNumber) => {
+  return await api.post(
+    `/user/creditos/${creditId}/payments/${paymentNumber}/checkout`
+  );
+};

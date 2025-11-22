@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useUserCreditById from "../../../../hooks/user/useUserCreditById";
 import useUploadPayment from "../../../../hooks/user/useUploadPayment";
+import useStripePayment from "../../../../hooks/user/useStripePayment";
 import {
   Upload,
   CheckCircle,
@@ -10,6 +11,7 @@ import {
   Loader2,
   AlertTriangle,
   ArrowLeft,
+  CreditCard,
 } from "lucide-react";
 
 export default function UserCreditDetailPage() {
@@ -17,6 +19,7 @@ export default function UserCreditDetailPage() {
   const navigate = useNavigate();
   const { credit, fetchCreditById, loading, error } = useUserCreditById();
   const { uploadTicket, loading: uploading } = useUploadPayment();
+  const { handlePayment, loading: paying } = useStripePayment();
 
   useEffect(() => {
     if (id) fetchCreditById(id);
@@ -141,6 +144,22 @@ export default function UserCreditDetailPage() {
                           ? "Reenviar ticket"
                           : "Subir ticket"}
                       </label>
+
+                      {/* 🔹 Botón de pago con Stripe */}
+                      <button
+                        onClick={() => handlePayment(id, pago.numero)}
+                        disabled={paying}
+                        className={`flex items-center gap-2 bg-[#635bff] text-white text-xs px-3 py-2 rounded-lg hover:bg-[#4e46e5] transition ${
+                          paying ? "opacity-60 cursor-not-allowed" : ""
+                        }`}
+                      >
+                        {paying ? (
+                          <Loader2 className="animate-spin w-3 h-3" />
+                        ) : (
+                          <CreditCard size={14} />
+                        )}
+                        {paying ? "Procesando..." : "Pagar con Stripe"}
+                      </button>
                     </>
                   ) : (
                     <span className="text-xs text-gray-400 flex items-center gap-1">
