@@ -60,6 +60,11 @@ export default function UserDashboard() {
     ["submitted", "reviewing", "pending"].includes(app.state)
   );
 
+  const activeCredits = credits.filter((credito) => {
+    const status = String(credito.estado).toLowerCase();
+    return status !== "completed" && status !== "cancelled";
+  });
+
   return (
     <section className="py-16 px-4 bg-[#F9FAFB] text-[#1a1a1a]">
       <div className="max-w-6xl mx-auto space-y-12">
@@ -87,7 +92,7 @@ export default function UserDashboard() {
           <StatCard
             icon={<CreditCard className="text-[#611232]" />}
             title="Créditos activos"
-            value={credits.length}
+            value={activeCredits.length}
           />
           <StatCard
             icon={<FileSignature className="text-[#611232]" />}
@@ -121,9 +126,9 @@ export default function UserDashboard() {
           )}
 
           {/* 💳 Créditos activos */}
-          {credits.length > 0 && (
+          {activeCredits.length > 0 && (
             <DashboardSection title="Créditos activos">
-              {credits.map((credito) => (
+              {activeCredits.map((credito) => (
                 <DashboardCard
                   key={credito._id}
                   title={`Crédito #${credito._id.slice(-6).toUpperCase()}`}

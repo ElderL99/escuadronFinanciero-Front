@@ -133,6 +133,11 @@ export default function HomeLoanCalculator() {
             </p>
           </div>
         </div>
+        <p className="text-xs text-gray-500 mt-1 text-center">
+          “Los cálculos mostrados son aproximados. El préstamo queda sujeto a
+          aprobación final y a los términos establecidos en el contrato
+          correspondiente.”
+        </p>
       </div>
     </section>
   );

@@ -5,12 +5,11 @@ import { BadgeDollarSign, Home, Menu, X } from "lucide-react";
 import { HomeWhyUs } from "../../components/homePage/HomeWhyUs";
 import HomeOurProduct from "@/components/homePage/HomeOurProduct";
 import HomeLoanCalculator from "@/components/homePage/HomeLoanCalculator";
-import HomeTestimonials from "@/components/homePage/HomeTestimonials";
 import HomeCTA from "@/components/homePage/HomeCTA";
 import HomeFooter from "@/components/homePage/HomeFooter";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import WhatsAppButton from "@/components/WhatsAppButton";
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
@@ -35,6 +34,7 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen">
+      <WhatsAppButton />
       {/* ===== NAVBAR ===== */}
       <nav className="fixed top-0 left-0 right-0 z-30 bg-white/80 shadow-[0_2px_6px_rgba(0,0,0,0.08)] backdrop-saturate-150 transition-all duration-300">
         <div className="flex justify-between items-center p-4 max-w-6xl mx-auto">

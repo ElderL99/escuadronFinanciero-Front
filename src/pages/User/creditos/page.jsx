@@ -12,6 +12,12 @@ export default function UserCreditsPage() {
     fetchCreditsOverview();
   }, [fetchCreditsOverview]);
 
+  // Filtrar créditos activos
+  const activeCredits = credits.filter((credito) => {
+    const status = String(credito.estado).toLowerCase();
+    return status !== "completed" && status !== "cancelled";
+  });
+
   if (loading)
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-[#611232]">
@@ -33,13 +39,13 @@ export default function UserCreditsPage() {
         Mis Créditos Activos
       </h1>
 
-      {credits.length === 0 ? (
+      {activeCredits.length === 0 ? (
         <p className="text-center text-gray-500">
           No tienes créditos activos por el momento.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {credits.map((credit) => (
+          {activeCredits.map((credit) => (
             <div
               key={credit._id}
               className="bg-white border border-[#e8e2dc] rounded-xl p-6 shadow-sm hover:shadow-md transition cursor-pointer"

@@ -2,8 +2,9 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 // Crear instancia base
+// Crear instancia base
 const api = axios.create({
-  baseURL: "https://escuadron-financiero-back-end.onrender.com",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:4000",
   withCredentials: false,
 });
 
@@ -40,7 +41,7 @@ api.interceptors.response.use(
       // ⚡ Redirigir (sin necesidad de recargar)
       setTimeout(() => {
         window.location.href = "/login";
-      }, 10000);
+      }, 1000);
     }
 
     return Promise.reject(error);
