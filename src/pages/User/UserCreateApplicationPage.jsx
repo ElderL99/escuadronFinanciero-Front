@@ -522,7 +522,7 @@ export default function UserCreateApplicationPage() {
               clabe: "Carátula de CLABE (con nombre)",
               comprobanteDomicilio: "Comprobante de domicilio",
               timCim: "TIM o CIM",
-              ine: "INE",
+              ine: "INE (Ambos Lados)",
               selfieIne: "Selfie con INE",
               selfieMilitarId: "Selfie con Identificación Militar",
             }).map(([name, label]) => (
