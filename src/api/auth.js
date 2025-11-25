@@ -31,3 +31,8 @@ export async function validateToken() {
 export const recoverPasswordApi = ({ email }) => {
   return api.post("/auth/request-password-reset", { email });
 };
+
+// 📧 Reenviar correo de activación
+export const resendActivationEmail = ({ email }) => {
+  return api.post("/auth/resend-activation", { email });
+};

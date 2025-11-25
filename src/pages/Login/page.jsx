@@ -6,12 +6,14 @@ import { useNavigate } from "react-router-dom";
 import InputField from "../../components/InputField";
 import { Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
+import ResendActivationModal from "../../components/auth/ResendActivationModal";
 
 export default function LoginPage() {
   const { login, loading, error } = useAuth();
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const {
     register,
@@ -125,6 +127,17 @@ export default function LoginPage() {
             ¿Olvidaste tu contraseña?
           </p>
 
+          {/* Enlace para reenviar activación */}
+          <p
+            onClick={() => !loading && setIsModalOpen(true)}
+            className={clsx(
+              "text-sm text-gray-500 hover:text-[#611232] hover:underline text-right cursor-pointer mt-1",
+              loading && "cursor-not-allowed opacity-50"
+            )}
+          >
+            ¿No recibiste el correo de activación?
+          </p>
+
           <button
             type="submit"
             disabled={loading}
@@ -153,6 +166,11 @@ export default function LoginPage() {
           </button>
         </p>
       </div>
+
+      <ResendActivationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 }
