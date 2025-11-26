@@ -21,7 +21,7 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm();
 
-  // 🧠 Mostrar error solo cuando cambie
+  // 🧠 Mostrar error solo cuando cambie el error
   useEffect(() => {
     if (error) {
       toast.error(error, {
