@@ -2,6 +2,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useUserCreditById from "../../../../hooks/user/useUserCreditById";
 import useUploadPayment from "../../../../hooks/user/useUploadPayment";
+import { getUserCreditContract } from "../../../../api/user";
+import useUserContract from "../../../../hooks/user/useUserContract";
+import toast from "react-hot-toast";
 import {
   Upload,
   CheckCircle,
@@ -10,6 +13,7 @@ import {
   Loader2,
   AlertTriangle,
   ArrowLeft,
+  FileDown,
 } from "lucide-react";
 
 export default function UserCreditDetailPage() {
@@ -17,6 +21,11 @@ export default function UserCreditDetailPage() {
   const navigate = useNavigate();
   const { credit, fetchCreditById, loading, error } = useUserCreditById();
   const { uploadTicket, loading: uploading } = useUploadPayment();
+  const {
+    contractUrl,
+    loading: loadingContract,
+    fetchContractUrl,
+  } = useUserContract();
 
   useEffect(() => {
     if (id) fetchCreditById(id);
@@ -26,6 +35,22 @@ export default function UserCreditDetailPage() {
     if (!file) return;
     await uploadTicket(id, paymentNumber, file);
     await fetchCreditById(id); // refrescar datos
+  };
+
+  const handleDownloadContract = async () => {
+    try {
+      const response = await getUserCreditContract(id);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `contrato_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      toast.success("Contrato descargado exitosamente");
+    } catch (error) {
+      toast.error("Error al descargar el contrato");
+    }
   };
 
   if (loading)
@@ -63,6 +88,34 @@ export default function UserCreditDetailPage() {
       <h1 className="text-2xl font-semibold text-[#611232] mb-6 text-center">
         Detalle del Crédito #{credit._id.slice(-6).toUpperCase()}
       </h1>
+
+      {/* 📄 Botón Descargar Contrato */}
+      <div className="flex justify-center mb-6">
+        {!contractUrl ? (
+          <button
+            onClick={() => fetchContractUrl(id)}
+            className="flex items-center gap-2 bg-[#611232] text-white px-4 py-2 rounded-lg hover:bg-[#4a0f27] transition shadow-md"
+            disabled={loadingContract}
+          >
+            {loadingContract ? (
+              <Loader2 className="animate-spin" size={18} />
+            ) : (
+              <FileDown size={18} />
+            )}
+            Obtener enlace del contrato
+          </button>
+        ) : (
+          <a
+            href={contractUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-[#d4af37] text-white px-4 py-2 rounded-lg hover:bg-[#c39e31] transition shadow-md"
+          >
+            <FileDown size={18} />
+            Descargar contrato
+          </a>
+        )}
+      </div>
 
       <div className="bg-white border border-[#e8e2dc] rounded-2xl shadow-sm p-6">
         <h2 className="text-lg font-medium text-[#611232] mb-2">

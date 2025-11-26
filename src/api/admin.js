@@ -83,3 +83,8 @@ export const rejectPayment = async (creditId, paymentNumber, reason) => {
     }
   );
 };
+
+// 📄 Obtener URL firmada del contrato
+export const getAdminCreditContract = async (creditId) => {
+  return api.get(`/admin/credits/${creditId}/contract`);
+};

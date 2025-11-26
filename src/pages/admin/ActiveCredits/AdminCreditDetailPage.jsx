@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
-  Loader2,
   ArrowLeft,
   CheckCircle2,
   XCircle,
   Clock,
   X,
+  FileDown,
+  Loader2,
 } from "lucide-react";
 import useFetchPayments from "../../../hooks/admin/useFetchpayments";
 import useApprovePayment from "../../../hooks/admin/useApprovePayments";
 import useRejectPayment from "../../../hooks/admin/useRejectPayments";
+import useCreditContract from "../../../hooks/admin/useCreditContract";
 
 export default function AdminCreditDetailPage() {
   const { creditId } = useParams();
@@ -21,6 +24,12 @@ export default function AdminCreditDetailPage() {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [reason, setReason] = useState("");
+
+  const {
+    contractUrl,
+    loading: loadingContract,
+    fetchContractUrl,
+  } = useCreditContract();
 
   const handleApprove = async (num) => {
     await approve(creditId, num);
@@ -42,6 +51,22 @@ export default function AdminCreditDetailPage() {
     );
     setReason("");
     setShowRejectModal(false);
+  };
+
+  const handleDownloadContract = async () => {
+    try {
+      const response = await getAdminCreditContract(creditId);
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `contrato_${creditId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      toast.success("Contrato descargado exitosamente");
+    } catch (error) {
+      toast.error("Error al descargar el contrato");
+    }
   };
 
   if (loading)
@@ -68,6 +93,34 @@ export default function AdminCreditDetailPage() {
           <ArrowLeft size={18} />
           Volver
         </Link>
+      </div>
+
+      {/* 📄 Botón Descargar Contrato */}
+      <div className="flex justify-center mb-6">
+        {!contractUrl ? (
+          <button
+            onClick={() => fetchContractUrl(creditId)}
+            className="flex items-center gap-2 bg-[#611232] text-white px-4 py-2 rounded-lg hover:bg-[#4a0f27] transition shadow-md"
+            disabled={loadingContract}
+          >
+            {loadingContract ? (
+              <Loader2 className="animate-spin" size={18} />
+            ) : (
+              <FileDown size={18} />
+            )}
+            Obtener enlace del contrato
+          </button>
+        ) : (
+          <a
+            href={contractUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-[#d4af37] text-white px-4 py-2 rounded-lg hover:bg-[#c39e31] transition shadow-md"
+          >
+            <FileDown size={18} />
+            Descargar contrato
+          </a>
+        )}
       </div>
 
       {/* 💰 Lista de pagos */}

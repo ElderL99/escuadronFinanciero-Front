@@ -68,3 +68,8 @@ export const uploadUserPaymentTicket = async (
     }
   );
 };
+
+// 📄 Obtener la URL firmada del contrato (usuario)
+export const getUserCreditContract = async (creditId) => {
+  return api.get(`/user/creditos/${creditId}/contract`);
+};
