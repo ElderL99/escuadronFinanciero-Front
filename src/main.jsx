@@ -76,6 +76,12 @@ const VerifyEmailPage = lazy(() => import("./pages/verifyEmailPage/page.jsx"));
 const ContactPage = lazy(() => import("./pages/contact/page"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy/page"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions/page"));
+const AdminUsersPage = lazy(() =>
+  import("./pages/admin/Users/AdminUsersPage.jsx")
+);
+const AdminUserDetailPage = lazy(() =>
+  import("./pages/admin/Users/AdminUserDetailPage.jsx")
+);
 
 // Componente de carga
 const LoadingFallback = () => (
@@ -155,6 +161,8 @@ const router = createBrowserRouter(
           path="active-credits/:creditId"
           element={<AdminCreditDetailPage />}
         />
+        <Route path="users" element={<AdminUsersPage />} />
+        <Route path="users/:id" element={<AdminUserDetailPage />} />
       </Route>
     </Route>
   )

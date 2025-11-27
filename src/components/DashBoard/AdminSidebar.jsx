@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { CheckCircle, Activity, Zap, LogOut } from "lucide-react";
+import { CheckCircle, Activity, Zap, LogOut, Users } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 export default function AdminSidebar() {
@@ -14,6 +14,7 @@ export default function AdminSidebar() {
       icon: Zap,
     },
     { name: "Activas", path: "/admin/active-credits", icon: CheckCircle },
+    { name: "Usuarios", path: "/admin/users", icon: Users },
   ];
 
   return (

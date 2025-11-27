@@ -88,3 +88,13 @@ export const rejectPayment = async (creditId, paymentNumber, reason) => {
 export const getAdminCreditContract = async (creditId) => {
   return api.get(`/admin/credits/${creditId}/contract`);
 };
+
+// 👥 Obtener todos los usuarios
+export const getAllUsers = async () => {
+  return api.get("/admin/users");
+};
+
+// 👤 Obtener un usuario por ID
+export const getUserById = async (userId) => {
+  return api.get(`/admin/users/${userId}`);
+};
