@@ -1,4 +1,5 @@
 import { memo, useMemo } from "react";
+import { Link } from "react-router-dom";
 
 function ApplicationDetailsCard({ data }) {
   if (!data)
@@ -8,7 +9,6 @@ function ApplicationDetailsCard({ data }) {
       </section>
     );
 
-  // ✅ Memoizamos el formateo de fechas y los arreglos de campos
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("es-MX", {
       year: "numeric",
@@ -18,7 +18,8 @@ function ApplicationDetailsCard({ data }) {
 
   const infoLeft = useMemo(
     () => [
-      { label: "ID", value: data._id },
+      { label: "Usuario ID", value: data.user, type: "link" }, // ⬅️ AQUI SE HACE LINK
+      { label: "Solicitud ID", value: data._id },
       { label: "Nombre", value: data.nombre },
       { label: "Grado", value: data.grado },
       { label: "Empleo", value: data.empleo },
@@ -41,11 +42,7 @@ function ApplicationDetailsCard({ data }) {
         type: "highlight",
       },
       { label: "Modalidad", value: data.paymentMode },
-      {
-        label: "Estado",
-        value: data.state,
-        type: "state",
-      },
+      { label: "Estado", value: data.state, type: "state" },
       { label: "Fecha Alta", value: formatDate(data.fechaAlta) },
       { label: "Último Ascenso", value: formatDate(data.ultimoAscenso) },
       {
@@ -66,29 +63,22 @@ function ApplicationDetailsCard({ data }) {
 
   return (
     <section className="bg-white rounded-2xl shadow-md border border-[#e5e5e5] overflow-hidden transition-all duration-200">
-      {/* 🔹 Header */}
       <div className="bg-[#611232] px-6 py-4 flex items-center justify-between">
         <h2 className="text-lg md:text-xl font-bold text-white tracking-wide">
           Detalles de la Solicitud
         </h2>
       </div>
 
-      {/* 🔹 Body */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-3">
           {infoLeft.map((item) => (
-            <DetailRow key={item.label} label={item.label} value={item.value} />
+            <DetailRow key={item.label} {...item} />
           ))}
         </div>
 
         <div className="space-y-3">
           {infoRight.map((item) => (
-            <DetailRow
-              key={item.label}
-              label={item.label}
-              value={item.value}
-              type={item.type}
-            />
+            <DetailRow key={item.label} {...item} />
           ))}
         </div>
       </div>
@@ -96,7 +86,6 @@ function ApplicationDetailsCard({ data }) {
   );
 }
 
-// ✅ Memoizamos los subcomponentes para evitar renders innecesarios
 const DetailRow = memo(function DetailRow({ label, value, type }) {
   const baseStyle =
     "flex justify-between items-center border-b border-[#f3e6eb] pb-2 text-sm md:text-base";
@@ -110,7 +99,18 @@ const DetailRow = memo(function DetailRow({ label, value, type }) {
   return (
     <div className={baseStyle}>
       <span className="text-[#611232] font-semibold">{label}</span>
-      <span className={valueStyle}>{value || "—"}</span>
+
+      {/* 🔗 Si es un link (Usuario ID) */}
+      {type === "link" ? (
+        <Link
+          to={`/admin/users/${value}`}
+          className="text-yellow-600 underline hover:text-yellow-800 font-semibold"
+        >
+          {value}
+        </Link>
+      ) : (
+        <span className={valueStyle}>{value || "—"}</span>
+      )}
     </div>
   );
 });

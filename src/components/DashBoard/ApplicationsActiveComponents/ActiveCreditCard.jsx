@@ -74,13 +74,15 @@ export default function ActiveCreditCard({ credito }) {
         </p>
 
         {/* 🧍 User ID (solo texto por ahora) */}
-        <p className="flex items-center gap-1">
-          <User size={12} className="text-[#611232]" />
-          <span className="font-medium">User ID:</span>{" "}
-          <span className="truncate max-w-[170px] sm:max-w-none">
-            {userId || "N/A"}
-          </span>
-        </p>
+        <Link to={`/admin/users/${userId}`}>
+          <p className="flex items-center gap-1">
+            <User size={12} className="text-[#611232]" />
+            <span className="font-medium">User ID:</span>{" "}
+            <span className="truncate max-w-[170px] text-[#611232] md:text-black sm:max-w-none hover:underline hover:text-[#8b204a]">
+              {userId || "N/A"}
+            </span>
+          </p>
+        </Link>
       </div>
 
       {/* Enlace a pagos */}

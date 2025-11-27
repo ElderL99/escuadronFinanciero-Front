@@ -103,7 +103,7 @@ function BasicInfo({ user }) {
         <Info
           label="Creditos Completados"
           icon={CreditCard}
-          value={user.creditStatusSummary.completed}
+          value={user.creditStatusSummary.completed || 0}
         />
 
         <div>
