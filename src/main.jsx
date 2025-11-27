@@ -11,6 +11,9 @@ import "./index.css";
 
 import AuthProvider from "./context/AuthContext.jsx";
 
+// 📊 Speed Insights
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
 // 🧩 Páginas principales (Lazy Loading)
 const HomePage = lazy(() => import("./pages/homePage/page.jsx"));
 const MainLayout = lazy(() => import("./layout/mainLayout"));
@@ -191,5 +194,6 @@ createRoot(document.getElementById("root")).render(
         },
       }}
     />
+    <SpeedInsights />
   </>
 );
