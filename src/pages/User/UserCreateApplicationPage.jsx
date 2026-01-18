@@ -368,7 +368,7 @@ export default function UserCreateApplicationPage() {
               empleo: "Empleo",
               matricula: "Matrícula",
               telefono: "Teléfono",
-              clienteNumberBank: "Cuenta bancaria",
+              clienteNumberBank: "Clave interbancaria",
               unidad: "Unidad",
               zona: "Zona",
               region: "Región",
