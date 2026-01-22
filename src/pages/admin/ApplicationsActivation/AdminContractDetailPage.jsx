@@ -7,15 +7,18 @@ import {
   ArrowLeft,
   CalendarDays,
   CheckCircle,
+  XCircle,
+  AlertTriangle,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ActivateCreditSection from "../../../components/DashBoard/contractsComponents/ActivateCredutSection";
+import useCancelSignedContract from "@/hooks/admin/useCancelSignedContract";
 
 export default function AdminContractDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { contract, loading, error } = useAdminContractById(id);
-  const [confirming, setConfirming] = useState(false);
+
   const {
     activateCredit,
     loading: activating,
@@ -23,10 +26,33 @@ export default function AdminContractDetailPage() {
     success,
   } = useActivateCredit();
 
+  const {
+    cancelContract,
+    loading: cancelling,
+    error: cancelError,
+    success: cancelSuccess,
+  } = useCancelSignedContract();
+
   const handleActivate = async () => {
     await activateCredit(contract.requestId);
-    navigate("/admin/active-credits");
   };
+
+  const handleCancel = async (reason) => {
+    await cancelContract(id, reason);
+  };
+
+  // ✅ Navegar SOLO cuando el backend confirma éxito
+  useEffect(() => {
+    if (success) {
+      navigate("/admin/active-credits");
+    }
+  }, [success, navigate]);
+
+  useEffect(() => {
+    if (cancelSuccess) {
+      navigate("/admin/signed-contracts");
+    }
+  }, [cancelSuccess, navigate]);
 
   if (loading)
     return (
@@ -168,14 +194,130 @@ export default function AdminContractDetailPage() {
         </div>
       </section>
 
-      {/* ✅ Nueva sección: botón para activar crédito */}
-      {contract.signed && (
-        <ActivateCreditSection
-          onActivate={handleActivate}
-          activating={activating}
-          success={success}
-          error={activateError}
-        />
+      {/* Acciones */}
+      <section className="p-4">
+        {contract.signed && (
+          <>
+            <ActivateCreditSection
+              onActivate={handleActivate}
+              activating={activating}
+              success={success}
+              error={activateError}
+            />
+
+            <CancelContractSection
+              onCancel={handleCancel}
+              disabled={cancelling}
+              success={cancelSuccess}
+              error={cancelError}
+            />
+          </>
+        )}
+      </section>
+    </>
+  );
+}
+
+function CancelContractSection({ onCancel, disabled, success, error }) {
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState("");
+  const [localError, setLocalError] = useState(null);
+
+  // 🔐 Cerrar modal SOLO si el backend respondió OK
+  useEffect(() => {
+    if (success) {
+      setOpen(false);
+      setReason("");
+      setLocalError(null);
+    }
+  }, [success]);
+
+  const handleConfirm = () => {
+    if (!reason.trim()) {
+      setLocalError("La razón de cancelación es obligatoria");
+      return;
+    }
+
+    setLocalError(null);
+    onCancel(reason); // solo dispara la petición
+  };
+
+  return (
+    <>
+      {/* 🔴 Sección principal */}
+      <section className="max-w-4xl mx-auto p-6 border border-red-200 rounded-3xl bg-white shadow-md mt-6">
+        <h2 className="text-lg font-semibold text-red-700 mb-2">
+          Cancelar contrato
+        </h2>
+
+        <p className="text-sm text-gray-600 mb-4">
+          Esta acción cancelará el contrato firmado y evitará la activación del
+          crédito. No se puede deshacer.
+        </p>
+
+        <button
+          onClick={() => setOpen(true)}
+          disabled={disabled}
+          className="flex items-center justify-center gap-2 w-full bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition"
+        >
+          <XCircle size={18} />
+          Cancelar contrato
+        </button>
+      </section>
+
+      {/* 🧠 Modal */}
+      {open && (
+        <div className="fixed inset-0 z-50 p-4 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-red-100 rounded-full">
+                <AlertTriangle className="text-red-600" size={22} />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                ¿Estás seguro?
+              </h3>
+            </div>
+
+            <p className="text-sm text-gray-600 mb-4">
+              Estás a punto de cancelar un contrato ya firmado. Esta acción es
+              irreversible.
+            </p>
+
+            {/* ✍️ Input */}
+            <textarea
+              rows={3}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              className="w-full rounded-xl border border-gray-300 p-3 text-sm focus:ring-2 focus:ring-red-500 text-black"
+              placeholder="Describe brevemente el motivo..."
+            />
+
+            {/* 🔴 Errores */}
+            {localError && (
+              <p className="text-sm text-red-600 mt-2">{localError}</p>
+            )}
+
+            {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
+
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() => !disabled && setOpen(false)}
+                disabled={disabled}
+                className="flex-1 py-2 rounded-xl border border-gray-300 text-gray-700 disabled:opacity-50"
+              >
+                No, volver
+              </button>
+
+              <button
+                onClick={handleConfirm}
+                disabled={disabled}
+                className="flex-1 py-2 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-semibold"
+              >
+                {disabled ? "Cancelando..." : "Sí, cancelar"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );
