@@ -81,10 +81,10 @@ export default function PendientesTable({
                         solicitud.estado === "Esperando Firma"
                           ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
                           : solicitud.estado === "Esperando Activación"
-                          ? "bg-[#611232]/15 text-[#611232] border border-[#611232]/30"
-                          : solicitud.estado === "Rechazada"
-                          ? "bg-red-100 text-red-800 border border-red-300"
-                          : "bg-green-100 text-green-800 border border-green-300"
+                            ? "bg-[#611232]/15 text-[#611232] border border-[#611232]/30"
+                            : solicitud.estado === "Rechazada"
+                              ? "bg-red-100 text-red-800 border border-red-300"
+                              : "bg-green-100 text-green-800 border border-green-300"
                       }`}
                     >
                       {solicitud.estado}
@@ -93,10 +93,12 @@ export default function PendientesTable({
 
                   {/* Fecha */}
                   <td className="px-4 py-3 text-sm text-gray-500">
-                    {new Date(solicitud.dia).toLocaleDateString("es-MX", {
+                    {new Date(solicitud.dia).toLocaleString("es-MX", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })}
                   </td>
                 </tr>
