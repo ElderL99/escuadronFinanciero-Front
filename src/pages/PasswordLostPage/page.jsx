@@ -1,9 +1,11 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import clsx from "clsx";
 import InputField from "../../components/InputField";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
+import logo from "../../public/logo.jpeg";
+import bandera from "../../public/bandera.jpg";
 
 export default function PasswordLostPage() {
   const { recoverPassword, loading, error } = useAuth();
@@ -43,14 +45,30 @@ export default function PasswordLostPage() {
   return (
     <section
       className="min-h-screen flex items-center justify-center px-6 
-      bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] 
-      from-[#fdf8f3] via-[#f9f7f5] to-[#f4f0eb]"
+      bg-no-repeat bg-cover bg-center relative"
+      style={{ backgroundImage: `url(${bandera})` }}
     >
+      {/* Overlay + blur */}
+      <div className="absolute inset-0 backdrop-blur-md bg-white/40" />
+
+      {/* Card */}
       <div
-        className="w-full max-w-md bg-white/80 backdrop-blur-md 
-        border border-[#e8e2dc]/60 rounded-2xl shadow-[0_0_25px_rgba(97,18,50,0.15)] 
+        className="relative z-10 w-full max-w-md bg-white/80 backdrop-blur-md 
+        border border-[#e8e2dc]/60 rounded-2xl 
+        shadow-[0_0_25px_rgba(97,18,50,0.15)] 
         p-8 sm:p-10 transition-all hover:shadow-lg"
       >
+        {/* Logo */}
+        <div className="flex justify-center mb-4">
+          <Link to="/" aria-label="Ir al inicio">
+            <img
+              src={logo}
+              alt="Logo"
+              className="h-16 object-contain rounded-2xl hover:scale-105 transition-transform"
+            />
+          </Link>
+        </div>
+
         {/* Encabezado */}
         <h1 className="text-3xl font-bold text-center text-[#611232] mb-2">
           Recuperar contraseña
@@ -60,7 +78,7 @@ export default function PasswordLostPage() {
           recuperación
         </p>
 
-        {/* Mensaje de error del backend */}
+        {/* Error backend */}
         {error && (
           <p className="text-red-500 text-center mb-4 bg-red-100/70 border border-red-200 py-2 rounded-lg">
             {error}
@@ -94,21 +112,21 @@ export default function PasswordLostPage() {
               "w-full py-3 text-white font-semibold rounded-full shadow-md transition-all",
               loading
                 ? "bg-[#611232]/70 cursor-not-allowed"
-                : "bg-[#611232] hover:bg-[#7a1b3a]"
+                : "bg-[#611232] hover:bg-[#7a1b3a]",
             )}
           >
             {loading ? "Enviando..." : "Enviar correo"}
           </button>
         </form>
 
-        {/* Enlace volver */}
+        {/* Volver */}
         <p className="text-center text-sm text-gray-600 mt-8">
           ¿Recordaste tu contraseña?{" "}
           <button
             onClick={() => navigate("/login")}
             className={clsx(
               "text-[#611232] font-semibold hover:underline",
-              loading && "cursor-not-allowed opacity-50"
+              loading && "cursor-not-allowed opacity-50",
             )}
             disabled={loading}
           >
